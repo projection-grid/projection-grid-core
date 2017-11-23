@@ -29,15 +29,15 @@ version to continue support the legacy projects.
     v                     |
 Plugin A <-- Config A     |
     |                     |
-    | Configu Model       |
+    | Config Model        |
     v                     |
 Plugin B <-- Config B     |
     |                     |
-    | Configu Model       |
+    | Config Model        |
     v                     |
 Plugin C <-- Config C     |
     |                     |
-    | Configu Model       |
+    | Config Model        |
     v                     |
 Composer                  |
     |                     |
