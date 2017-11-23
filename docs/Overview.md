@@ -55,8 +55,11 @@ Config model consists data and composer callbacks. Plugins can decorate either o
 
 ```jsx
 {
-  // Data items
-  items: [{
+  // -----------
+  //  Data part
+  // -----------
+  // Data records
+  records: [{
     ID: '000',
     Name: 'Moana',
     Gender: 'Female',
@@ -68,23 +71,25 @@ Config model consists data and composer callbacks. Plugins can decorate either o
     Tribe: 'Half God',
   }],
   
-  // Primary key of each item
-  primaryKey: (item) => item['ID'],
+  // Primary key of each record
+  primaryKey: (record) => record['ID'],
   
   // Column configuration
   columns: [{
     // Name of the column
     name: 'Name',
 
-    
     // Sub columns
     columns: [],
   }],
 
+  // -------------
+  // Composer part
+  // -------------
   // Callback to create TD in render model
-  composeTD: (column, item, config) => ({
+  composeTD: (column, record, config) => ({
     attributes: { ... },
-    content: <NameCell item={item} />,
+    content: <NameCell record={record} />,
   }),
 
   // Callback to create TH in render model
@@ -100,7 +105,7 @@ Config model consists data and composer callbacks. Plugins can decorate either o
   }),
     
   // Callback to create TR in render model
-  composeTR: (item, config) => ({
+  composeTR: (record, config) => ({
     attributes: { ... },
     tds: [ ... ],
   }),
