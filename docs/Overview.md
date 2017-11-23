@@ -75,29 +75,30 @@ Config model consists data and composer callbacks. Plugins can decorate either o
   columns: [{
     // Name of the column
     name: 'Name',
-    
-    // Callback to create TD in render model
-    composeTD: (item, config) => ({
-      attributes: { ... },
-      content: <NameCell item={item} />,
-    }),
-    
-    // Callback to create TH in render model
-    composeTH: (config) => ({
-      attributes: { ... },
-      content: <NameHeader />,
-    }),
-    
-    // Callback to create COL in render model
-    composeCOL: (config) => ({
-      attributes: { ... },
-      content: <NameCol />,
-    }),
+
     
     // Sub columns
     columns: [],
   }],
-  
+
+  // Callback to create TD in render model
+  composeTD: (column, item, config) => ({
+    attributes: { ... },
+    content: <NameCell item={item} />,
+  }),
+
+  // Callback to create TH in render model
+  composeTH: (column, config) => ({
+    attributes: { ... },
+    content: <NameHeader />,
+  }),
+
+  // Callback to create COL in render model
+  composeCOL: (column, config) => ({
+    attributes: { ... },
+    content: <NameCol />,
+  }),
+    
   // Callback to create TR in render model
   composeTR: (item, config) => ({
     attributes: { ... },
@@ -144,7 +145,9 @@ Config model consists data and composer callbacks. Plugins can decorate either o
   attributes: { ... },
   colgroup: {
     attributes: { ... }, 
-    cols: { ... },
+    cols: [{
+      attributes: { ... }, 
+    }],
   },
   thead: {
     attributes: { ... },
