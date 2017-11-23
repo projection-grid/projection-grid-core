@@ -59,3 +59,57 @@ render() {
   );
 }
 ```
+
+### Renderer props
+```js
+{
+  attributes,
+  colgroup: {
+    attributes,
+    cols: [{
+      attributes,
+    }],
+  },
+  thead: {
+    attributes,
+    trs: [{
+      attributes,
+      th: [{
+        attributes,
+        content,
+      }],
+    }],
+  },
+  tbody: {
+    attributes,
+    trs: [{
+      attributes,
+      td: [{
+        attributes,
+        content,
+      }],
+    }],
+  },
+  tfoot: {
+    attributes,
+    trs: [{
+      attributes,
+      td: [{
+        attributes,
+        content,
+      }],
+    }],
+  },
+}
+```
+
+### Converter sample
+```js
+function ({ RowComponent, data, columns }) {
+  return {
+    bodyRows: _.map(data, item => (
+      <RowComponent item={item} columns={columns} />
+    )),
+  }
+}
+```
