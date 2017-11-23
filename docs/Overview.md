@@ -23,25 +23,25 @@ version to continue support the legacy projects.
                           |                  v
                           |              Normalize
                           |                  |
-                          |                  | Configuration Model
+                          |                  | Config Model
     +---------------------(------------------+
     |                     |
     v                     |
 Plugin A <-- Config A     |
-    |                     | 
-    | Configuration Model |
+    |                     |
+    | Configu Model       |
     v                     |
 Plugin B <-- Config B     |
     |                     |
-    | Configuration Model |
+    | Configu Model       |
     v                     |
 Plugin C <-- Config C     |
     |                     |
+    | Configu Model       |
+    v                     |
+Composer                  |
+    |                     |
     +---------------------(------------------+
-                          |                  | Configuration Model
-                          |                  v
-                          |               Compose
-                          |                  |
                           |                  | Render Model
                           |                  v
                           |                Render
@@ -50,5 +50,129 @@ Plugin C <-- Config C     |
                           |            DOM/Virtual DOM
                           |
 ```
+## Config Model
+```jsx
+{
+  // Data items
+  items: [{
+    ID: '000',
+    Name: 'Moana',
+    Gender: 'Female',
+    Tribe: 'Polynesian',
+  }, {
+    ID: '001',
+    Name: 'Maui',
+    Gender: ‘Male',
+    Tribe: 'Half God',
+  }],
+  
+  // Primary key of each item
+  primaryKey: (item) => item['ID'],
+  
+  // Column configuration
+  columns: [{
+    // Name of the column
+    name: 'Name',
+    
+    // Callback to create TD in render model
+    composeTD: (item, config) => ({
+      attributes: { ... },
+      content: <NameCell item={item} />,
+    }),
+    
+    // Callback to create TH in render model
+    composeTH: (config) => ({
+      attributes: { ... },
+      content: <NameHeader />,
+    }),
+    
+    // Callback to create COL in render model
+    composeCOL: (config) => ({
+      attributes: { ... },
+      content: <NameCol />,
+    }),
+    
+    // Sub columns
+    columns: [],
+  }],
+  
+  // Callback to create TR in render model
+  composeTR: (item, config) => ({
+    attributes: { ... },
+    tds: [ ... ],
+  }),
+  
+  // Callback to create THEAD in render model
+  componseTHEAD: (config) => ({
+    attributes: { ... },
+    trs: [ ... ],
+  }),
+  
+  // Callback to create TBODY in reander model
+  composeTBODY: (config) => ({
+    attributes: { ... },
+    trs: [ ... ],
+  }),
+  
+  // Callback to create TFOOT in reander model
+  composeTFOOT: (config) => ({
+    attributes: { ... },
+    trs: [ ... ],
+  }),
+  
+  // Callback to create COLGROUP in render model
+  composeCOLGROUP: (config) => ({
+    attributes: { ... },
+    cols: [ ... ],
+  }),
+  
+  // Callback to create the render model
+  composeTABLE: (config) => ({
+    attributes: { ... },
+    thead: { ... },
+    tbody: { ... },
+    tfoot: { ... },
+  }),
+}
+```
 
-01234567890123456789012345678901234567890123456789012345678901234567890123456789
+## Render Model
+```js
+{
+  attributes: { ... },
+  colgroup: {
+    attributes: { ... }, 
+    cols: { ... },
+  },
+  thead: {
+    attributes: { ... },
+    trs: [{
+      attributes: { ... },
+      ths: [{
+        attributes: { ... },
+        content,
+      }],
+    }],
+  },
+  tbody: {
+    attributes: { ... },
+    trs: [{
+      attributes: { ... },
+      tds: [{
+        attributes: { ... },
+        content,
+      }],
+    }],
+  },
+  tfoot: {
+    attributes: { ... },
+    trs: [{
+      attributes: { ... },
+      tds: [{
+        attributes: { ... },
+        content,
+      }],
+    }],
+  },
+}
+```
