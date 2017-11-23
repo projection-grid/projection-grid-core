@@ -51,6 +51,8 @@ Composer                  |
                           |
 ```
 ## Config Model
+Config model consists data and composer callbacks. Plugins can decorate either of them.
+
 ```jsx
 {
   // Data items
