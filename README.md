@@ -31,8 +31,6 @@ function renderTable({ colGroups, bodyRows }) {
 ```js
 import HelpLink from 'help-link-plugin-react';
 
-...
-
 render() {
   return (
     <ProjectionGrid
@@ -43,9 +41,10 @@ render() {
             name: 'Name',
             component: NameCell,
           }],
+          row: RowComponent,
         })
       },
-      plugins = {[
+      projections = {[
         SortableHeader({ onSort: (key) => this.sort(key) }),
         Selection({ onSelectionChange: this.props.onSelectionChange1 }),
         Selection({ onSelectionChange: this.props.onSelectionChange2 }),
