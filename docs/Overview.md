@@ -186,3 +186,46 @@ Config model consists data and composer callbacks. Plugins can decorate either o
   },
 }
 ```
+
+## Generic render model
+```js
+{
+  attributes: { ... },
+  columnGroup: {
+    attributes: { ... },
+    columns: [{
+      attributes,
+    }],
+  },
+  header: {
+    attributes: { ... },
+    rows: [{
+      attributes: { ... },
+      cells: [{
+        attributes,
+        content,
+      }],
+    }],
+  },
+  body: {
+    attributes: { ... },
+    rows: [{
+      attributes: { ... },
+      cells: [{
+        attributes,
+        content,
+      }],
+    }],
+  },
+  footer: {
+    attributes: { ... },
+    rows: [{
+      attributes: { ... },
+      cells: [{
+        attributes,
+        content,
+      }],
+    }],
+  },
+}
+```
