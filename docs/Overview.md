@@ -50,8 +50,41 @@ Composer                  |
                           |            DOM/Virtual DOM
                           |
 ```
+
+## Config Model
+
+Config model is the interface to let end consumers to define the data, content, structure and behavior of their grid.
+
+```js
+{
+  data: [
+    {
+      ID: '000',
+      FirstName: 'firstname',
+      LastName: 'lastname',
+      Gender: 'Female',
+      Tribe: 'Polynesian',
+    },
+  ],
+  // Column configuration
+  columns: [{
+    // Name of the column
+    name: 'Name',
+
+    // Sub columns
+    columns: [],
+
+    // header cell
+
+    // body cell
+
+    // footer cell
+  }],
+}
+```
+
 ## Projection Model
-Config model consists data and composer callbacks. Plugins can decorate either of them.
+Projection model consists data and composer callbacks. Plugins can decorate either of them.
 
 ```jsx
 {
@@ -67,13 +100,13 @@ Config model consists data and composer callbacks. Plugins can decorate either o
   }, {
     ID: '001',
     Name: 'Maui',
-    Gender: ‘Male',
+    Gender: 'Male',
     Tribe: 'Half God',
   }],
-  
+
   // Primary key of each record
   primaryKey: (record) => record['ID'],
-  
+
   // Column configuration
   columns: [{
     // Name of the column
@@ -81,6 +114,8 @@ Config model consists data and composer callbacks. Plugins can decorate either o
 
     // Sub columns
     columns: [],
+
+    // Other parts will be different according to the UI framework(Ract/Vue/Etc)
   }],
 
   // -------------
@@ -103,37 +138,37 @@ Config model consists data and composer callbacks. Plugins can decorate either o
     attributes: { ... },
     content: <NameCol />,
   }),
-    
+
   // Callback to create TR in render model
   composeTR: (record, config) => ({
     attributes: { ... },
     tds: [ ... ],
   }),
-  
+
   // Callback to create THEAD in render model
   componseTHEAD: (config) => ({
     attributes: { ... },
     trs: [ ... ],
   }),
-  
+
   // Callback to create TBODY in reander model
   composeTBODY: (config) => ({
     attributes: { ... },
     trs: [ ... ],
   }),
-  
+
   // Callback to create TFOOT in reander model
   composeTFOOT: (config) => ({
     attributes: { ... },
     trs: [ ... ],
   }),
-  
+
   // Callback to create COLGROUP in render model
   composeCOLGROUP: (config) => ({
     attributes: { ... },
     cols: [ ... ],
   }),
-  
+
   // Callback to create the render model
   composeTABLE: (config) => ({
     attributes: { ... },
@@ -149,9 +184,9 @@ Config model consists data and composer callbacks. Plugins can decorate either o
 {
   attributes: { ... },
   colgroup: {
-    attributes: { ... }, 
+    attributes: { ... },
     cols: [{
-      attributes: { ... }, 
+      attributes: { ... },
     }],
   },
   thead: {
