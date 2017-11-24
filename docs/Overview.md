@@ -18,26 +18,26 @@ version to continue support the legacy projects.
   Projection Grid Core    |  Projection Grid [React/Vue/Backbone]
                           |
                           |
-                          |            Initial Model
+                          |            Config Model
                           |                  |
                           |                  v
                           |              Normalize
                           |                  |
-                          |                  | Config Model
+                          |                  | Projection Model
     +---------------------(------------------+
     |                     |
     v                     |
-Plugin A <-- Config A     |
+Projection A <-- Config A |
     |                     |
-    | Config Model        |
+    | Projection Model    |
     v                     |
-Plugin B <-- Config B     |
+Projection B <-- Config B |
     |                     |
-    | Config Model        |
+    | Projection Model    |
     v                     |
-Plugin C <-- Config C     |
+Projection C <-- Config C |
     |                     |
-    | Config Model        |
+    | Projection Model    |
     v                     |
 Composer                  |
     |                     |
@@ -50,7 +50,7 @@ Composer                  |
                           |            DOM/Virtual DOM
                           |
 ```
-## Config Model
+## Projection Model
 Config model consists data and composer callbacks. Plugins can decorate either of them.
 
 ```jsx
