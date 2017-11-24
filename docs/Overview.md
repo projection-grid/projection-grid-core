@@ -74,6 +74,8 @@ Config model is the interface to let end consumers to define the data, content, 
     // Sub columns
     columns: [],
 
+    // Other parts will be different according to the UI framework(Ract/Vue/Etc)
+
     // header cell
 
     // body cell
@@ -114,8 +116,6 @@ Projection model consists data and composer callbacks. Plugins can decorate eith
 
     // Sub columns
     columns: [],
-
-    // Other parts will be different according to the UI framework(Ract/Vue/Etc)
   }],
 
   // -------------
