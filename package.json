@@ -6,6 +6,10 @@
   "repository": "git@github.com:projection-grid/projection-grid-core.git",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "build": "webpack",
+    "prepublish": "webpack"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
