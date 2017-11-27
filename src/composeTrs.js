@@ -1,11 +1,11 @@
 import _ from 'underscore';
 
-export function composeTrs(record, model) {
+export function composeTrs({ record, config }) {
   return [{
     attributes: {},
-    key: model.primaryKey(record),
-    tds: _.chain(model.columns)
-      .map(col => model.composeTds(col, record, model))
+    key: record[config.primaryKey],
+    tds: _.chain(config.columns)
+      .map(column => config.composeTds({ column, record, config }))
       .flatten()
       .compact()
       .value(),

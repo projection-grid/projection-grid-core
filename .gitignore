@@ -1,6 +1,9 @@
-node_modules
-npm-debug.log
-.DS_Store
+node_modules/
 dist/
-coverage-report
-jsdoc
+coverage-report/
+jsdoc/
+.DS_Store
+
+# log files
+yarn-error.log
+npm-debug.log

@@ -1,11 +1,11 @@
 import _ from 'underscore';
 
-export function composeTbodies(model) {
+export function composeTbodies({ config }) {
   return [{
+    key: 'default',
     attributes: {},
-    key: 'default-tbody',
-    trs: _.chain(model.records)
-      .map(record => model.composeTrs(record, model))
+    trs: _.chain(config.records)
+      .map(record => config.composeTrs({ record, config }))
       .flatten()
       .compact()
       .value(),

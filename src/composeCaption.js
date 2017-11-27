@@ -1,6 +1,3 @@
-export function composeCaption(model) {
-  return {
-    attributes: {},
-    content: model.composeContent(),
-  };
+export function composeCaption(/* { config } */) {
+  return null;
 }

@@ -1,10 +1,10 @@
-export function composeTable(model) {
+export function composeTable({ config }) {
   return {
     attributes: {},
-    caption: model.composeCaption(model),
-    colgroups: model.composeColgroups(model),
-    thead: model.composeThead(model),
-    tbodies: model.composeTbodies(model),
-    tfoot: model.composeTfoot(model),
+    caption: config.composeCaption({ config }),
+    colgroups: config.composeColgroups({ config }),
+    thead: config.composeThead({ config }),
+    tbodies: config.composeTbodies({ config }),
+    tfoot: config.composeTfoot({ config }),
   };
 }
