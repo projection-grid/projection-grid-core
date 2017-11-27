@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 export function composeThead(model) {
-  return [{
+  return {
     attributes: {},
     trs: [{
       attributes: {},
@@ -11,5 +11,5 @@ export function composeThead(model) {
         .compact()
         .value(),
     }],
-  }];
+  };
 }
