@@ -2,19 +2,40 @@ import _ from 'underscore';
 import { composer } from './composer';
 import { customColumn } from './custom-column';
 
-function defaultColumns({ records, columns }) {
-  return _.map(columns || _.keys(_.first(records)), (col) => {
-    if (_.isString(col)) {
-      return { name: col };
-    }
-    return col;
-  });
+const DEFAULT_PRIMARY_KEY = '@id';
+
+function defaultRecords(config) {
+  return _.extend({ rows: [] }, config);
+}
+
+function defaultPrimaryKey(config) {
+  if (_.has(config, 'primaryKey')) {
+    return config;
+  }
+
+  return _.defaults({
+    primaryKey: DEFAULT_PRIMARY_KEY,
+    records: _.map(config.records, (record, index) => _.defaults({
+      [DEFAULT_PRIMARY_KEY]: index,
+    }, record)),
+  }, config);
+}
+
+function defaultColumns(config) {
+  const { records, columns } = config;
+
+  return _.defaults({
+    columns: _.map(
+      columns || _.keys(_.first(records)),
+      col => (_.isString(col) ? { name: col } : col)
+    ),
+  }, config);
 }
 
 export const coreDefault = [
-  config => _.defaults({
-    columns: defaultColumns(config),
-  }, config),
+  defaultRecords,
+  defaultColumns,
+  defaultPrimaryKey,
   composer,
   customColumn,
 ];
