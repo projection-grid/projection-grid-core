@@ -1,10 +1,6 @@
-export function composeCaption(/** model*/) {
+export function composeCaption(model) {
   return {
     attributes: {},
-    content: {
-      Component: null,
-      props: {},
-      events: {},
-    },
+    content: model.composeContent(),
   };
 }
