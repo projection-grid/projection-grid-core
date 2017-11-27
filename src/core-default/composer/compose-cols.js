@@ -1,6 +1,6 @@
 export function composeCols({ column /* , config */ }) {
   return [{
-    key: column.name,
+    key: `@${column.name}`,
     attributes: {},
   }];
 }
