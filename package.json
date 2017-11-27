@@ -2,7 +2,7 @@
   "name": "projection-grid-core",
   "version": "0.0.4",
   "description": "Implement the core concept of projection grid",
-  "main": "dist/index",
+  "main": "src/index",
   "repository": "git@github.com:projection-grid/projection-grid-core.git",
   "license": "MIT",
   "private": false,
