@@ -13,7 +13,7 @@ import { composeTrs } from './composeTrs';
 import { compose } from './compose';
 
 export function CoreDefault(config) {
-  const primaryKey = config.primaryKey;
+  const { primaryKey } = config;
   const columns = config.columns || [];
   const model = {
     records: config.data,

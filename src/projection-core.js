@@ -6,9 +6,11 @@ export class ProjectionCore {
   }
 
   compose(config) {
-    const model = _.reduce(this.projections,
+    const model = _.reduce(
+      this.projections,
       (memo, projection) => projection.process(memo, projection.option),
-      config);
+      config
+    );
     return model.compose(model);
   }
 }
