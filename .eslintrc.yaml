@@ -48,8 +48,6 @@
       - error
       - always
       - js: never
-        jsx: never
-        es: never
 
     # Disable trailing comma for function declaration and function calls due to jsdoc syntax requirement
     comma-dangle:
@@ -59,9 +57,3 @@
         imports: ignore
         exports: ignore
         functions: never
-
-    react/jsx-filename-extension:
-      - 1
-      - extensions:
-        - ".js"
-        - ".jsx"
