@@ -5,6 +5,7 @@ export function composeThead(model) {
     attributes: {},
     trs: [{
       attributes: {},
+      key: 'thead-default',
       ths: _.chain(model.columns)
         .map(col => model.composeThs(col, model))
         .flatten()
