@@ -1,7 +1,10 @@
-export function composeTds(col, record, model) {
+export function composeTds({ column, record, config }) {
   return [{
+    key: column.name,
     attributes: {},
-    key: col.name,
-    content: model.composeContent(col, record, model),
+    content: config.composeContent({
+      props: { text: record[column.name] },
+      events: {},
+    }),
   }];
 }

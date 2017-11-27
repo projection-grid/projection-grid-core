@@ -1,13 +1,13 @@
 import _ from 'underscore';
 
-export function composeThead(model) {
+export function composeThead({ config }) {
   return {
     attributes: {},
     trs: [{
       attributes: {},
-      key: 'thead-default',
-      ths: _.chain(model.columns)
-        .map(col => model.composeThs(col, model))
+      key: 'default',
+      ths: _.chain(config.columns)
+        .map(column => config.composeThs({ column, config }))
         .flatten()
         .compact()
         .value(),

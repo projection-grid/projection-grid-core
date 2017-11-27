@@ -1,11 +1,11 @@
 import _ from 'underscore';
 
-export function composeColgroups(model) {
+export function composeColgroups({ config }) {
   return [{
     attributes: {},
-    key: 'default-colgroup',
-    cols: _.chain(model.columns)
-      .map(col => model.composeCols(col, model))
+    key: 'default',
+    cols: _.chain(config.columns)
+      .map(column => config.composeCols({ column, config }))
       .flatten()
       .compact()
       .value(),

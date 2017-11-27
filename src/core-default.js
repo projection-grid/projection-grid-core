@@ -10,14 +10,12 @@ import { composeTfoot } from './composeTfoot';
 import { composeThead } from './composeThead';
 import { composeThs } from './composeThs';
 import { composeTrs } from './composeTrs';
-import { compose } from './compose';
 
-export function CoreDefault(config) {
-  const { primaryKey } = config;
+export function coreDefault(config) {
   const columns = config.columns || [];
   const model = {
-    records: config.data,
-    primaryKey: _.isString(primaryKey) ? _.property(primaryKey) : primaryKey,
+    records: config.records,
+    primaryKey: config.primaryKey,
     columns: _.map(columns, (col) => {
       if (_.isString(col)) {
         return {
@@ -39,6 +37,5 @@ export function CoreDefault(config) {
     composeCols,
     composeContent,
     composeCaption,
-    compose,
   });
 }

@@ -1,7 +1,10 @@
-export function composeThs(col, model) {
+export function composeThs({ column, config }) {
   return [{
+    key: column.name,
     attributes: {},
-    key: col.name,
-    content: model.composeContent(col),
+    content: config.composeContent({
+      props: { text: column.name },
+      events: {},
+    }),
   }];
 }
