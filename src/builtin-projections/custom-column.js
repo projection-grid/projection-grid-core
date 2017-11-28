@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-export function customColumn(config) {
+export default function customColumn(config) {
   const configNew = _.defaults({
     composeTds(options) {
       return _.chain(config.composeTds(options))
