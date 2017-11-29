@@ -30,12 +30,12 @@ function decorate(decorator, options, value) {
 }
 
 export default function customColumn(config) {
-  const configNew = _.defaults({
-    composeTds(options) {
-      const { column: { td: decorator } } = options;
-      return decorate(decorator, options, config.composeTds(options));
-    },
-  }, config);
-
-  return configNew;
+  return _.chain({
+    composeCols: 'col',
+    composeThs: 'th',
+    composeTds: 'td',
+  }).mapObject((decoratorKey, composerName) => (options) => {
+    const { column: { [decoratorKey]: decorator } } = options;
+    return decorate(decorator, options, config[composerName](options));
+  }).defaults(config).value();
 }
