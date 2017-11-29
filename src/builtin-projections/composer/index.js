@@ -11,7 +11,7 @@ import { composeThead } from './compose-thead';
 import { composeThs } from './compose-ths';
 import { composeTrs } from './compose-trs';
 
-export function composer(config) {
+export default function composer(config) {
   return _.defaults({
     composeTable,
     composeTbodies,
