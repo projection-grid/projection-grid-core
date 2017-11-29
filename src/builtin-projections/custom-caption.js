@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-export function customCaption(config) {
+export default function customCaption(config) {
   return _.defaults({
     composeCaption(option) {
       const { props = {}, events = {}, content } = option.config.caption || {};
