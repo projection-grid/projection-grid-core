@@ -3,6 +3,8 @@ import _ from 'underscore';
 export function composeThead({ config }) {
   return {
     props: {},
+    classes: [],
+    styles: {},
     events: {},
     trs: [{
       key: 'default',

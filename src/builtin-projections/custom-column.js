@@ -5,13 +5,19 @@ Configuration added by custom-column projection
 
   column.col
     column.col.props
+    column.col.classes
+    column.col.style
     column.col.events
   column.td
     column.td.props
+    column.td.classes
+    column.td.style
     column.td.events
     column.td.content
   column.th
     column.th.props
+    column.td.classes
+    column.td.style
     column.th.events
     column.th.content
 */
