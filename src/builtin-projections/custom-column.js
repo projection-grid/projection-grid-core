@@ -23,9 +23,6 @@ Configuration added by custom-column projection
 */
 
 function decorate(decorator, options, value) {
-  if (_.isArray(value)) {
-    return _.map(value, v => decorate(decorator, options, v));
-  }
   if (_.isFunction(decorator)) {
     return decorator(options, value);
   }
@@ -42,6 +39,9 @@ export default function customColumn(config) {
     composeTds: 'td',
   }).mapObject((decoratorKey, composerName) => (options) => {
     const { column: { [decoratorKey]: decorator } } = options;
-    return decorate(decorator, options, config[composerName](options));
+    return _.map(
+      config[composerName](options),
+      value => decorate(decorator, options, value)
+    );
   }).defaults(config).value();
 }
