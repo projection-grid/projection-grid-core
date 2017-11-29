@@ -2,10 +2,14 @@ import _ from 'underscore';
 
 export function composeThead({ config }) {
   return {
-    attributes: {},
+    props: {},
+    classes: [],
+    styles: {},
+    events: {},
     trs: [{
       key: 'default',
-      attributes: {},
+      props: {},
+      events: {},
       ths: _.chain(config.columns)
         .map(column => config.composeThs({ column, config }))
         .flatten()

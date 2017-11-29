@@ -1,6 +1,9 @@
 export function composeTable({ config }) {
   return {
-    attributes: {},
+    props: {},
+    classes: [],
+    styles: {},
+    events: {},
     caption: config.composeCaption({ config }),
     colgroups: config.composeColgroups({ config }),
     thead: config.composeThead({ config }),

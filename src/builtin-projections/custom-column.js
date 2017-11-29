@@ -1,37 +1,47 @@
 import _ from 'underscore';
 
+/*
+Configuration added by custom-column projection
+
+  column.col
+    column.col.props
+    column.col.classes
+    column.col.style
+    column.col.events
+  column.td
+    column.td.props
+    column.td.classes
+    column.td.style
+    column.td.events
+    column.td.content
+  column.th
+    column.th.props
+    column.td.classes
+    column.td.style
+    column.th.events
+    column.th.content
+*/
+
+function decorate(decorator, options, value) {
+  if (_.isArray(value)) {
+    return _.map(value, v => decorate(decorator, options, v));
+  }
+  if (_.isFunction(decorator)) {
+    return decorator(options, value);
+  }
+  if (_.isObject(decorator)) {
+    return _.mapObject(value, (v, key) => decorate(decorator[key], options, v));
+  }
+  return value;
+}
+
 export default function customColumn(config) {
-  const configNew = _.defaults({
-    composeTds(options) {
-      return _.chain(config.composeTds(options))
-        .map((td) => {
-          const { attributes, content } = td;
-          const { events } = content;
-          const { column } = options;
-          const { Component } = column;
-
-          return _.defaults({
-            attributes: _.chain(column)
-              .result('attributes')
-              .mapObject(attr => attr(options))
-              .defaults(attributes)
-              .value(),
-            content: Component ? {
-              Component,
-              props: _.defaults({ content }, options),
-              events: _.chain(column)
-                .result('events')
-                .mapObject(handler => (...args) => handler(options, ...args))
-                .defaults(events)
-                .value(),
-            } : content,
-          }, td);
-        })
-        .flatten()
-        .compact()
-        .value();
-    },
-  }, config);
-
-  return configNew;
+  return _.chain({
+    composeCols: 'col',
+    composeThs: 'th',
+    composeTds: 'td',
+  }).mapObject((decoratorKey, composerName) => (options) => {
+    const { column: { [decoratorKey]: decorator } } = options;
+    return decorate(decorator, options, config[composerName](options));
+  }).defaults(config).value();
 }
