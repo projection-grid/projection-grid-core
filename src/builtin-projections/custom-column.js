@@ -3,40 +3,37 @@ import _ from 'underscore';
 /*
 Configuration added by custom-column projection
 
-  column.Component
-  column.attributes
-  column.events
+  column.col
+    column.col.props
+    column.col.events
+  column.td
+    column.td.props
+    column.td.events
+    column.td.content
+  column.th
+    column.th.props
+    column.th.events
+    column.th.content
 */
+
+function decorate(decorator, options, value) {
+  if (_.isArray(value)) {
+    return _.map(value, v => decorate(decorator, options, v));
+  }
+  if (_.isFunction(decorator)) {
+    return decorator(options, value);
+  }
+  if (_.isObject(decorator)) {
+    return _.mapObject(value, (v, key) => decorate(decorator[key], options, v));
+  }
+  return value;
+}
 
 export default function customColumn(config) {
   const configNew = _.defaults({
     composeTds(options) {
-      const { column } = options;
-      const customAttributes = _.mapObject(
-        column.attribute || {},
-        attr => (_.isFunction(attr) ? attr(options) : attr)
-      );
-      const customEvents = _.mapObject(
-        column.events || {},
-        handler => (...args) => handler(options, ...args)
-      );
-      const wrapContent = column.Component ?
-        // If the custom Component is provided, wrap the content with it.
-        // The custom events is for the custom Component
-        content => ({
-          Component: column.Component,
-          props: _.defaults({ content }, options),
-          events: customEvents,
-        }) :
-        // Otherwise the events is for the original component
-        content => _.defaults({
-          events: _.defaults({}, customEvents, content.events),
-        }, content);
-
-      return _.map(config.composeTds(options), td => _.defaults({
-        attributes: _.defaults({}, customAttributes, td.attributes),
-        content: wrapContent(td.content),
-      }, td));
+      const { column: { td: decorator } } = options;
+      return decorate(decorator, options, config.composeTds(options));
     },
   }, config);
 
