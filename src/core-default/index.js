@@ -1,6 +1,7 @@
 import _ from 'underscore';
 import { composer } from './composer';
 import { customColumn } from './custom-column';
+import { customCaption } from './built-in/custom-caption';
 
 const DEFAULT_PRIMARY_KEY = '@id';
 
@@ -38,4 +39,5 @@ export const coreDefault = [
   defaultPrimaryKey,
   composer,
   customColumn,
+  customCaption,
 ];
