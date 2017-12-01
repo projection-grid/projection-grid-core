@@ -85,7 +85,7 @@ function decorate({ composeTable }, config, {
     },
 
     composeCols(col) {
-      return [_.pick(col, COMMON_PROPS, 'key')];
+      return [_.pick(col, COMMON_PROPS, 'key', 'width')];
     },
 
     composeThead(thead) {
