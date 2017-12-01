@@ -1,9 +1,9 @@
 import _ from 'underscore';
 
-export default function columnWidth({ composerCols }) {
+export default function columnWidth({ composeCols }) {
   return {
-    composerCols(col) {
-      const columns = composerCols(col);
+    composeCols(col) {
+      const columns = composeCols(col);
       return _.map(columns, (column) => {
         const widthProps = _.chain({})
           .defaults(column)
