@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import { COMMON_PROPS } from '../constants';
 import { convert } from './convert';
 
 export class Decorator {
@@ -46,20 +45,6 @@ export class Decorator {
       Component,
       props: _.defaults({ content }, content.props),
     } : {}, deco(context, content));
-  }
-
-  th(th, thExt, context) {
-    const deco = Decorator.create(thExt, [COMMON_PROPS, 'key', 'content']);
-    return deco(th, context);
-  }
-
-  td(td, tdExt, context) {
-    const deco = Decorator.create(tdExt, [COMMON_PROPS, 'key', 'content']);
-    return deco(td, context);
-  }
-
-  tr(tr, trExt) {
-    return Decorator.create(trExt, [COMMON_PROPS, 'key', 'td', 'th'], tr)(tr);
   }
 
   static create(wrapper, keys) {
