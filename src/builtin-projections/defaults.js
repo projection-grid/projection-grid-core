@@ -1,5 +1,5 @@
 import _ from 'underscore';
-// import { Decorator } from '../utils/decorator';
+import { Decorator } from '../utils/decorator';
 import { COMMON_PROPS } from '../constants';
 
 function compose(content, method) {
@@ -99,18 +99,19 @@ function decorate({ composeTable }, config, {
     },
 
     composeTbodies(tbody) {
+      const deco = Decorator.create(tbody.tr, [COMMON_PROPS, 'key', 'td', 'th']);
       const trs = _.map(
         tbody.records,
-        record => _.defaults({
+        record => [].concat(_.map(compose(_.defaults({
           key: `@tr-${record[table.primaryKey]}`,
           record,
-        }, tbody.tr)
+        }), this.composeDataTrs), model => deco(model, { record, table })))
       );
 
       return [
         _.chain(tbody)
           .pick(COMMON_PROPS, 'key')
-          .extend({ trs: compose(trs, this.composeDataTrs) })
+          .extend({ trs })
           .value(),
       ];
     },

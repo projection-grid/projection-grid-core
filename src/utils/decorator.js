@@ -47,12 +47,14 @@ export class Decorator {
     } : {}, deco(content, context));
   }
 
-  th(th, thExt) {
-    return Decorator.create(thExt, [COMMON_PROPS, 'key', 'content'], th)(th);
+  th(th, thExt, context) {
+    const deco = Decorator.create(thExt, [COMMON_PROPS, 'key', 'content']);
+    return deco(th, context);
   }
 
   td(td, tdExt) {
-    return Decorator.create(tdExt, [COMMON_PROPS, 'key', 'content'], td)(td);
+    const deco = Decorator.create(tdExt, [COMMON_PROPS, 'key', 'content']);
+    return deco(td, context);
   }
 
   tr(tr, trExt) {
