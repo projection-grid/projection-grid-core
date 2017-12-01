@@ -1,16 +1,7 @@
 import _ from 'underscore';
 import { Decorator } from '../utils/decorator';
+import { convert } from '../utils/convert';
 import { COMMON_PROPS } from '../constants';
-
-function compose(content, method) {
-  if (_.isArray(content)) {
-    return [].concat(..._.map(content, method));
-  }
-  if (_.isObject(content)) {
-    return method(content);
-  }
-  return null;
-}
 
 function normalize(config) {
   const {
@@ -53,11 +44,11 @@ function decorate({ composeTable }, config, {
       return _.chain(table)
         .pick(COMMON_PROPS)
         .extend({
-          caption: compose(table.caption, this.composeCaption),
-          colgroups: compose(table.colgroups, this.composeColgroups),
-          thead: compose(table.thead, this.composeThead),
-          tbodies: compose(table.tbodies, this.composeTbodies),
-          tfoot: compose(table.tfoot, this.composeTfoot),
+          caption: convert(this.composeCaption, table.caption),
+          colgroups: convert(this.composeColgroups, table.colgroups),
+          thead: convert(this.composeThead, table.thead),
+          tbodies: convert(this.composeTbodies, table.tbodies),
+          tfoot: convert(this.composeTfoot, table.tfoot),
         })
         .defaults(composeTable(table))
         .value();
@@ -80,7 +71,7 @@ function decorate({ composeTable }, config, {
       return [
         _.chain(colgroup)
           .pick(COMMON_PROPS, 'key')
-          .extend({ cols: compose(cols, this.composeCols) })
+          .extend({ cols: convert(this.composeCols, cols) })
           .value(),
       ];
     },
@@ -94,7 +85,7 @@ function decorate({ composeTable }, config, {
 
       return _.chain(thead)
         .pick(COMMON_PROPS)
-        .extend({ trs: compose(tr, this.composeHeaderTrs) })
+        .extend({ trs: convert(this.composeHeaderTrs, tr) })
         .value();
     },
 
@@ -102,10 +93,13 @@ function decorate({ composeTable }, config, {
       const deco = Decorator.create(tbody.tr, [COMMON_PROPS, 'key', 'td', 'th']);
       const trs = _.map(
         tbody.records,
-        record => [].concat(_.map(compose(_.defaults({
+        record => convert(_.compose(
+          _.partial(deco, { record, table }),
+          this.composeDataTrs
+        ), _.defaults({
           key: `@tr-${record[table.primaryKey]}`,
           record,
-        }), this.composeDataTrs), model => deco({ record, table }, model)))
+        }))
       );
 
       return [
@@ -133,7 +127,7 @@ function decorate({ composeTable }, config, {
       return [
         _.chain(tr)
           .pick(COMMON_PROPS, 'key')
-          .extend({ ths: compose(ths, this.composeHeaderThs) })
+          .extend({ ths: convert(this.composeHeaderThs, ths) })
           .value(),
       ];
     },
@@ -153,7 +147,7 @@ function decorate({ composeTable }, config, {
       return [
         _.chain(tr)
           .pick(COMMON_PROPS, 'key')
-          .extend({ tds: compose(tds, this.composeDataTds) })
+          .extend({ tds: convert(this.composeDataTds, tds) })
           .value(),
       ];
     },

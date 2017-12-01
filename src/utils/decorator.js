@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import { COMMON_PROPS } from '../constants';
+import { convert } from './convert';
 
 export class Decorator {
   constructor({ wrappers }) {
@@ -52,7 +53,7 @@ export class Decorator {
     return deco(th, context);
   }
 
-  td(td, tdExt) {
+  td(td, tdExt, context) {
     const deco = Decorator.create(tdExt, [COMMON_PROPS, 'key', 'content']);
     return deco(td, context);
   }
@@ -62,11 +63,13 @@ export class Decorator {
   }
 
   static create(wrapper, keys) {
-    if (_.isFunction(wrapper)) {
-      return (context, model) => _.pick(wrapper(context, model), keys);
-    }
-    const deco = new Decorator({ wrappers: _.pick(wrapper, keys) });
+    const func = _.isFunction(wrapper) ?
+      (...args) => _.pick(wrapper(...args), keys) :
+      (() => {
+        const deco = new Decorator({ wrappers: _.pick(wrapper, keys) });
+        return deco.decorate.bind(deco);
+      })();
 
-    return deco.decorate.bind(deco);
+    return (context, model) => convert(_.partial(func, context), model);
   }
 }
