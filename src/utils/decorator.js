@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-class Decorator {
+export class Decorator {
   constructor({ wrappers, context }) {
     this.wrappers = _.mapObject(wrappers, (wrapper, key) => {
       if (_.isFunction(wrapper)) {
@@ -43,20 +43,20 @@ class Decorator {
     return _.defaults(Component ? {
       Component,
       props: _.defaults({ content }, content.props),
-    } : {}, new Decorator({
+    } : {}, Decorator.create({
       events: contentExt.events,
-    }).decorate(content));
+    }, 'events', this.context)(content));
   }
-}
 
-export function decorator(wrapper, keys, context) {
-  if (_.isFunction(wrapper)) {
-    return model => _.pick(wrapper(model, context), keys);
+  static create(wrapper, keys, context) {
+    if (_.isFunction(wrapper)) {
+      return model => _.pick(wrapper(model, context), keys);
+    }
+    const deco = new Decorator({
+      wrappers: _.pick(wrapper, keys),
+      context,
+    });
+
+    return model => deco.decorate(model, context);
   }
-  const deco = new Decorator({
-    wrappers: _.pick(wrapper, keys),
-    context,
-  });
-
-  return model => deco.decorate(model, context);
 }

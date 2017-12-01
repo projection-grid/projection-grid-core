@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { decorator } from '../utils/decorator';
+import { Decorator } from '../utils/decorator';
 import { COMMON_PROPS } from '../constants';
 
 export function customColumn({
@@ -11,7 +11,7 @@ export function customColumn({
     composeCols(col) {
       const model = _.map(
         composeCols(col),
-        decorator(col.column.col, COMMON_PROPS, col)
+        Decorator.create(col.column.col, COMMON_PROPS, col)
       );
 
       return model;
@@ -19,7 +19,7 @@ export function customColumn({
     composeHeaderThs(th) {
       const model = _.map(
         composeHeaderThs(th),
-        decorator(th.column.th, [COMMON_PROPS, 'content'], th)
+        Decorator.create(th.column.th, [COMMON_PROPS, 'content'], th)
       );
 
       return model;
@@ -27,7 +27,7 @@ export function customColumn({
     composeDataTds(td) {
       const model = _.map(
         composeDataTds(td),
-        decorator(td.column.td, [COMMON_PROPS, 'content'], td)
+        Decorator.create(td.column.td, [COMMON_PROPS, 'content'], td)
       );
 
       return model;
