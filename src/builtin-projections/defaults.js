@@ -46,9 +46,9 @@ function decorate({ composeTable }, config, {
 
       return _.defaults({
         caption: convert(this.composeCaption, context('caption')),
-        colgroups: convert(this.composeColgroups, context('colgroups')),
+        colgroups: [].concat(...convert(this.composeColgroups, context('colgroups'))),
         thead: convert(this.composeThead, context('thead')),
-        tbodies: convert(this.composeTbodies, context('tbodies')),
+        tbodies: [].concat(...convert(this.composeTbodies, context('tbodies'))),
         tfoot: convert(this.composeTfoot, context('tfoot')),
       }, composeTable(table));
     },
@@ -68,7 +68,7 @@ function decorate({ composeTable }, config, {
 
       return [{
         key: colgroup.key,
-        cols: convert(this.composeCols, cols),
+        cols: [].concat(...convert(this.composeCols, cols)),
       }];
     },
 
@@ -80,7 +80,7 @@ function decorate({ composeTable }, config, {
         thead,
       }, _.pick(thead, 'table'), thead.tr);
 
-      return { trs: convert(this.composeHeaderTrs, tr) };
+      return { trs: [].concat(...convert(this.composeHeaderTrs, tr)) };
     },
 
     composeTbodies(tbody) {
@@ -92,7 +92,7 @@ function decorate({ composeTable }, config, {
 
       return [{
         key: tbody.key,
-        trs: convert(this.composeDataTrs, trs),
+        trs: [].concat(...convert(this.composeDataTrs, trs)),
       }];
     },
 
@@ -107,7 +107,7 @@ function decorate({ composeTable }, config, {
 
       return [{
         key: tr.key,
-        ths: convert(this.composeHeaderThs, ths),
+        ths: [].concat(...convert(this.composeHeaderThs, ths)),
       }];
     },
 
@@ -120,7 +120,7 @@ function decorate({ composeTable }, config, {
 
       return [{
         key: tr.key,
-        tds: convert(this.composeDataTds, tds),
+        tds: [].concat(...convert(this.composeDataTds, tds)),
       }];
     },
 
