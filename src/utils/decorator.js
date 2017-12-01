@@ -1,62 +1,70 @@
 import _ from 'underscore';
+import { COMMON_PROPS } from '../constants';
 
 export class Decorator {
-  constructor({ wrappers, context }) {
+  constructor({ wrappers }) {
     this.wrappers = _.mapObject(wrappers, (wrapper, key) => {
       if (_.isFunction(wrapper)) {
         return wrapper;
       }
       if (_.isFunction(this[key])) {
-        return value => this[key](value, wrapper);
+        return (value, context) => this[key](value, wrapper, context);
       }
       return _.constant(wrapper);
     });
-    this.context = context;
   }
 
-  decorate(model) {
+  decorate(model, context) {
     return _.chain(this.wrappers)
-      .mapObject((wrapper, key) => wrapper(model[key], this.context))
+      .mapObject((wrapper, key) => wrapper(model[key], context))
       .defaults(model)
       .value();
   }
 
-  props(props, propsExt) {
+  props(props, propsExt/* , context */) {
     return _.extend({}, props, propsExt);
   }
 
-  classes(classes, classesExt) {
+  classes(classes, classesExt/* , context */) {
     return _.union(classes, classesExt);
   }
 
-  styles(styles, stylesExt) {
+  styles(styles, stylesExt/* , context */) {
     return _.extend({}, styles, stylesExt);
   }
 
-  events(events, eventsExt) {
+  events(events, eventsExt/* , context */) {
     return _.extend({}, events, eventsExt);
   }
 
-  content(content, contentExt) {
+  content(content, contentExt, context) {
     const { Component } = contentExt;
+    const deco = Decorator.create(contentExt, ['classes', 'styles', 'events']);
 
     return _.defaults(Component ? {
       Component,
       props: _.defaults({ content }, content.props),
-    } : {}, Decorator.create({
-      events: contentExt.events,
-    }, 'events', this.context)(content));
+    } : {}, deco(content, context));
   }
 
-  static create(wrapper, keys, context) {
-    if (_.isFunction(wrapper)) {
-      return model => _.pick(wrapper(model, context), keys);
-    }
-    const deco = new Decorator({
-      wrappers: _.pick(wrapper, keys),
-      context,
-    });
+  th(th, thExt) {
+    return Decorator.create(thExt, [COMMON_PROPS, 'key', 'content'], th)(th);
+  }
 
-    return model => deco.decorate(model, context);
+  td(td, tdExt) {
+    return Decorator.create(tdExt, [COMMON_PROPS, 'key', 'content'], td)(td);
+  }
+
+  tr(tr, trExt) {
+    return Decorator.create(trExt, [COMMON_PROPS, 'key', 'td', 'th'], tr)(tr);
+  }
+
+  static create(wrapper, keys) {
+    if (_.isFunction(wrapper)) {
+      return (model, context) => _.pick(wrapper(model, context), keys);
+    }
+    const deco = new Decorator({ wrappers: _.pick(wrapper, keys) });
+
+    return deco.decorate.bind(deco);
   }
 }

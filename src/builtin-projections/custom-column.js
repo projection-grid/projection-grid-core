@@ -9,26 +9,20 @@ export function customColumn({
 }) {
   return {
     composeCols(col) {
-      const model = _.map(
-        composeCols(col),
-        Decorator.create(col.column.col, [COMMON_PROPS, 'key'], col)
-      );
+      const deco = Decorator.create(col.column.col, [COMMON_PROPS, 'key', 'content']);
+      const model = _.map(composeCols(col), m => deco(m, col));
 
       return model;
     },
     composeHeaderThs(th) {
-      const model = _.map(
-        composeHeaderThs(th),
-        Decorator.create(th.column.th, [COMMON_PROPS, 'key', 'content'], th)
-      );
+      const deco = Decorator.create(th.column.th, [COMMON_PROPS, 'key', 'content']);
+      const model = _.map(composeHeaderThs(th), m => deco(m, th));
 
       return model;
     },
     composeDataTds(td) {
-      const model = _.map(
-        composeDataTds(td),
-        Decorator.create(td.column.td, [COMMON_PROPS, 'key', 'content'], td)
-      );
+      const deco = Decorator.create(td.column.td, [COMMON_PROPS, 'key', 'content']);
+      const model = _.map(composeDataTds(td), m => deco(m, td));
 
       return model;
     },

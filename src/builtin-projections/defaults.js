@@ -1,4 +1,5 @@
 import _ from 'underscore';
+// import { Decorator } from '../utils/decorator';
 import { COMMON_PROPS } from '../constants';
 
 function compose(content, method) {
@@ -93,7 +94,7 @@ function decorate({ composeTable }, config, {
 
       return _.chain(thead)
         .pick(COMMON_PROPS)
-        .extend({ trs: [compose(tr, this.composeHeaderTrs)] })
+        .extend({ trs: compose(tr, this.composeHeaderTrs) })
         .value();
     },
 
@@ -118,13 +119,6 @@ function decorate({ composeTable }, config, {
       return _.pick(tfoot, COMMON_PROPS);
     },
 
-    composeTrs(tr) {
-      if (_.isObject(tr.record)) {
-        return this.composeDataTrs(tr);
-      }
-      return _.pick(tr, COMMON_PROPS, 'key');
-    },
-
     composeHeaderTrs(tr) {
       const ths = _.map(
         columns,
@@ -135,10 +129,12 @@ function decorate({ composeTable }, config, {
         }, tr.th)
       );
 
-      return _.chain(tr)
-        .pick(COMMON_PROPS, 'key')
-        .extend({ ths: compose(ths, this.composeHeaderThs) })
-        .value();
+      return [
+        _.chain(tr)
+          .pick(COMMON_PROPS, 'key')
+          .extend({ ths: compose(ths, this.composeHeaderThs) })
+          .value(),
+      ];
     },
 
     composeDataTrs(tr) {
@@ -153,10 +149,12 @@ function decorate({ composeTable }, config, {
         }, tr.td)
       );
 
-      return _.chain(tr)
-        .pick(COMMON_PROPS, 'key')
-        .extend({ tds: compose(tds, this.composeDataTds) })
-        .value();
+      return [
+        _.chain(tr)
+          .pick(COMMON_PROPS, 'key')
+          .extend({ tds: compose(tds, this.composeDataTds) })
+          .value(),
+      ];
     },
 
     composeHeaderThs(th) {
