@@ -1,7 +1,8 @@
 import _ from 'underscore';
 import {
   defaults,
-  customColumn,
+  decoration,
+  columnDecoration,
   sortable,
   columnWidth,
 } from './builtin-projections';
@@ -45,7 +46,8 @@ export class ProjectionGridCore {
       composeTable: () => ({}),
     }, [
       defaults(this.defaultComponents),
-      customColumn,
+      decoration,
+      columnDecoration,
       sortable,
       projections,
       columnWidth,
