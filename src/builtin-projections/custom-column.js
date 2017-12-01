@@ -1,47 +1,97 @@
 import _ from 'underscore';
 
-/*
-Configuration added by custom-column projection
+const COMMON_PROPS = ['props', 'classes', 'style', 'events'];
 
-  column.col
-    column.col.props
-    column.col.classes
-    column.col.style
-    column.col.events
-  column.td
-    column.td.props
-    column.td.classes
-    column.td.style
-    column.td.events
-    column.td.content
-  column.th
-    column.th.props
-    column.td.classes
-    column.td.style
-    column.th.events
-    column.th.content
-*/
+class Decorator {
+  constructor({ wrappers, context }) {
+    this.wrappers = _.mapObject(wrappers, (wrapper, key) => {
+      if (_.isFunction(wrapper)) {
+        return wrapper;
+      }
+      if (_.isFunction(this[key])) {
+        return value => this[key](value, wrapper);
+      }
+      return _.constant(wrapper);
+    });
+    this.context = context;
+  }
 
-function decorate(decorator, options, value) {
-  if (_.isFunction(decorator)) {
-    return decorator(options, value);
+  decorate(model) {
+    return _.chain(this.wrappers)
+      .mapObject((wrapper, key) => wrapper(model[key], this.context))
+      .defaults(model)
+      .value();
   }
-  if (_.isObject(decorator)) {
-    return _.mapObject(value, (v, key) => decorate(decorator[key], options, v));
+
+  props(props, propsExt) {
+    return _.extend({}, props, propsExt);
   }
-  return value;
+
+  classes(classes, classesExt) {
+    return _.union(classes, classesExt);
+  }
+
+  styles(styles, stylesExt) {
+    return _.extend({}, styles, stylesExt);
+  }
+
+  events(events, eventsExt) {
+    return _.extend({}, events, eventsExt);
+  }
+
+  content(content, contentExt) {
+    const { Component } = contentExt;
+
+    return _.defaults(Component ? {
+      Component,
+      props: _.defaults({ content }, content.props),
+    } : {}, new Decorator({
+      events: contentExt.events,
+    }).decorate(content));
+  }
 }
 
-export default function customColumn(config) {
-  return _.chain({
-    composeCols: 'col',
-    composeThs: 'th',
-    composeTds: 'td',
-  }).mapObject((decoratorKey, composerName) => (options) => {
-    const { column: { [decoratorKey]: decorator } } = options;
-    return _.map(
-      config[composerName](options),
-      value => decorate(decorator, options, value)
-    );
-  }).defaults(config).value();
+function decorator(wrapper, keys, context) {
+  if (_.isFunction(wrapper)) {
+    return model => _.pick(wrapper(model, context), keys);
+  }
+  const deco = new Decorator({
+    wrappers: _.pick(wrapper, keys),
+    context,
+  });
+
+  return model => deco.decorate(model, context);
+}
+
+export function customColumn({
+  composeCols,
+  composeHeaderThs,
+  composeDataTds,
+}) {
+  return {
+    composeCols(col) {
+      const model = _.map(
+        composeCols(col),
+        decorator(col.column.col, COMMON_PROPS, col)
+      );
+
+      return model;
+    },
+    composeHeaderThs(th) {
+      const model = _.map(
+        composeHeaderThs(th),
+        decorator(th.column.th, [COMMON_PROPS, 'content'], th)
+      );
+
+      return model;
+    },
+    composeDataTds(td) {
+      const model = _.map(
+        composeDataTds(td),
+        decorator(td.column.td, [COMMON_PROPS, 'content'], td)
+      );
+
+      return model;
+    },
+  };
 }
