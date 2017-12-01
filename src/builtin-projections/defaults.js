@@ -155,12 +155,8 @@ function decorate({ composeTable }, config, {
 
       return _.chain(tr)
         .pick(COMMON_PROPS, 'key')
-        .extend({ tds: compose(tds, this.composeTds) })
+        .extend({ tds: compose(tds, this.composeDataTds) })
         .value();
-    },
-
-    composeThs(th) {
-      return [_.pick(th, COMMON_PROPS, 'key', 'content')];
     },
 
     composeHeaderThs(th) {
@@ -175,13 +171,6 @@ function decorate({ composeTable }, config, {
           })
           .value(),
       ];
-    },
-
-    composeTds(td) {
-      if (_.isObject(td.record)) {
-        return this.composeDataTds(td);
-      }
-      return [_.pick(td, COMMON_PROPS, 'key', 'content')];
     },
 
     composeDataTds(td) {
