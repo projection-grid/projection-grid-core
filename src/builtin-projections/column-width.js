@@ -12,8 +12,9 @@ export default function columnWidth({ composerCols }) {
           .value();
 
         // extend props in col to support width:100, width: "100", width: "100px"
-        _.extend(column.props, widthProps);
-        return column;
+        return _.defaults({}, {
+          props: _.defaults({}, widthProps, column.props),
+        }, column);
       });
     },
   };
