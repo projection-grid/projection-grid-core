@@ -26,12 +26,12 @@ function normalize(config) {
   const colgroup = _.extend({ columns }, config.colgroup);
   const tbody = _.extend({ records }, config.tbody);
   const colgroups = _.chain(config)
-    .result('colgroups', [{ key: 'default' }])
-    .map(cg => (cg.key === 'default' ? _.defaults(colgroup, cg) : cg))
+    .result('colgroups', [{ key: 'colgroup-default' }])
+    .map(cg => (cg.key === 'colgroup-default' ? _.defaults(colgroup, cg) : cg))
     .value();
   const tbodies = _.chain(config)
-    .result('tbodies', [{ key: 'default' }])
-    .map(tb => (tb.key === 'default' ? _.defaults(tbody, tb) : tb))
+    .result('tbodies', [{ key: 'tbody-default' }])
+    .map(tb => (tb.key === 'tbody-default' ? _.defaults(tbody, tb) : tb))
     .value();
 
   return _.defaults({
@@ -73,7 +73,7 @@ function decorate({ composeTable }, config, {
       const cols = _.map(
         columns,
         column => _.defaults({
-          key: `@${column.name}`,
+          key: `@col-${column.name}`,
           column,
           table,
         }, colgroup.col)
@@ -88,12 +88,12 @@ function decorate({ composeTable }, config, {
     },
 
     composeCols(col) {
-      return [_.pick(col, COMMON_PROPS)];
+      return [_.pick(col, COMMON_PROPS, 'key')];
     },
 
     composeThead(thead) {
       const tr = _.defaults({
-        key: 'default',
+        key: 'tr-header',
         record: HEADER_RECORD,
       }, thead.tr);
 
@@ -107,7 +107,7 @@ function decorate({ composeTable }, config, {
       const trs = _.map(
         tbody.records,
         record => _.defaults({
-          key: record[table.primaryKey],
+          key: `@tr-${record[table.primaryKey]}`,
           record,
         }, tbody.tr)
       );
@@ -138,7 +138,7 @@ function decorate({ composeTable }, config, {
       const ths = _.map(
         columns,
         column => _.defaults({
-          key: `@${column.name}`,
+          key: `@th-${column.name}`,
           record: HEADER_RECORD,
           column,
           table,
@@ -156,7 +156,7 @@ function decorate({ composeTable }, config, {
       const tds = _.map(
         columns,
         column => _.defaults({
-          key: `@${column.name}`,
+          key: `td-@${column.name}`,
           record,
           column,
           table,
@@ -173,13 +173,13 @@ function decorate({ composeTable }, config, {
       if (th.record === HEADER_RECORD) {
         return this.composeHeaderThs(th);
       }
-      return [_.pick(th, COMMON_PROPS, 'content')];
+      return [_.pick(th, COMMON_PROPS, 'key', 'content')];
     },
 
     composeHeaderThs(th) {
       return [
         _.chain(th)
-          .pick(COMMON_PROPS)
+          .pick(COMMON_PROPS, 'key')
           .extend({
             content: _.defaults({
               Component: DefaultHeader,
@@ -194,13 +194,13 @@ function decorate({ composeTable }, config, {
       if (_.isObject(td.record)) {
         return this.composeDataTds(td);
       }
-      return [_.pick(td, COMMON_PROPS, 'content')];
+      return [_.pick(td, COMMON_PROPS, 'key', 'content')];
     },
 
     composeDataTds(td) {
       return [
         _.chain(td)
-          .pick(COMMON_PROPS)
+          .pick(COMMON_PROPS, 'key')
           .extend({
             content: _.defaults({
               Component: DefaultCell,

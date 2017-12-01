@@ -11,7 +11,7 @@ export function customColumn({
     composeCols(col) {
       const model = _.map(
         composeCols(col),
-        Decorator.create(col.column.col, COMMON_PROPS, col)
+        Decorator.create(col.column.col, [COMMON_PROPS, 'key'], col)
       );
 
       return model;
@@ -19,7 +19,7 @@ export function customColumn({
     composeHeaderThs(th) {
       const model = _.map(
         composeHeaderThs(th),
-        Decorator.create(th.column.th, [COMMON_PROPS, 'content'], th)
+        Decorator.create(th.column.th, [COMMON_PROPS, 'key', 'content'], th)
       );
 
       return model;
@@ -27,7 +27,7 @@ export function customColumn({
     composeDataTds(td) {
       const model = _.map(
         composeDataTds(td),
-        Decorator.create(td.column.td, [COMMON_PROPS, 'content'], td)
+        Decorator.create(td.column.td, [COMMON_PROPS, 'key', 'content'], td)
       );
 
       return model;
