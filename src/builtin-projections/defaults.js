@@ -105,7 +105,7 @@ function decorate({ composeTable }, config, {
         record => [].concat(_.map(compose(_.defaults({
           key: `@tr-${record[table.primaryKey]}`,
           record,
-        }), this.composeDataTrs), model => deco(model, { record, table })))
+        }), this.composeDataTrs), model => deco({ record, table }, model)))
       );
 
       return [

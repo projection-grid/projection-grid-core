@@ -8,15 +8,15 @@ export class Decorator {
         return wrapper;
       }
       if (_.isFunction(this[key])) {
-        return (value, context) => this[key](value, wrapper, context);
+        return (context, value) => this[key](value, wrapper, context);
       }
       return _.constant(wrapper);
     });
   }
 
-  decorate(model, context) {
+  decorate(context, model) {
     return _.chain(this.wrappers)
-      .mapObject((wrapper, key) => wrapper(model[key], context))
+      .mapObject((wrapper, key) => wrapper(context, model[key]))
       .defaults(model)
       .value();
   }
@@ -44,7 +44,7 @@ export class Decorator {
     return _.defaults(Component ? {
       Component,
       props: _.defaults({ content }, content.props),
-    } : {}, deco(content, context));
+    } : {}, deco(context, content));
   }
 
   th(th, thExt, context) {
@@ -63,7 +63,7 @@ export class Decorator {
 
   static create(wrapper, keys) {
     if (_.isFunction(wrapper)) {
-      return (model, context) => _.pick(wrapper(model, context), keys);
+      return (context, model) => _.pick(wrapper(context, model), keys);
     }
     const deco = new Decorator({ wrappers: _.pick(wrapper, keys) });
 
