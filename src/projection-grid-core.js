@@ -2,6 +2,7 @@ import _ from 'underscore';
 import {
   defaults,
   customColumn,
+  sortable,
 } from './builtin-projections';
 
 function mergeComposer(composer, funcs) {
@@ -44,6 +45,7 @@ export class ProjectionGridCore {
     }, [
       defaults(this.defaultComponents),
       customColumn,
+      sortable,
       projections,
     ]);
     const { composeTable } = _.bindAll(composer, ..._.keys(composer));
