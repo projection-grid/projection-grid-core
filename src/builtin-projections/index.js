@@ -1,4 +1,5 @@
 export { defaults } from './defaults';
-export { customColumn } from './custom-column';
+export { decoration } from './decoration';
+export { columnDecoration } from './column-decoration';
 export { sortable } from './sortable';
 export { columnWidth } from './column-width';
