@@ -1,47 +1,36 @@
 import _ from 'underscore';
+import { Decorator } from '../utils/decorator';
+import { COMMON_PROPS } from '../constants';
 
-/*
-Configuration added by custom-column projection
+export function customColumn({
+  composeCols,
+  composeHeaderThs,
+  composeDataTds,
+}) {
+  return {
+    composeCols(col) {
+      const model = _.map(
+        composeCols(col),
+        Decorator.create(col.column.col, [COMMON_PROPS, 'key'], col)
+      );
 
-  column.col
-    column.col.props
-    column.col.classes
-    column.col.style
-    column.col.events
-  column.td
-    column.td.props
-    column.td.classes
-    column.td.style
-    column.td.events
-    column.td.content
-  column.th
-    column.th.props
-    column.td.classes
-    column.td.style
-    column.th.events
-    column.th.content
-*/
+      return model;
+    },
+    composeHeaderThs(th) {
+      const model = _.map(
+        composeHeaderThs(th),
+        Decorator.create(th.column.th, [COMMON_PROPS, 'key', 'content'], th)
+      );
 
-function decorate(decorator, options, value) {
-  if (_.isFunction(decorator)) {
-    return decorator(options, value);
-  }
-  if (_.isObject(decorator)) {
-    return _.mapObject(value, (v, key) => decorate(decorator[key], options, v));
-  }
-  return value;
-}
+      return model;
+    },
+    composeDataTds(td) {
+      const model = _.map(
+        composeDataTds(td),
+        Decorator.create(td.column.td, [COMMON_PROPS, 'key', 'content'], td)
+      );
 
-export default function customColumn(config) {
-  return _.chain({
-    composeCols: 'col',
-    composeThs: 'th',
-    composeTds: 'td',
-  }).mapObject((decoratorKey, composerName) => (options) => {
-    const { column: { [decoratorKey]: decorator } } = options;
-    return _.map(
-      config[composerName](options),
-      value => decorate(decorator, options, value)
-    );
-  }).defaults(config).value();
+      return model;
+    },
+  };
 }

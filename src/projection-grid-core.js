@@ -1,23 +1,55 @@
 import _ from 'underscore';
-import builtinProjections from './builtin-projections';
+import {
+  defaults,
+  customColumn,
+  sortable,
+} from './builtin-projections';
 
-function resolve(config, projection) {
-  if (_.isArray(projection)) {
-    return projection.reduce(resolve, config);
-  }
-  if (_.isFunction(projection && projection.reducer)) {
-    return projection.reducer(config, projection.options);
-  }
-  if (_.isFunction(projection)) {
-    return projection(config);
-  }
-  return config;
+function mergeComposer(composer, funcs) {
+  return _.extend(composer, _.mapObject(funcs, func => func.bind(composer)));
 }
 
 export class ProjectionGridCore {
-  compose({ config: userConfig, projections = [] }) {
-    const config = resolve(userConfig, [builtinProjections, projections]);
+  constructor({
+    DefaultCell,
+    DefaultHeader,
+  }) {
+    this.defaultComponents = {
+      DefaultCell,
+      DefaultHeader,
+    };
+  }
 
-    return { table: config.composeTable({ config }) };
+  compose({ config, projections = [] }) {
+    function decorate(composer, projection) {
+      if (_.isArray(projection)) {
+        return projection.reduce(decorate, composer);
+      }
+      if (_.isFunction(projection && projection.decorate)) {
+        return mergeComposer(
+          composer,
+          projection.decorate(composer, config, projection.config)
+        );
+      }
+      if (_.isFunction(projection)) {
+        return mergeComposer(
+          composer,
+          projection(composer, config)
+        );
+      }
+      return composer;
+    }
+
+    const composer = decorate({
+      composeTable: () => ({}),
+    }, [
+      defaults(this.defaultComponents),
+      customColumn,
+      sortable,
+      projections,
+    ]);
+    const { composeTable } = _.bindAll(composer, ..._.keys(composer));
+
+    return { table: composeTable(config) };
   }
 }
