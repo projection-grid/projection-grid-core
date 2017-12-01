@@ -1,8 +1,5 @@
 import _ from 'underscore';
-import {
-  COMMON_PROPS,
-  HEADER_RECORD,
-} from '../constants';
+import { COMMON_PROPS } from '../constants';
 
 function compose(content, method) {
   if (_.isArray(content)) {
@@ -92,14 +89,11 @@ function decorate({ composeTable }, config, {
     },
 
     composeThead(thead) {
-      const tr = _.defaults({
-        key: 'tr-header',
-        record: HEADER_RECORD,
-      }, thead.tr);
+      const tr = _.defaults({ key: 'tr-header' }, thead.tr);
 
       return _.chain(thead)
         .pick(COMMON_PROPS)
-        .extend({ trs: [compose(tr, this.composeTrs)] })
+        .extend({ trs: [compose(tr, this.composeHeaderTrs)] })
         .value();
     },
 
@@ -115,7 +109,7 @@ function decorate({ composeTable }, config, {
       return [
         _.chain(tbody)
           .pick(COMMON_PROPS, 'key')
-          .extend({ trs: compose(trs, this.composeTrs) })
+          .extend({ trs: compose(trs, this.composeDataTrs) })
           .value(),
       ];
     },
@@ -125,13 +119,10 @@ function decorate({ composeTable }, config, {
     },
 
     composeTrs(tr) {
-      if (tr.record === HEADER_RECORD) {
-        return this.composeHeaderTrs(tr);
-      }
       if (_.isObject(tr.record)) {
         return this.composeDataTrs(tr);
       }
-      return [];
+      return _.pick(tr, COMMON_PROPS, 'key');
     },
 
     composeHeaderTrs(tr) {
@@ -139,7 +130,6 @@ function decorate({ composeTable }, config, {
         columns,
         column => _.defaults({
           key: `@th-${column.name}`,
-          record: HEADER_RECORD,
           column,
           table,
         }, tr.th)
@@ -147,7 +137,7 @@ function decorate({ composeTable }, config, {
 
       return _.chain(tr)
         .pick(COMMON_PROPS, 'key')
-        .extend({ ths: compose(ths, this.composeThs) })
+        .extend({ ths: compose(ths, this.composeHeaderThs) })
         .value();
     },
 
@@ -170,9 +160,6 @@ function decorate({ composeTable }, config, {
     },
 
     composeThs(th) {
-      if (th.record === HEADER_RECORD) {
-        return this.composeHeaderThs(th);
-      }
       return [_.pick(th, COMMON_PROPS, 'key', 'content')];
     },
 
