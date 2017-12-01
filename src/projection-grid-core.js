@@ -4,6 +4,7 @@ import {
   decoration,
   columnDecoration,
   sortable,
+  columnWidth,
 } from './builtin-projections';
 
 function mergeComposer(composer, funcs) {
@@ -49,6 +50,7 @@ export class ProjectionGridCore {
       columnDecoration,
       sortable,
       projections,
+      columnWidth,
     ]);
     const { composeTable } = _.bindAll(composer, ..._.keys(composer));
 
