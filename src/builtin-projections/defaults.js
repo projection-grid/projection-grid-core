@@ -1,7 +1,8 @@
 import _ from 'underscore';
-
-const COMMON_PROPS = ['props', 'classes', 'styles', 'events'];
-const HEADER_RECORD = 'header';
+import {
+  COMMON_PROPS,
+  HEADER_RECORD,
+} from '../constants';
 
 function compose(content, method) {
   if (_.isArray(content)) {
