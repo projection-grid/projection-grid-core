@@ -59,7 +59,6 @@ function decorate({ composeTable }, config, {
       const cols = _.map(
         columns,
         column => _.defaults({
-          key: `@col-${column.name}`,
           column,
           colgroup,
           table: colgroup.table,
@@ -72,11 +71,12 @@ function decorate({ composeTable }, config, {
       }];
     },
 
-    composeCols(col) { return [_.pick(col, 'key')]; },
+    composeCols(col) {
+      return [{ key: `@col-${col.column.name}` }];
+    },
 
     composeThead(thead) {
       const tr = _.defaults({
-        key: 'tr-header',
         thead,
       }, _.pick(thead, 'table'), thead.tr);
 
@@ -85,7 +85,6 @@ function decorate({ composeTable }, config, {
 
     composeTbodies(tbody) {
       const trs = _.map(tbody.records, record => _.defaults({
-        key: `@tr-${record[table.primaryKey]}`,
         record,
         tbody,
       }, _.pick(tbody, 'table'), tbody.tr));
@@ -100,33 +99,31 @@ function decorate({ composeTable }, config, {
 
     composeHeaderTrs(tr) {
       const ths = _.map(columns, column => _.defaults({
-        key: `@th-${column.name}`,
         column,
         tr,
       }, _.pick(tr, 'table', 'thead'), tr.th));
 
       return [{
-        key: tr.key,
+        key: 'tr-header',
         ths: [].concat(...convert(this.composeHeaderThs, ths)),
       }];
     },
 
     composeDataTrs(tr) {
       const tds = _.map(columns, column => _.defaults({
-        key: `@td-${column.name}`,
         column,
         tr,
       }, _.pick(tr, 'table', 'thead', 'tbody', 'tfoot', 'record'), tr.td));
 
       return [{
-        key: tr.key,
+        key: `@tr-${tr.record[table.primaryKey]}`,
         tds: [].concat(...convert(this.composeDataTds, tds)),
       }];
     },
 
     composeHeaderThs(th) {
       return [{
-        key: th.key,
+        key: `@th-${th.column.name}`,
         content: _.defaults({
           Component: DefaultHeader,
           props: _.pick(th, 'column', 'table'),
@@ -136,7 +133,7 @@ function decorate({ composeTable }, config, {
 
     composeDataTds(td) {
       return [{
-        key: td.key,
+        key: `@td-${td.column.name}`,
         content: _.defaults({
           Component: DefaultCell,
           props: _.pick(td, 'record', 'column', 'table'),
