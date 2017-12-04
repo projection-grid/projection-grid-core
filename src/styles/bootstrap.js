@@ -1,31 +1,31 @@
 export default {
   table: {
     width: '100%',
-    'max-width': '100%',
-    'background-color': 'transparent',
-    'border-spacing': 0,
-    'border-collapse': 'collapse',
+    maxWidth: '100%',
+    backgroundColor: 'transparent',
+    borderSpacing: 0,
+    borderCollapse: 'collapse',
   },
   caption: {
-    'padding-top': '8px',
-    'padding-bottom': '8px',
+    paddingTop: '8px',
+    paddingBottom: '8px',
     color: '#777',
-    'text-align': 'left',
+    textAlign: 'left',
   },
   'table>thead>tr>th': {
-    'vertical-align': 'bottom',
-    'border-bottom': '2px solid #ddd',
+    verticalAlign: 'bottom',
+    borderBottom: '2px solid #ddd',
   },
-  '.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th': {
+  'table>tbody>tr>td, table>tbody>tr>th, table>tfoot>tr>td, table>tfoot>tr>th, table>thead>tr>td, table>thead>tr>th': {
     padding: '8px',
-    'line-height': 1.42857143,
-    'vertical-align': 'top',
-    'border-top': '1px solid #ddd',
+    inlineHeight: 1.42857143,
+    verticalAlign: 'top',
+    borderTop: '1px solid #ddd',
   },
   th: {
-    'text-align': 'left',
+    textAlign: 'left',
   },
-  '.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th': {
-    'border-top': 0,
+  'table>caption+thead>tr:firstChild>td, table>caption+thead>tr:firstChild>th, table>colgroup+thead>tr:firstChild>td, table>colgroup+thead>tr:firstChild>th, table>thead:firstChild>tr:firstChild>td, table>thead:firstChild>tr:firstChild>th': {
+    borderTop: 0,
   },
 };
