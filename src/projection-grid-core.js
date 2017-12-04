@@ -4,6 +4,7 @@ import {
   decoration,
   columnDecoration,
   sortable,
+  theme,
   columnWidth,
 } from './builtin-projections';
 
@@ -50,6 +51,7 @@ export class ProjectionGridCore {
       columnDecoration,
       sortable,
       projections,
+      theme,
       columnWidth,
     ]);
     const { composeTable } = _.bindAll(composer, ..._.keys(composer));
