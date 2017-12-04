@@ -1,6 +1,18 @@
+const applyField = (origin, patch) => {
+  if (Array.isArray(patch)) {
+    return patch.concat(origin || []);
+  }
+
+  if (typeof patch === 'string' || patch instanceof String) {
+    return `${origin || ''} ${patch}`;
+  }
+
+  return Object.assign({}, origin, patch);
+};
+
 export const applyValue = (defaults, obj) => Object.keys(obj).reduce((memo, key) =>
   Object.assign({}, memo, {
-    [key]: Object.assign({}, memo[key], obj[key]),
+    [key]: applyField(memo[key], obj[key]),
   }), defaults);
 
 export const applyForChildByCondition = (

@@ -1,33 +1,33 @@
-import _ from 'underscore';
+import { applyValue } from '../utils/composer-helper';
 
 export function sortable({ composeHeaderThs }, config) {
   return {
-    composeHeaderThs(th) {
-      const sortConfig = _.defaults({}, config.sort, {
+    composeHeaderThs(model) {
+      const sortConfig = Object.assign({}, {
         ascClasses: ['glyphicon', 'glyphicon-arrow-up'],
         descClasses: ['glyphicon', 'glyphicon-arrow-down'],
         handleResort: () => {},
-      });
-      const { column: { name, sorting } } = th;
-      const ths = composeHeaderThs(th);
+      }, config.sort);
+      const { column: { name, sorting } } = model;
+      const ths = composeHeaderThs(model);
 
       if (sorting) {
-        const sortingClasses = _.result({
+        const sortingClasses = {
           asc: sortConfig.ascClasses,
           desc: sortConfig.descClasses,
-        }, sorting, []);
+        }[sorting] || [];
 
-        return _.map(ths, model => _.defaults({}, {
-          classes: _.union(sortingClasses, model.classes),
-          events: _.defaults({}, {
+        return ths.map(th => applyValue(th, {
+          classes: sortingClasses,
+          events: {
             click: () => {
               sortConfig.handleResort(name);
             },
-          }, model.events),
-          styles: _.defaults({}, {
+          },
+          styles: {
             cursor: 'pointer',
-          }, model.styles),
-        }, model));
+          },
+        }));
       }
 
       return ths;
