@@ -1,39 +1,13 @@
 
-const applyStyles = (memo, styles) => Object.assign({}, memo, {
-  styles: Object.assign({}, memo.styles, styles),
-});
+import { applyValue, applyForChildByCondition } from '../utils/composer-helper';
 
-const applyStylesForChildByCondition = (
-  parent,
-  styles,
-  childPath = 'trs/tds',
-  condition = () => false
-) => {
-  const [, path1, path2] = childPath.match(/^(\S+)\/(\S+)$/);
-
-  if (Array.isArray(parent)) {
-    return parent.map(parentMemo =>
-      applyStylesForChildByCondition(parentMemo, styles, childPath, condition));
-  }
-
-  return Object.assign({}, parent, {
-    [path1]: parent[path1].map((childLevel1, index) => {
-      if (condition(childLevel1, index)) {
-        return Object.assign({}, childLevel1, {
-          [path2]: childLevel1[path2].map(childLevel2 => applyStyles(childLevel2, styles)),
-        });
-      }
-
-      return childLevel1;
-    }),
-  });
-};
+const applyStyles = (memo, styles) => applyValue(memo, { styles });
 
 const applyStylsForFirstChild = (parent, styles, childPath = 'trs/tds') =>
-  applyStylesForChildByCondition(parent, styles, childPath, (child, index) => index === 0);
+  applyForChildByCondition(parent, { styles }, childPath, (child, index) => index === 0);
 
 const applyStylsForOddChild = (parent, styles, childPath = 'trs/tds') =>
-  applyStylesForChildByCondition(parent, styles, childPath, (child, index) => !(index % 2));
+  applyForChildByCondition(parent, { styles }, childPath, (child, index) => !(index % 2));
 
 const composeWithBootstrap = ({
   composeTable,
