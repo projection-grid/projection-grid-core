@@ -1,15 +1,5 @@
 import _ from 'underscore';
-import { COMMON_PROPS } from '../constants';
-
-function compose(content, method) {
-  if (_.isArray(content)) {
-    return [].concat(..._.map(content, method));
-  }
-  if (_.isObject(content)) {
-    return method(content);
-  }
-  return null;
-}
+import { convert } from '../utils/convert';
 
 function normalize(config) {
   const {
@@ -49,142 +39,106 @@ function decorate({ composeTable }, config, {
 
   return {
     composeTable(/* table */) {
-      return _.chain(table)
-        .pick(COMMON_PROPS)
-        .extend({
-          caption: compose(table.caption, this.composeCaption),
-          colgroups: compose(table.colgroups, this.composeColgroups),
-          thead: compose(table.thead, this.composeThead),
-          tbodies: compose(table.tbodies, this.composeTbodies),
-          tfoot: compose(table.tfoot, this.composeTfoot),
-        })
-        .defaults(composeTable(table))
-        .value();
+      const context = name => convert(
+        obj => _.defaults({ table }, obj),
+        table[name]
+      );
+
+      return _.defaults({
+        caption: convert(this.composeCaption, context('caption')),
+        colgroups: [].concat(...convert(this.composeColgroups, context('colgroups'))),
+        thead: convert(this.composeThead, context('thead')),
+        tbodies: [].concat(...convert(this.composeTbodies, context('tbodies'))),
+        tfoot: convert(this.composeTfoot, context('tfoot')),
+      }, composeTable(table));
     },
 
-    composeCaption(caption) {
-      return _.pick(caption, COMMON_PROPS, 'content');
-    },
+    composeCaption(/* caption */) { return null; },
 
     composeColgroups(colgroup) {
       const cols = _.map(
         columns,
         column => _.defaults({
-          key: `@col-${column.name}`,
           column,
-          table,
+          colgroup,
+          table: colgroup.table,
         }, colgroup.col)
       );
 
-      return [
-        _.chain(colgroup)
-          .pick(COMMON_PROPS, 'key')
-          .extend({ cols: compose(cols, this.composeCols) })
-          .value(),
-      ];
+      return [{
+        key: colgroup.key,
+        cols: [].concat(...convert(this.composeCols, cols)),
+      }];
     },
 
     composeCols(col) {
-      return [_.pick(col, COMMON_PROPS, 'key')];
+      return [{ key: `@col-${col.column.name}` }];
     },
 
     composeThead(thead) {
-      const tr = _.defaults({ key: 'tr-header' }, thead.tr);
+      const tr = _.defaults({
+        thead,
+      }, _.pick(thead, 'table'), thead.tr);
 
-      return _.chain(thead)
-        .pick(COMMON_PROPS)
-        .extend({ trs: [compose(tr, this.composeHeaderTrs)] })
-        .value();
+      return { trs: [].concat(...convert(this.composeHeaderTrs, tr)) };
     },
 
     composeTbodies(tbody) {
-      const trs = _.map(
-        tbody.records,
-        record => _.defaults({
-          key: `@tr-${record[table.primaryKey]}`,
-          record,
-        }, tbody.tr)
-      );
+      const trs = _.map(tbody.records, record => _.defaults({
+        record,
+        tbody,
+      }, _.pick(tbody, 'table'), tbody.tr));
 
-      return [
-        _.chain(tbody)
-          .pick(COMMON_PROPS, 'key')
-          .extend({ trs: compose(trs, this.composeDataTrs) })
-          .value(),
-      ];
+      return [{
+        key: tbody.key,
+        trs: [].concat(...convert(this.composeDataTrs, trs)),
+      }];
     },
 
-    composeTfoot(tfoot) {
-      return _.pick(tfoot, COMMON_PROPS);
-    },
-
-    composeTrs(tr) {
-      if (_.isObject(tr.record)) {
-        return this.composeDataTrs(tr);
-      }
-      return _.pick(tr, COMMON_PROPS, 'key');
-    },
+    composeTfoot(/* tfoot */) { return null; },
 
     composeHeaderTrs(tr) {
-      const ths = _.map(
-        columns,
-        column => _.defaults({
-          key: `@th-${column.name}`,
-          column,
-          table,
-        }, tr.th)
-      );
+      const ths = _.map(columns, column => _.defaults({
+        column,
+        tr,
+      }, _.pick(tr, 'table', 'thead'), tr.th));
 
-      return _.chain(tr)
-        .pick(COMMON_PROPS, 'key')
-        .extend({ ths: compose(ths, this.composeHeaderThs) })
-        .value();
+      return [{
+        key: 'tr-header',
+        ths: [].concat(...convert(this.composeHeaderThs, ths)),
+      }];
     },
 
     composeDataTrs(tr) {
-      const { record } = tr;
-      const tds = _.map(
-        columns,
-        column => _.defaults({
-          key: `td-@${column.name}`,
-          record,
-          column,
-          table,
-        }, tr.td)
-      );
+      const tds = _.map(columns, column => _.defaults({
+        column,
+        tr,
+      }, _.pick(tr, 'table', 'thead', 'tbody', 'tfoot', 'record'), tr.td));
 
-      return _.chain(tr)
-        .pick(COMMON_PROPS, 'key')
-        .extend({ tds: compose(tds, this.composeDataTds) })
-        .value();
+      return [{
+        key: `@tr-${tr.record[table.primaryKey]}`,
+        tds: [].concat(...convert(this.composeDataTds, tds)),
+      }];
     },
 
     composeHeaderThs(th) {
-      return [
-        _.chain(th)
-          .pick(COMMON_PROPS, 'key')
-          .extend({
-            content: _.defaults({
-              Component: DefaultHeader,
-              props: _.pick(th, 'column', 'table'),
-            }, th.content),
-          })
-          .value(),
-      ];
+      return [{
+        key: `@th-${th.column.name}`,
+        content: _.defaults({
+          Component: DefaultHeader,
+          props: _.pick(th, 'column', 'table'),
+        }),
+      }];
     },
 
     composeDataTds(td) {
-      return [
-        _.chain(td)
-          .pick(COMMON_PROPS, 'key')
-          .extend({
-            content: _.defaults({
-              Component: DefaultCell,
-              props: _.pick(td, 'record', 'column', 'table'),
-            }, td.content),
-          })
-          .value(),
-      ];
+      return [{
+        key: `@td-${td.column.name}`,
+        content: _.defaults({
+          Component: DefaultCell,
+          props: _.pick(td, 'record', 'column', 'table'),
+        }),
+      }];
     },
   };
 }
