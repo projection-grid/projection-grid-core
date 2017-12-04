@@ -4,8 +4,9 @@ export function convert(converter, value) {
   if (_.isArray(value)) {
     return _.map(value, converter);
   }
-  if (_.isNull(value) || _.isUndefined(value)) {
+  const model = converter(value || {});
+  if (_.isEmpty(model)) {
     return null;
   }
-  return converter(value);
+  return model;
 }

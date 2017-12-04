@@ -1,13 +1,13 @@
 import _ from 'underscore';
 
-export default function columnWidth({ composeCols }) {
+export function columnWidth({ composeCols }) {
   return {
     composeCols(col) {
       const columns = composeCols(col);
       return _.map(columns, (column) => {
         const widthProps = _.chain({})
           .defaults(column)
-          .defaults(col)
+          .defaults(col.column)
           .pick('width')
           .value();
 

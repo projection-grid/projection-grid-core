@@ -8,7 +8,12 @@ export class Decorator {
         return wrapper;
       }
       if (_.isFunction(this[key])) {
-        return (context, value) => this[key](value, wrapper, context);
+        return (context, value) => {
+          if (_.isUndefined(value)) {
+            return wrapper;
+          }
+          return this[key](value, wrapper, context);
+        };
       }
       return _.constant(wrapper);
     });

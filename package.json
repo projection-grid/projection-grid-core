@@ -8,7 +8,8 @@
   "private": false,
   "scripts": {
     "build": "webpack",
-    "prepublish": "webpack"
+    "prepublish": "webpack",
+    "watch": "webpack --watch"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
