@@ -1,56 +1,64 @@
+import _ from 'underscore';
 import { Decorator } from '../utils/decorator';
 import { COMMON_PROPS } from '../constants';
 
-/**
- * Custom rows define:
- * pendRows: [
- *   {
- *     props:
- *     events:
- *     classes:
- *     styles:
- *     content: {
- *       Component: XXX,
- *       props:
- *       events:
- *       class:
- *       styles:
- *     }
- *   }
- * ]
- * tbody:{tr:{classes: ()=>{}/[], props, events,styles}}
- */
-
-export default function customRow({
+export function customRow({
   composeThead,
   composeTbodies,
   composeTfoot,
   composeDataTrs,
 }) {
   function convertCustomRows(rows, key) {
+    if (!rows) {
+      return [];
+    }
     const trs = rows.map((row, index) => {
       if (row.records) {
         const dataTbody = composeTbodies(row);
-        return dataTbody.trs;
+        return _.pluck(dataTbody, 'trs');
       }
 
       if (row.content) {
-        return [{
+        const td = _.defaults({}, {
+          props: _.defaults(row.props, { colSpan: '100%' }),
+        }, row);
+        return {
           key: `${key}-${index}`,
-          tds: [row],
-        }];
+          tds: [_.defaults({}, { key: 'custom-row' }, td)],
+        };
       }
-      return [];
+      return null;
     });
-    return {
+    return [{
       key,
+      trs: _.flatten(_.compact(trs)),
+    }];
+  }
+
+  function customHeadFoot({
+    model = {},
+    config = {},
+  }) {
+    const beforeTrs = _.pluck(convertCustomRows(config.BeforeRows, 'custom-before-rows'));
+    const afterTrs = _.pluck(convertCustomRows(config.AfterRows, 'custom-after-rows'));
+    const trs = []
+      .concat(_.flatten(beforeTrs))
+      .concat((model && model.trs) || [])
+      .concat(_.flatten(afterTrs));
+    if (trs.length === 0) {
+      return null;
+    }
+    return _.defaults({}, {
       trs,
-    };
+    }, model);
   }
 
   return {
     composeThead(thead) {
-      return composeThead(thead);
+      return customHeadFoot({
+        model: composeThead(thead),
+        config: thead,
+      });
     },
     composeTbodies(tbody) {
       // just prepend and append tbody before and after original tbodies
@@ -64,13 +72,15 @@ export default function customRow({
     // custom tr with COMMON_PROPS in tbody.tr, which included in tr
     composeDataTrs(tr) {
       const deco = Decorator.create(tr, COMMON_PROPS);
-      const model = deco(tr, composeDataTrs(tr)); // the model should be a object not array
+      const model = deco(tr, composeDataTrs(tr));
       return model;
     },
 
     composeTfoot(tfoot) {
-      return [].concat(composeTfoot(tfoot));
-      // after foot
+      return customHeadFoot({
+        model: composeTfoot(tfoot),
+        config: tfoot,
+      });
     },
   };
 }

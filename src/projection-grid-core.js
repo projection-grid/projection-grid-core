@@ -50,12 +50,12 @@ export class ProjectionGridCore {
       decoration,
       columnDecoration,
       sortable,
-      projections,
       columnWidth,
       customRow,
+      projections,
     ]);
     const { composeTable } = _.bindAll(composer, ..._.keys(composer));
-    // test test
+
     return { table: composeTable(config) };
   }
 }
