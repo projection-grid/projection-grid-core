@@ -1,20 +1,15 @@
-import _ from 'underscore';
+import { applyValue } from '../utils';
 
 export default function columnWidth({ composeCols }) {
   return {
     composeCols(col) {
       const columns = composeCols(col);
-      return _.map(columns, (column) => {
-        const widthProps = _.chain({})
-          .defaults(column)
-          .defaults(col)
-          .pick('width')
-          .value();
+      return columns.map((column) => {
+        const widthProps = Object.assign({}, column, col);
 
-        // extend props in col to support width:100, width: "100", width: "100px"
-        return _.defaults({}, {
-          props: _.defaults({}, widthProps, column.props),
-        }, column);
+        return applyValue(column, {
+          props: widthProps,
+        });
       });
     },
   };
