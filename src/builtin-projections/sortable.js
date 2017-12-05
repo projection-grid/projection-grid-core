@@ -4,20 +4,25 @@ export function sortable({ composeHeaderThs }, config) {
   return {
     composeHeaderThs(model) {
       const sortConfig = Object.assign({}, {
-        ascClasses: ['glyphicon', 'glyphicon-arrow-up'],
-        descClasses: ['glyphicon', 'glyphicon-arrow-down'],
+        ascClasses: [],
+        descClasses: [],
         handleResort: () => {},
       }, config.sort);
       const { column: { name, sorting } } = model;
       const ths = composeHeaderThs(model);
 
       if (sorting) {
+        const sortingComponent = {
+          asc: sortConfig.ascComponent,
+          descr: sortConfig.descComponent,
+        }[sorting];
+
         const sortingClasses = {
           asc: sortConfig.ascClasses,
           desc: sortConfig.descClasses,
         }[sorting] || [];
 
-        return ths.map(th => applyValue(th, {
+        const patch = {
           classes: sortingClasses,
           events: {
             click: () => {
@@ -27,7 +32,15 @@ export function sortable({ composeHeaderThs }, config) {
           styles: {
             cursor: 'pointer',
           },
-        }));
+        };
+
+        if (sortingComponent) {
+          patch.content = {
+            Component: sortingComponent,
+          };
+        }
+
+        return ths.map(th => applyValue(th, patch));
       }
 
       return ths;

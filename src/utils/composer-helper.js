@@ -7,6 +7,10 @@ const applyField = (origin, patch) => {
     return `${origin || ''} ${patch}`;
   }
 
+  if (patch && {}.toString.call(patch) === '[object Function]') {
+    return patch;
+  }
+
   return Object.assign({}, origin, patch);
 };
 
