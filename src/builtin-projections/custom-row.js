@@ -29,22 +29,19 @@ export function customRow({
       }
       return null;
     });
-    return [{
-      key,
-      trs: _.flatten(_.compact(trs)),
-    }];
+    return _.flatten(_.compact(trs));
   }
 
   function customHeadFoot({
     model = {},
     config = {},
   }) {
-    const beforeTrs = _.pluck(convertCustomRows(config.BeforeRows, 'custom-before-rows'), 'trs');
-    const afterTrs = _.pluck(convertCustomRows(config.AfterRows, 'custom-after-rows'), 'trs');
+    const beforeTrs = convertCustomRows(config.BeforeRows, 'custom-before-rows');
+    const afterTrs = convertCustomRows(config.AfterRows, 'custom-after-rows');
     const trs = []
-      .concat(_.flatten(beforeTrs))
+      .concat(beforeTrs)
       .concat((model && model.trs) || [])
-      .concat(_.flatten(afterTrs));
+      .concat(afterTrs);
     if (trs.length === 0) {
       return null;
     }
@@ -61,13 +58,13 @@ export function customRow({
       });
     },
     composeTbodies(tbody) {
-      // just prepend and append tbody before and after original tbodies
-      // we should not support prepand and append it in tbody
-      // we cannot assumpt there is only one tbody return in composeTbodies
+      const beforeTrs = convertCustomRows(tbody.BeforeRows, 'tbody-before-rows');
+      const afterTrs = convertCustomRows(tbody.AfterRows, 'tbody-after-rows');
+      const convert2Tbodies = (trs, key) => (trs.length > 0 ? [{ key, trs }] : []);
       return []
-        .concat(convertCustomRows(tbody.BeforeRows, 'tbody-before-rows'))
+        .concat(convert2Tbodies(beforeTrs, 'tbody-before-rows'))
         .concat(composeTbodies(tbody))
-        .concat(convertCustomRows(tbody.AfterRows, 'tbody-after-rows'));
+        .concat(convert2Tbodies(afterTrs, 'tbody-after-rows'));
     },
     // custom tr with COMMON_PROPS in tbody.tr, which included in tr
     composeDataTrs(tr) {
