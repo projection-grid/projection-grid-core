@@ -1,8 +1,8 @@
-export const isObject = obj => toString.call(obj) === '[object Object]';
+export const isObject = obj => Object.prototype.toString.call(obj) === '[object Object]';
 
 export const compactObject = (obj) => {
   if (!isObject(obj)) {
-    throw new Error(`${obj} is not an Object`);
+    throw new TypeError(`${obj} is not an Object`);
   }
 
   return Object.keys(obj).reduce((memo, key) => {
