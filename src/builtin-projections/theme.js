@@ -1,5 +1,5 @@
 
-import { applyValue, applyForChildByCondition } from '../utils/composer-helper';
+import { applyValue, applyForChildByCondition } from '../utils';
 
 const applyStyles = (memo, styles) => applyValue(memo, { styles });
 

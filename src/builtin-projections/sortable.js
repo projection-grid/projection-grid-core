@@ -1,4 +1,4 @@
-import { applyValue } from '../utils/composer-helper';
+import { applyValue } from '../utils';
 
 export function sortable({ composeHeaderThs }, config) {
   return {
@@ -24,6 +24,9 @@ export function sortable({ composeHeaderThs }, config) {
 
         const patch = {
           classes: sortingClasses,
+          content: {
+            Component: sortingComponent,
+          },
           events: {
             click: () => {
               sortConfig.handleResort(name);
@@ -33,12 +36,6 @@ export function sortable({ composeHeaderThs }, config) {
             cursor: 'pointer',
           },
         };
-
-        if (sortingComponent) {
-          patch.content = {
-            Component: sortingComponent,
-          };
-        }
 
         return ths.map(th => applyValue(th, patch));
       }
