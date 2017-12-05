@@ -1,4 +1,10 @@
+import { compactObject } from './object';
+
 const applyField = (origin, patch) => {
+  if (!patch) {
+    return origin;
+  }
+
   if (Array.isArray(patch)) {
     return patch.concat(origin || []);
   }
@@ -7,7 +13,11 @@ const applyField = (origin, patch) => {
     return `${origin || ''} ${patch}`;
   }
 
-  return Object.assign({}, origin, patch);
+  if (patch && {}.toString.call(patch) === '[object Function]') {
+    return patch;
+  }
+
+  return Object.assign({}, origin, compactObject(patch));
 };
 
 export const applyValue = (defaults, obj) => Object.keys(obj).reduce((memo, key) =>
