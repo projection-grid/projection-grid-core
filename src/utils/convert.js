@@ -1,10 +1,10 @@
-import _ from 'underscore';
+import { isArray } from './array';
 
 export function convert(converter, value) {
-  if (_.isArray(value)) {
-    return _.map(value, converter);
+  if (isArray(value)) {
+    return value.map(converter);
   }
-  if (_.isNull(value) || _.isUndefined(value)) {
+  if (!value) {
     return null;
   }
   return converter(value);

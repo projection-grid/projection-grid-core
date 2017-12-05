@@ -5,7 +5,7 @@ export const isObject = obj => Object.prototype.toString.call(obj) === '[object 
 const iterateeWithCondition = (
   obj,
   condition = () => true,
-  iteratee = (iterateeObj, key) => iterateeObj[key]
+  iteratee = iterateeObj => iterateeObj
 ) => {
   if (!isObject(obj)) {
     throw new TypeError(`${obj} is not an Object`);
@@ -13,7 +13,7 @@ const iterateeWithCondition = (
 
   return Object.keys(obj).reduce((memo, key) => {
     if (condition(obj, key)) {
-      return Object.assign(memo, { [key]: iteratee(obj, key) });
+      return Object.assign(memo, { [key]: iteratee(obj[key], key) });
     }
 
     return memo;
