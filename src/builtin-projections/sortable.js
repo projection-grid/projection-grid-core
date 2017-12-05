@@ -1,33 +1,43 @@
-import _ from 'underscore';
+import { applyValue } from '../utils';
 
 export function sortable({ composeHeaderThs }, config) {
   return {
-    composeHeaderThs(th) {
-      const sortConfig = _.defaults({}, config.sort, {
-        ascClasses: ['glyphicon', 'glyphicon-arrow-up'],
-        descClasses: ['glyphicon', 'glyphicon-arrow-down'],
+    composeHeaderThs(model) {
+      const sortConfig = Object.assign({}, {
+        ascClasses: [],
+        descClasses: [],
         handleResort: () => {},
-      });
-      const { column: { name, sorting } } = th;
-      const ths = composeHeaderThs(th);
+      }, config.sort);
+      const { column: { name, sorting } } = model;
+      const ths = composeHeaderThs(model);
 
       if (sorting) {
-        const sortingClasses = _.result({
+        const sortingComponent = {
+          asc: sortConfig.ascComponent,
+          descr: sortConfig.descComponent,
+        }[sorting];
+
+        const sortingClasses = {
           asc: sortConfig.ascClasses,
           desc: sortConfig.descClasses,
-        }, sorting, []);
+        }[sorting] || [];
 
-        return _.map(ths, model => _.defaults({}, {
-          classes: _.union(sortingClasses, model.classes),
-          events: _.defaults({}, {
+        const patch = {
+          classes: sortingClasses,
+          content: {
+            Component: sortingComponent,
+          },
+          events: {
             click: () => {
               sortConfig.handleResort(name);
             },
-          }, model.events),
-          styles: _.defaults({}, {
+          },
+          styles: {
             cursor: 'pointer',
-          }, model.styles),
-        }, model));
+          },
+        };
+
+        return ths.map(th => applyValue(th, patch));
       }
 
       return ths;

@@ -4,6 +4,7 @@ import {
   decoration,
   columnDecoration,
   sortable,
+  theme,
   columnWidth,
   customRow,
 } from './builtin-projections';
@@ -50,6 +51,7 @@ export class ProjectionGridCore {
       decoration,
       columnDecoration,
       sortable,
+      theme,
       columnWidth,
       customRow,
       projections,
