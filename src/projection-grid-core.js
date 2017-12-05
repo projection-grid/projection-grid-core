@@ -55,14 +55,7 @@ export class ProjectionGridCore {
       columnWidth,
     ]);
     const { composeTable } =
-      // Object.keys(composer).forEach((composeFunc) => {
-      //   window.console.log(composeFunc);
-      //   composeFunc.bind(composer);
-      // });
-
       mapObject(composer, composeFunc => composeFunc.bind(composer));
-
-    // _.bindAll(composer, ...Object.keys(composer));
 
     return { table: composeTable(config) };
   }
