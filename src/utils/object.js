@@ -13,3 +13,8 @@ export const compactObject = (obj) => {
     return memo;
   }, {});
 };
+
+export const mapObject = (obj, iteratee) =>
+  Object.keys(obj).reduce((memo, key) => ({
+    [key]: iteratee(obj[key], key),
+  }), {});

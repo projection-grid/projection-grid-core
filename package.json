@@ -8,11 +8,12 @@
   "private": false,
   "scripts": {
     "build": "webpack",
-    "prepublish": "webpack"
+    "prepublishOnly": "webpack"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.12.0",
     "eslint-config-airbnb": "^16.1.0",
