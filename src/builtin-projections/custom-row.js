@@ -39,8 +39,8 @@ export function customRow({
     model = {},
     config = {},
   }) {
-    const beforeTrs = _.pluck(convertCustomRows(config.BeforeRows, 'custom-before-rows'));
-    const afterTrs = _.pluck(convertCustomRows(config.AfterRows, 'custom-after-rows'));
+    const beforeTrs = _.pluck(convertCustomRows(config.BeforeRows, 'custom-before-rows'), 'trs');
+    const afterTrs = _.pluck(convertCustomRows(config.AfterRows, 'custom-after-rows'), 'trs');
     const trs = []
       .concat(_.flatten(beforeTrs))
       .concat((model && model.trs) || [])
