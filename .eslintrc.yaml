@@ -3,10 +3,13 @@
   # Refer to docs/javascript/README.md for detail
   extends: airbnb
 
+  plugins:
+    - jest
+
   env:
     browser: true
     amd: true
-    mocha: true
+    jest/globals: true
     # These globals should not be enabled in production code.
     # Not all browsers support es6 globals, and none of them support node globals.
     node: false
