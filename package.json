@@ -8,7 +8,9 @@
   "private": false,
   "scripts": {
     "build": "webpack",
-    "prepublishOnly": "webpack"
+    "prepublishOnly": "webpack",
+    "watch": "webpack --watch",
+    "test": "jest"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -21,6 +23,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1",
+    "jest": "^21.2.1",
     "webpack": "^3.8.1"
   },
   "peerDependencies": {}
