@@ -1,6 +1,7 @@
 import { isFunction, partial } from './function';
 import { mapObject, pick } from './object';
 import { convert } from './convert';
+import { uniq } from './array';
 
 export class Decorator {
   constructor({ wrappers }) {
@@ -25,7 +26,7 @@ export class Decorator {
   }
 
   classes(classes, classesExt/* , context */) {
-    return [...classes, ...classesExt];
+    return uniq([...classes, ...classesExt]);
   }
 
   styles(styles, stylesExt/* , context */) {
