@@ -27,5 +27,9 @@
     "jest": "^21.2.1",
     "webpack": "^3.8.1"
   },
-  "peerDependencies": {}
+  "peerDependencies": {},
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage-report"
+  }
 }
