@@ -40,4 +40,12 @@ export const isUndefined = obj => Object.prototype.toString.call(obj) === '[obje
 
 export const isNull = obj => Object.prototype.toString.call(obj) === '[object Null]';
 
-export const isEmpty = obj => Object.keys(obj).length === 0;
+export const isEmpty = (obj) => {
+  if (isNull(obj)) {
+    return true;
+  }
+  if (obj.length > 0) {
+    return false;
+  }
+  return Object.keys(obj).length === 0;
+};

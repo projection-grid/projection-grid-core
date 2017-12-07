@@ -15,7 +15,7 @@ export class Decorator {
           if (isUndefined(value)) {
             return wrapper;
           }
-          this[key](value, wrapper, context);
+          return this[key](value, wrapper, context);
         };
       }
       return () => wrapper;

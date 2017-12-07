@@ -1,5 +1,5 @@
 import { isArray } from './array';
-import { isNull, isUndefined, isEmpty } from './object';
+import { isEmpty } from './object';
 
 export function convert(converter, value) {
   if (isArray(value)) {

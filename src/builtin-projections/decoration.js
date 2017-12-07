@@ -10,6 +10,7 @@ const decorations = {
   composeTbodies: [],
   composeTfoot: [],
   composeHeaderTrs: [],
+  composeTrs: [],
   composeDataTrs: [],
   composeHeaderThs: ['content'],
   composeDataTds: ['content'],
