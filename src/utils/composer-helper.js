@@ -1,4 +1,5 @@
 import { compactObject } from './object';
+import { isFunction } from './function';
 
 const applyField = (origin, patch) => {
   if (!patch) {
@@ -13,7 +14,7 @@ const applyField = (origin, patch) => {
     return `${origin || ''} ${patch}`;
   }
 
-  if (patch && {}.toString.call(patch) === '[object Function]') {
+  if (isFunction(patch)) {
     return patch;
   }
 

@@ -1,60 +1,60 @@
-import _ from 'underscore';
+import { isFunction, partial } from './function';
+import { mapObject, pick } from './object';
 import { convert } from './convert';
+import { uniq } from './array';
 
 export class Decorator {
   constructor({ wrappers }) {
-    this.wrappers = _.mapObject(wrappers, (wrapper, key) => {
-      if (_.isFunction(wrapper)) {
+    this.wrappers = mapObject(wrappers, (wrapper, key) => {
+      if (isFunction(wrapper)) {
         return wrapper;
       }
-      if (_.isFunction(this[key])) {
+      if (isFunction(this[key])) {
         return (context, value) => this[key](value, wrapper, context);
       }
-      return _.constant(wrapper);
+      return () => wrapper;
     });
   }
 
   decorate(context, model) {
-    return _.chain(this.wrappers)
-      .mapObject((wrapper, key) => wrapper(context, model[key]))
-      .defaults(model)
-      .value();
+    return Object.assign({}, model, mapObject(this.wrappers, (wrapper, key) =>
+      wrapper(context, model[key])));
   }
 
   props(props, propsExt/* , context */) {
-    return _.extend({}, props, propsExt);
+    return Object.assign({}, props, propsExt);
   }
 
   classes(classes, classesExt/* , context */) {
-    return _.union(classes, classesExt);
+    return uniq([...classes, ...classesExt]);
   }
 
   styles(styles, stylesExt/* , context */) {
-    return _.extend({}, styles, stylesExt);
+    return Object.assign({}, styles, stylesExt);
   }
 
   events(events, eventsExt/* , context */) {
-    return _.extend({}, events, eventsExt);
+    return Object.assign({}, events, eventsExt);
   }
 
   content(content, contentExt, context) {
     const { Component } = contentExt;
     const deco = Decorator.create(contentExt, ['classes', 'styles', 'events']);
 
-    return _.defaults(Component ? {
+    return Object.assign({}, deco(context, content), Component ? {
       Component,
-      props: _.defaults({ content }, content.props),
-    } : {}, deco(context, content));
+      props: Object.assign({}, content.props, { content }),
+    } : {});
   }
 
   static create(wrapper, keys) {
-    const func = _.isFunction(wrapper) ?
-      (...args) => _.pick(wrapper(...args), keys) :
+    const func = isFunction(wrapper) ?
+      (...args) => pick(wrapper(...args), keys) :
       (() => {
-        const deco = new Decorator({ wrappers: _.pick(wrapper, keys) });
+        const deco = new Decorator({ wrappers: pick(wrapper || {}, keys) });
         return deco.decorate.bind(deco);
       })();
 
-    return (context, model) => convert(_.partial(func, context), model);
+    return (context, model) => convert(partial(func, context), model);
   }
 }

@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import {
   defaults,
   decoration,
@@ -7,9 +6,10 @@ import {
   theme,
   columnWidth,
 } from './builtin-projections';
+import { mapObject, isFunction, isArray } from './utils';
 
 function mergeComposer(composer, funcs) {
-  return _.extend(composer, _.mapObject(funcs, func => func.bind(composer)));
+  return Object.assign(composer, mapObject(funcs, func => func.bind(composer)));
 }
 
 export class ProjectionGridCore {
@@ -25,16 +25,16 @@ export class ProjectionGridCore {
 
   compose({ config, projections = [] }) {
     function decorate(composer, projection) {
-      if (_.isArray(projection)) {
+      if (isArray(projection)) {
         return projection.reduce(decorate, composer);
       }
-      if (_.isFunction(projection && projection.decorate)) {
+      if (isFunction(projection && projection.decorate)) {
         return mergeComposer(
           composer,
           projection.decorate(composer, config, projection.config)
         );
       }
-      if (_.isFunction(projection)) {
+      if (isFunction(projection)) {
         return mergeComposer(
           composer,
           projection(composer, config)
@@ -54,7 +54,8 @@ export class ProjectionGridCore {
       theme,
       columnWidth,
     ]);
-    const { composeTable } = _.bindAll(composer, ..._.keys(composer));
+    const { composeTable } =
+      mapObject(composer, composeFunc => composeFunc.bind(composer));
 
     return { table: composeTable(config) };
   }
