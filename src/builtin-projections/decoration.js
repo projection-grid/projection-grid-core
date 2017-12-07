@@ -1,5 +1,4 @@
-import _ from 'underscore';
-import { Decorator } from '../utils/decorator';
+import { mapObject, Decorator } from '../utils';
 import { COMMON_PROPS } from '../constants';
 
 const decorations = {
@@ -17,9 +16,9 @@ const decorations = {
 };
 
 export function decoration(composer) {
-  const orig = _.clone(composer);
+  const orig = { ...composer };
 
-  return _.mapObject(decorations, (props, name) => (context) => {
+  return mapObject(decorations, (props, name) => (context) => {
     const deco = Decorator.create(context, COMMON_PROPS.concat(props));
     const model = deco(context, orig[name](context));
 

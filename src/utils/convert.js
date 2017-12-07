@@ -1,11 +1,12 @@
-import _ from 'underscore';
+import { isArray } from './array';
+import { isNull, isUndefined, isEmpty } from './object';
 
 export function convert(converter, value) {
-  if (_.isArray(value)) {
-    return _.map(value, converter);
+  if (isArray(value)) {
+    return value.map(converter);
   }
   const model = converter(value || {});
-  if (_.isEmpty(model)) {
+  if (isEmpty(model)) {
     return null;
   }
   return model;
