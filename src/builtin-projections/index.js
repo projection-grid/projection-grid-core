@@ -4,3 +4,4 @@ export { columnDecoration } from './column-decoration';
 export { sortable } from './sortable';
 export { theme } from './theme';
 export { columnWidth } from './column-width';
+export { customRow } from './custom-row';

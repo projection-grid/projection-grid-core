@@ -21,7 +21,7 @@ const applyField = (origin, patch) => {
   return Object.assign({}, origin, compactObject(patch));
 };
 
-export const applyValue = (defaults, obj) => Object.keys(obj).reduce((memo, key) =>
+export const applyValue = (defaults, obj) => Object.keys(obj || {}).reduce((memo, key) =>
   Object.assign({}, memo, {
     [key]: applyField(memo[key], obj[key]),
   }), defaults);

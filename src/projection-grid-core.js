@@ -5,6 +5,7 @@ import {
   sortable,
   theme,
   columnWidth,
+  customRow,
 } from './builtin-projections';
 import { mapObject, isFunction, isArray } from './utils';
 
@@ -50,9 +51,10 @@ export class ProjectionGridCore {
       decoration,
       columnDecoration,
       sortable,
-      projections,
       theme,
       columnWidth,
+      customRow,
+      projections,
     ]);
     const { composeTable } =
       mapObject(composer, composeFunc => composeFunc.bind(composer));

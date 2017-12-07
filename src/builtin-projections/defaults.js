@@ -11,6 +11,7 @@ function normalize(config) {
 
   const colgroup = Object.assign({}, { columns }, config.colgroup);
   const tbody = Object.assign({}, { records }, config.tbody);
+  tbody.rows = tbody.rows || tbody.records.map(record => Object.assign({}, { record }, tbody.tr));
   const colgroups = (config.colgroups || [{ key: 'colgroup-default' }]).map(cg =>
     (cg.key === 'colgroup-default' ? Object.assign(cg, colgroup) : cg));
   const tbodies = (config.tbodies || [{ key: 'tbody-default' }]).map(tb =>
@@ -19,7 +20,7 @@ function normalize(config) {
   return Object.assign({}, config, {
     caption,
     colgroups,
-    thead,
+    thead: Object.assign({}, { rows: [{ isHeader: true }] }, thead),
     tbodies,
     tfoot,
   });
@@ -69,35 +70,54 @@ function decorate({ composeTable }, config, {
     },
 
     composeThead(thead) {
-      const tr = Object.assign({}, thead.tr, pick(thead, 'table'), { thead });
+      let trs = [];
+      if (thead && thead.rows) {
+        trs = thead.rows.map(row => Object.assign({}, row, pick(thead, 'table'), { thead }));
+      }
 
-      return { trs: [].concat(...convert(this.composeHeaderTrs, tr)) };
+      return { trs: [].concat(...convert(this.composeHeaderTrs, trs)) };
     },
 
     composeTbodies(tbody) {
-      const trs = tbody.records.map(record => Object.assign({}, tbody.tr, pick(tbody, 'table'), {
-        record,
+      const trs = tbody.rows.map(row => Object.assign({}, row, pick(tbody, 'table', 'tfoot', 'thead'), {
         tbody,
       }));
 
       return [{
         key: tbody.key,
-        trs: [].concat(...convert(this.composeDataTrs, trs)),
+        trs: [].concat(...convert(this.composeTrs, trs)),
       }];
     },
 
-    composeTfoot(/* tfoot */) { return null; },
+    composeTfoot(tfoot) {
+      if (tfoot && tfoot.rows) {
+        return {
+          trs: [].concat(...convert(this.composeTrs, tfoot.rows)),
+        };
+      }
+      return null;
+    },
 
     composeHeaderTrs(tr) {
-      const ths = columns.map(column => Object.assign({}, tr.th, pick(tr, 'table', 'thead'), {
-        column,
-        tr,
-      }));
+      if (tr.isHeader) {
+        const trs = columns.map(column => Object.assign({}, tr.th, pick(tr, 'table', 'thead'), {
+          column,
+          tr,
+        }));
 
-      return [{
-        key: 'tr-header',
-        ths: [].concat(...convert(this.composeHeaderThs, ths)),
-      }];
+        return [{
+          key: 'tr-header',
+          tds: [].concat(...convert(this.composeHeaderThs, trs)),
+        }];
+      }
+      return this.composeTrs(tr);
+    },
+
+    composeTrs(tr) {
+      if (tr.record) {
+        return this.composeDataTrs(tr);
+      }
+      return null;
     },
 
     composeDataTrs(tr) {
@@ -120,6 +140,7 @@ function decorate({ composeTable }, config, {
     composeHeaderThs(th) {
       return [{
         key: `@th-${th.column.name}`,
+        isHeader: true,
         content: Object.assign({}, {
           Component: DefaultHeader,
           props: pick(th, 'column', 'table'),

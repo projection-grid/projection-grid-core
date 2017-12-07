@@ -1,11 +1,12 @@
-import { applyValue } from '../utils';
+import { applyValue, pick } from '../utils';
 
-export default function columnWidth({ composeCols }) {
+export function columnWidth({ composeCols }) {
   return {
     composeCols(col) {
       const columns = composeCols(col);
+
       return columns.map((column) => {
-        const widthProps = Object.assign({}, column, col);
+        const widthProps = pick(Object.assign({}, column, col.column), 'width');
 
         return applyValue(column, {
           props: widthProps,

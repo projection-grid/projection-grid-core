@@ -1,5 +1,5 @@
 import { isFunction, partial } from './function';
-import { mapObject, pick } from './object';
+import { mapObject, pick, isUndefined } from './object';
 import { convert } from './convert';
 import { uniq } from './array';
 
@@ -9,8 +9,14 @@ export class Decorator {
       if (isFunction(wrapper)) {
         return wrapper;
       }
+
       if (isFunction(this[key])) {
-        return (context, value) => this[key](value, wrapper, context);
+        return (context, value) => {
+          if (isUndefined(value)) {
+            return wrapper;
+          }
+          return this[key](value, wrapper, context);
+        };
       }
       return () => wrapper;
     });
