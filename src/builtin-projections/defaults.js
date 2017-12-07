@@ -20,7 +20,7 @@ function normalize(config) {
   return Object.assign({}, config, {
     caption,
     colgroups,
-    thead,
+    thead: Object.assign({}, { rows: [{ isHeader: true }] }, thead),
     tbodies,
     tfoot,
   });
@@ -100,14 +100,14 @@ function decorate({ composeTable }, config, {
 
     composeHeaderTrs(tr) {
       if (tr.isHeader) {
-        const ths = columns.map(column => Object.assign({}, tr.th, pick(tr, 'table', 'thead'), {
+        const trs = columns.map(column => Object.assign({}, tr.th, pick(tr, 'table', 'thead'), {
           column,
           tr,
         }));
 
         return [{
           key: 'tr-header',
-          ths: [].concat(...convert(this.composeHeaderThs, ths)),
+          tds: [].concat(...convert(this.composeHeaderThs, trs)),
         }];
       }
       return this.composeTrs(tr);
@@ -140,6 +140,7 @@ function decorate({ composeTable }, config, {
     composeHeaderThs(th) {
       return [{
         key: `@th-${th.column.name}`,
+        isHeader: true,
         content: Object.assign({}, {
           Component: DefaultHeader,
           props: pick(th, 'column', 'table'),

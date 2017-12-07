@@ -34,8 +34,8 @@ const composeWithBootstrap = ({
       textAlign: 'left',
     });
   },
-  composeHeaderThs(ths) {
-    return composeHeaderThs(ths).map(th => applyStyles(th, {
+  composeHeaderThs(tds) {
+    return composeHeaderThs(tds).map(td => applyStyles(td, {
       verticalAlign: 'bottom',
       borderBottom: '2px solid #ddd',
       textAlign: 'left',
@@ -56,7 +56,7 @@ const composeWithBootstrap = ({
     return applyStylsForFirstChild(composeTbodies(tbody), { borderTop: 0 });
   },
   composeThead(thead) {
-    return applyStylsForFirstChild(composeThead(thead), { borderTop: 0 }, 'trs/ths');
+    return applyStylsForFirstChild(composeThead(thead), { borderTop: 0 });
   },
 });
 

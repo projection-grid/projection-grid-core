@@ -9,7 +9,7 @@ export function sortable({ composeHeaderThs }, config) {
         handleResort: () => {},
       }, config.sort);
       const { column: { name, sorting } } = model;
-      const ths = composeHeaderThs(model);
+      const tds = composeHeaderThs(model);
 
       if (sorting) {
         const sortingComponent = {
@@ -37,10 +37,10 @@ export function sortable({ composeHeaderThs }, config) {
           },
         };
 
-        return ths.map(th => applyValue(th, patch));
+        return tds.map(th => applyValue(th, patch));
       }
 
-      return ths;
+      return tds;
     },
   };
 }
