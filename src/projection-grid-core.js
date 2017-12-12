@@ -45,9 +45,9 @@ export class ProjectionGridCore {
     }
 
     const composer = decorate({
-      composeTable: () => ({}),
+      composeTable: ({ key = null }) => ({ key }),
     }, [
-      defaults(this.defaultComponents),
+      defaults,
       decoration,
       columnDecoration,
       sortable,
@@ -56,8 +56,7 @@ export class ProjectionGridCore {
       customRow,
       projections,
     ]);
-    const { composeTable } =
-      mapObject(composer, composeFunc => composeFunc.bind(composer));
+    const { composeTable } = composer;
 
     return { table: composeTable(config) };
   }

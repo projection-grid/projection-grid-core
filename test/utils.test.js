@@ -66,7 +66,7 @@ describe('Array', () => {
   test('pluck', () => {
     expect(_.pluck([
       { a: 1, foo: 'bar' },
-      { b: 2, foo: 'bar1'},
+      { b: 2, foo: 'bar1' },
     ], 'foo')).toEqual(['bar', 'bar1']);
   });
 
@@ -81,8 +81,9 @@ describe('Array', () => {
 
 describe('Function', () => {
   test('isFunction', () => {
+    function foo() { }
     expect(_.isFunction(() => {})).toBe(true);
-    expect(_.isFunction(function foo() {})).toBe(true);
+    expect(_.isFunction(foo)).toBe(true);
   });
 
   test('partial', () => {
