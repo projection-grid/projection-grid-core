@@ -58,7 +58,7 @@ export function defaults() {
     },
 
     composeTrs(tr) {
-      const composeTds = handleVector(extendParam(this.coposeTds, { tr }));
+      const composeTds = handleVector(extendParam(this.composeTds, { tr }));
       const tds = composeTds(tr.tds);
       return [createModel(tr, { tds, tag: 'TR' })];
     },
