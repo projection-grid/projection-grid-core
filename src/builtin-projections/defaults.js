@@ -1,63 +1,71 @@
-import { convert, mapObject } from '../utils';
+import { mapObject, isArray } from '../utils';
 
-function createModel(config, additionalProps = {}) {
+function createModel(config, ...additionalProps) {
   return Object.assign({
     key: config.key || null,
     props: config.props || {},
     classes: config.classes || [],
     styles: config.styles || {},
     events: config.events || {},
-  }, additionalProps);
+  }, ...additionalProps);
 }
+
+const toVector = obj => (isArray(obj) ? obj : [obj]);
+const toScalar = obj => (isArray(obj) ? obj[0] || null : obj);
+const extendParam = (compose, ...ext) =>
+  config => compose(Object.assign({}, config, ...ext));
+const handleVector = compose =>
+  (config = []) => [].concat(...toVector(config).map(compose));
+const handleScalar = compose =>
+  (config = {}) => toScalar(compose(toScalar(config)));
 
 export function defaults() {
   return {
     composeTable(table) {
+      const extendContext = (compose, tag) => extendParam(compose, { table, tag });
+
       return createModel(table, mapObject({
-        caption: this.composeCaption,
-        colgroups: this.composeColgroups,
-        thead: this.composeThead,
-        tbodies: this.composeTbody,
-        tfoot: this.composeTfoot,
-      }, (composer, key) => convert({ table }, composer, table[key])));
+        caption: handleScalar(extendContext(this.composeCaption)),
+        colgroups: handleVector(extendContext(this.composeColgroups)),
+        thead: handleScalar(extendContext(this.composeSections, 'THEAD')),
+        tbodies: handleVector(extendContext(this.composeSections, 'TBODY')),
+        tfoot: handleScalar(extendContext(this.composeSections, 'TFOOT')),
+      }, (compose, name) => compose(table[name])), {
+        tag: 'TABLE',
+      });
     },
 
     composeCaption(caption) {
-      return createModel(caption);
+      const { content = null } = caption;
+      return createModel(caption, { content, tag: 'CAPTION' });
     },
 
     composeColgroups(colgroup) {
-      const cols = convert({ colgroup }, this.composeCols, colgroup.cols);
-      return [createModel(colgroup, { cols })];
+      const composeCols = handleVector(extendParam(this.composeCols, { colgroup }));
+      const cols = composeCols(colgroup.cols);
+      return [createModel(colgroup, { cols, tag: 'COLGROUP' })];
     },
 
     composeCols(col) {
-      return [createModel(col)];
+      return [createModel(col, { tag: 'COL' })];
     },
 
-    composeThead(thead) {
-      const trs = convert({ thead }, this.composeTrs, thead.trs);
-      return createModel(thead, { trs });
-    },
-
-    composeTbodies(tbody) {
-      const trs = convert({ tbody }, this.composeTrs, tbody.trs);
-      return [createModel(tbody, { trs })];
-    },
-
-    composeTfoot(tfoot) {
-      const trs = convert({ tfoot }, this.composeTrs, tfoot.trs);
-      return createModel(tfoot, { trs });
+    composeSections(section) {
+      const { tag = 'TBODY' } = section;
+      const composeTrs = handleVector(extendParam(this.composeTrs, { section }));
+      const trs = composeTrs(section.trs);
+      return [createModel(section, { trs, tag })];
     },
 
     composeTrs(tr) {
-      const tds = convert({ tr }, this.composeTds, tr.tds);
-      return [createModel(tr, { tds })];
+      const composeTds = handleVector(extendParam(this.coposeTds, { tr }));
+      const tds = composeTds(tr.tds);
+      return [createModel(tr, { tds, tag: 'TR' })];
     },
 
     composeTds(td) {
-      const { isHeader = false } = td;
-      return [createModel(td, { isHeader })];
+      const { tag = 'TD', content = null } = td;
+      return [createModel(td, { content, tag })];
     },
   };
 }

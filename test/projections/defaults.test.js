@@ -1,74 +1,58 @@
 import { mapObject } from '../../src/utils';
 import { defaults } from '../../src/builtin-projections/defaults';
 
+const DEFAULT_COMMON = {
+  key: null,
+  classes: [],
+  props: {},
+  styles: {},
+  events: {},
+};
+const DEFAULT_CAPTION = { tag: 'CAPTION', content: null, ...DEFAULT_COMMON };
+const DEFAULT_COL = { tag: 'COL', ...DEFAULT_COMMON };
+const DEFAULT_COLGROUP = { tag: 'COLGROUP', cols: [], ...DEFAULT_COMMON };
+const DEFAULT_TD = { tag: 'TD', content: null, ...DEFAULT_COMMON };
+const DEFAULT_TR = { tag: 'TR', tds: [], ...DEFAULT_COMMON };
+const DEFAULT_SECTION = { tag: 'TBODY', trs: [], ...DEFAULT_COMMON };
+const DEFAULT_TABLE = {
+  tag: 'TABLE',
+  caption: DEFAULT_CAPTION,
+  colgroups: [],
+  thead: { tag: 'THEAD', trs: [], ...DEFAULT_COMMON },
+  tbodies: [],
+  tfoot: { tag: 'TFOOT', trs: [], ...DEFAULT_COMMON },
+  ...DEFAULT_COMMON,
+};
+
 describe('The defaults projection', () => {
-  test('being a function', () => {
-    expect(defaults).toBeInstanceOf(Function);
+  const composer = {};
+  Object.assign(composer, mapObject(defaults(composer), func => func.bind(composer)));
+
+  test('compose default caption', () => {
+    expect(composer.composeCaption({})).toEqual(DEFAULT_CAPTION);
   });
 
-  test('decorating the composer', () => {
-    const composer = defaults();
-
-    expect(composer.composeTable).toBeInstanceOf(Function);
+  test('compose default cols', () => {
+    expect(composer.composeCols({})).toEqual([DEFAULT_COL]);
   });
 
-  describe('The default composer', () => {
-    const composer = {};
-    Object.assign(composer, mapObject(defaults(composer)), func => func.bind(composer));
+  test('compose default colgroups', () => {
+    expect(composer.composeColgroups({})).toEqual([DEFAULT_COLGROUP]);
+  });
 
-    mapObject({
-      composeTable: {
-        caption: null,
-        colgroups: null,
-        thead: null,
-        tbodies: null,
-        tfoot: null,
-      },
-      composeCaption: {},
-      composeColgroups: { cols: null },
-      composeCols: {},
-      composeThead: { trs: null },
-      composeTbodies: { trs: null },
-      composeTfoot: { trs: null },
-      composeTrs: { tds: null },
-      composeTds: { isHeader: false },
-    }, (defaultProps, name) => describe(`#${name}`, () => {
-      test('compose the default render model', () => {
-        const model = Object.assign({
-          key: null,
-          props: {},
-          classes: [],
-          styles: {},
-          events: {},
-        }, defaultProps);
-        const output = name.match(/s$/) ? [model] : model;
-        expect(composer[name]({})).toEqual(output);
-      });
+  test('compose default tds', () => {
+    expect(composer.composeTds({})).toEqual([DEFAULT_TD]);
+  });
 
-      test('compose the render model with given properties', () => {
-        const key = 'foo';
-        const props = { 'data-bar': 'bar' };
-        const classes = ['some-class'];
-        const styles = { display: 'block' };
-        const events = { click: () => {} };
+  test('compose default trs', () => {
+    expect(composer.composeTrs({})).toEqual([DEFAULT_TR]);
+  });
 
-        const model = Object.assign({
-          key,
-          props,
-          classes,
-          styles,
-          events,
-        }, defaultProps);
-        const output = name.match(/s$/) ? [model] : model;
+  test('compose default sections', () => {
+    expect(composer.composeSections({})).toEqual([DEFAULT_SECTION]);
+  });
 
-        expect(composer[name]({
-          key,
-          props,
-          classes,
-          styles,
-          events,
-        })).toEqual(output);
-      });
-    }));
+  test('compose default table', () => {
+    expect(composer.composeTable({})).toEqual(DEFAULT_TABLE);
   });
 });
