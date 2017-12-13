@@ -1,11 +1,10 @@
 import {
   defaults,
+  data,
   decoration,
-  columnDecoration,
-  sortable,
-  theme,
-  columnWidth,
-  customRow,
+  // sortable,
+  // theme,
+  // columnWidth,
 } from './builtin-projections';
 import { mapObject, isFunction, isArray } from './utils';
 
@@ -48,12 +47,8 @@ export class ProjectionGridCore {
       composeTable: ({ key = null }) => ({ key }),
     }, [
       defaults,
+      data,
       decoration,
-      columnDecoration,
-      sortable,
-      theme,
-      columnWidth,
-      customRow,
       projections,
     ]);
     const { composeTable } = composer;

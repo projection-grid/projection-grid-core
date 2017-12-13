@@ -1,5 +1,5 @@
 import { mapObject } from '../../src/utils';
-import { defaults } from '../../src/builtin-projections/defaults';
+import defaults from '../../src/builtin-projections/defaults';
 
 const DEFAULT_COMMON = {
   key: null,

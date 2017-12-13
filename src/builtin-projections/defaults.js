@@ -19,7 +19,7 @@ const handleVector = compose =>
 const handleScalar = compose =>
   (config = {}) => toScalar(compose(toScalar(config)));
 
-export function defaults() {
+export default function () {
   return {
     composeTable(table) {
       const extendContext = (compose, tag) => extendParam(compose, { table, tag });
