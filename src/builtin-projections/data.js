@@ -26,10 +26,10 @@ export default function ({
       const cols = [].concat(...pluck(table.colgroups || [], 'cols'));
       const composeDataTr = d => composeTrs(Object.assign({}, tr, {
         tds: cols.map(col => ({ data: d, col })),
-      }, primaryKey ? { key: data[primaryKey] } : {}));
+      }, primaryKey ? { key: d[primaryKey] } : {}));
 
       if (isArray(data)) {
-        return data.map(composeDataTr);
+        return [].concat(...data.map(composeDataTr));
       }
 
       if (isObject(data)) {

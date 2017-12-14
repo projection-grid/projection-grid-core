@@ -9,7 +9,7 @@ import {
   DEFAULT_SECTION,
   DEFAULT_TR,
   DEFAULT_TD,
-} from './constants';
+} from '../constants';
 
 mapObject({
   composeTable: DEFAULT_TABLE,
