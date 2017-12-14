@@ -5,7 +5,5 @@ function mergeComposer(comp, proj) {
 }
 
 export function composer(projections) {
-  return projections.reduce(mergeComposer, {
-    composeTable: () => ({}),
-  });
+  return projections.reduce(mergeComposer, {});
 }

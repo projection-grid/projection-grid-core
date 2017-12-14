@@ -24,16 +24,16 @@ export default function ({
       const { data, section: { table } } = tr;
       const { primaryKey } = table;
       const cols = [].concat(...pluck(table.colgroups || [], 'cols'));
-      const composeDataTr = d => composeTrs(Object.assign({}, tr, {
-        tds: cols.map(col => ({ data: d, col })),
-      }, primaryKey ? { key: d[primaryKey] } : {}));
 
       if (isArray(data)) {
-        return [].concat(...data.map(composeDataTr));
+        const trs = data.map(d => Object.assign({}, tr, { data: d }));
+        return [].concat(...trs.map(this.composeTrs));
       }
 
       if (isObject(data)) {
-        return composeDataTr(data);
+        return composeTrs(Object.assign({}, tr, {
+          tds: cols.map(col => ({ data, col })),
+        }, primaryKey ? { key: data[primaryKey] } : {}));
       }
 
       return composeTrs(tr);
