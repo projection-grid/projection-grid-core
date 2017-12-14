@@ -1,5 +1,6 @@
 import { pluck, isArray, isFunction, isObject, isString, mapObject } from '../utils';
 
+// Merge 2 event hashes
 function mergeEvents(events, e) {
   return Object.assign({}, events, mapObject(e, (handler, name) => (...args) => {
     handler(...args);
@@ -10,38 +11,55 @@ function mergeEvents(events, e) {
 }
 
 const getStandardDecorator = d => (isFunction(d) ? d : v => v);
+
+// Decorator for key
 const getKeyDecorator = d => (
   isString(d) ? key => `${key}.${d}` : getStandardDecorator(d)
 );
+
+// Decorator for object value
 const getObjectDecorator = d => (
   isObject(d) ? obj => Object.assign({}, obj, d) : getStandardDecorator(d)
 );
+
+// Decorator for props
 const getPropsDecorator = getObjectDecorator;
+
+// Decorator for classes
 const getClassesDecorator = d => (
   isArray(d) ? classes => classes.append(d) : getStandardDecorator(d)
 );
+
+// Decorator for styles
 const getStylesDecorator = getObjectDecorator;
+
+// Decorator for events
 const getEventsDecorator = d => (
   isObject(d) ? events => mergeEvents(events, d) : getStandardDecorator(d)
 );
+
+// Decorator for content
 const getContentDecorator = getStandardDecorator;
 
 function getModelDecorator(decorator, hasContent) {
-  return (context, model) => {
-    const result = mapObject({
-      key: getKeyDecorator,
-      props: getPropsDecorator,
-      classes: getClassesDecorator,
-      styles: getStylesDecorator,
-      events: getEventsDecorator,
-    }, (getDecorator, name) => getDecorator(decorator[name])(context, model[name]));
+  if (isObject(decorator)) {
+    return (context, model) => {
+      const result = mapObject({
+        key: getKeyDecorator,
+        props: getPropsDecorator,
+        classes: getClassesDecorator,
+        styles: getStylesDecorator,
+        events: getEventsDecorator,
+      }, (getDecorator, name) => getDecorator(decorator[name])(context, model[name]));
 
-    if (hasContent) {
-      result.content = getContentDecorator(decorator.content)(context, model.content);
-    }
+      if (hasContent) {
+        result.content = getContentDecorator(decorator.content)(context, model.content);
+      }
 
-    return result;
-  };
+      return result;
+    };
+  }
+  return getStandardDecorator(decorator);
 }
 
 function decorate(model, {
@@ -52,15 +70,7 @@ function decorate(model, {
   if (isArray(model)) {
     return model.map(m => decorate(m, { context, decorators, hasContent }));
   }
-  return decorators.reduce((m, decorator) => {
-    if (isFunction(decorator)) {
-      return decorator(context, m);
-    }
-    if (isObject(decorator)) {
-      return getModelDecorator(decorator, hasContent)(context, m);
-    }
-    return m;
-  }, model);
+  return decorators.reduce((m, d) => getModelDecorator(d, hasContent)(context, m), model);
 }
 
 export default function ({

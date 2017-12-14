@@ -22,10 +22,11 @@ export default function ({
 
     composeTrs(tr) {
       const { data, section: { table } } = tr;
+      const { primaryKey } = table;
       const cols = [].concat(...pluck(table.colgroups || [], 'cols'));
       const composeDataTr = d => composeTrs(Object.assign({}, tr, {
         tds: cols.map(col => ({ data: d, col })),
-      }));
+      }, primaryKey ? { key: data[primaryKey] } : {}));
 
       if (isArray(data)) {
         return data.map(composeDataTr);
