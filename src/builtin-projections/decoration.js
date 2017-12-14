@@ -1,4 +1,4 @@
-import { pluck, isArray, isFunction, isObject, isString, mapObject } from '../utils';
+import { pluck, isArray, isFunction, isObject, mapObject } from '../utils';
 
 // Merge 2 event hashes
 function mergeEvents(events, e) {
@@ -13,9 +13,7 @@ function mergeEvents(events, e) {
 const getStandardDecorator = d => (isFunction(d) ? d : v => v);
 
 // Decorator for key
-const getKeyDecorator = d => (
-  isString(d) ? key => `${key}.${d}` : getStandardDecorator(d)
-);
+const getKeyDecorator = getStandardDecorator;
 
 // Decorator for object value
 const getObjectDecorator = d => (
