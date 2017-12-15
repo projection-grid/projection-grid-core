@@ -7,10 +7,16 @@ export default function ({
 }) {
   return {
     composeTable(table) {
-      const { tbodies = [], data } = table;
-      return composeTable(isArray(data) ? Object.assign({}, table, {
-        tbodies: tbodies.concat([{ data }]),
-      }) : table);
+      const {
+        tbodies: tb = [],
+        colgroups: cg = [],
+        data,
+        cols,
+      } = table;
+      const tbodies = isArray(data) ? tb.concat([{ data }]) : tb;
+      const colgroups = isArray(cols) ? cg.concat([{ cols }]) : cg;
+
+      return composeTable({ ...table, tbodies, colgroups });
     },
 
     composeSections(section) {
@@ -23,7 +29,7 @@ export default function ({
     composeTrs(tr) {
       const { data, section: { table } } = tr;
       const { primaryKey } = table;
-      const cols = [].concat(...pluck(table.colgroups || [], 'cols'));
+      const cols = [].concat(...pluck(table.colgroups, 'cols'));
 
       if (isArray(data)) {
         const trs = data.map(d => Object.assign({}, tr, { data: d }));
