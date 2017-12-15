@@ -49,3 +49,5 @@ export const isEmpty = (obj) => {
   }
   return Object.keys(obj).length === 0;
 };
+
+export const isString = obj => typeof obj === 'string';
