@@ -1,6 +1,8 @@
 import {
   defaults,
+  columns,
   data,
+  header,
   decoration,
 } from './builtin-projections';
 
@@ -11,7 +13,9 @@ export class ProjectionGridCore {
     return {
       table: composer([
         defaults,
+        columns,
         data,
+        header,
         decoration,
         ...projections,
       ]).composeTable(config),

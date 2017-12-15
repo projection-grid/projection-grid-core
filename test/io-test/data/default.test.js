@@ -1,5 +1,5 @@
 import { ioTest } from '../io-test';
-import { defaults, data } from '../../../src/builtin-projections';
+import { defaults, columns, data } from '../../../src/builtin-projections';
 import { DEFAULT_COMMON, DEFAULT_TABLE } from '../constants';
 
 ioTest({
@@ -28,7 +28,7 @@ ioTest({
 
 ioTest({
   name: 'data~composeTable with data and cols',
-  projections: [defaults, data],
+  projections: [defaults, columns, data],
   input: {
     cols: [{ key: 'a' }],
     data: [{ a: 1, b: 2 }],
@@ -58,4 +58,4 @@ ioTest({
       }],
     }],
   },
-})
+});
