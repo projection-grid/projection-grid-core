@@ -33,7 +33,12 @@ export default function ({
       if (isHeader) {
         return composeTrs({
           ...tr,
-          tds: cols.map(col => ({ tag: 'TH', isHeader: true, col })),
+          tds: cols.map(col => ({
+            tag: 'TH',
+            key: col.key,
+            isHeader: true,
+            col,
+          })),
         });
       }
       return composeTrs(tr);

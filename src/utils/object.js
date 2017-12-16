@@ -50,4 +50,4 @@ export const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };
 
-export const isString = obj => typeof obj === 'string';
+export const isString = obj => Object.prototype.toString.call(obj) === '[object String]';

@@ -32,7 +32,7 @@ export default function ({
 
       if (isObject(data)) {
         return composeTrs(Object.assign({}, tr, {
-          tds: cols.map(col => ({ data, col })),
+          tds: cols.map(col => ({ data, col, key: col.key })),
         }, primaryKey ? { key: data[primaryKey] } : {}));
       }
 

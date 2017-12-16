@@ -53,6 +53,7 @@ ioTest({
         tds: [{
           ...DEFAULT_COMMON,
           tag: 'TD',
+          key: 'a',
           content: null,
         }],
       }],

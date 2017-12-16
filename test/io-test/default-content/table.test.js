@@ -1,17 +1,28 @@
 import { ioTest } from '../io-test';
-import { defaults, columns, header, data } from '../../../src/builtin-projections';
+import {
+  defaults,
+  columns,
+  header,
+  data,
+  defaultContent,
+} from '../../../src/builtin-projections';
 import { DEFAULT_COMMON, DEFAULT_TABLE } from '../constants';
 
 ioTest({
-  name: 'header~composeTable',
-  projections: [defaults, columns, header, data],
+  name: 'defaultContent~composeTable',
+  projections: [defaults, columns, header, data, defaultContent],
   input: {
-    cols: [
-      { key: 'a' },
-      { key: 'b' },
-    ],
-    data: [{ a: 1, b: 2 }],
-    tfoot: { hasHeader: true },
+    cols: [{
+      key: 'a',
+    }, {
+      key: 'b',
+      title: 'Bar',
+      property: 'bar',
+    }, {
+      key: 'c',
+      property: ({ a, bar }) => a + bar,
+    }],
+    data: [{ a: 1, bar: 2 }],
   },
   output: {
     ...DEFAULT_TABLE,
@@ -20,12 +31,16 @@ ioTest({
       tag: 'COLGROUP',
       cols: [{
         ...DEFAULT_COMMON,
-        tag: 'COL',
         key: 'a',
+        tag: 'COL',
       }, {
         ...DEFAULT_COMMON,
-        tag: 'COL',
         key: 'b',
+        tag: 'COL',
+      }, {
+        ...DEFAULT_COMMON,
+        key: 'c',
+        tag: 'COL',
       }],
     }],
     thead: {
@@ -37,14 +52,19 @@ ioTest({
         tag: 'TR',
         tds: [{
           ...DEFAULT_COMMON,
-          tag: 'TH',
           key: 'a',
-          content: null,
+          tag: 'TH',
+          content: 'a',
         }, {
           ...DEFAULT_COMMON,
-          tag: 'TH',
           key: 'b',
-          content: null,
+          tag: 'TH',
+          content: 'Bar',
+        }, {
+          ...DEFAULT_COMMON,
+          key: 'c',
+          tag: 'TH',
+          content: 'c',
         }],
       }],
     },
@@ -58,34 +78,19 @@ ioTest({
           ...DEFAULT_COMMON,
           tag: 'TD',
           key: 'a',
-          content: null,
+          content: 1,
         }, {
           ...DEFAULT_COMMON,
           tag: 'TD',
           key: 'b',
-          content: null,
+          content: 2,
+        }, {
+          ...DEFAULT_COMMON,
+          tag: 'TD',
+          key: 'c',
+          content: 3,
         }],
       }],
     }],
-    tfoot: {
-      ...DEFAULT_COMMON,
-      tag: 'TFOOT',
-      trs: [{
-        ...DEFAULT_COMMON,
-        key: '@header',
-        tag: 'TR',
-        tds: [{
-          ...DEFAULT_COMMON,
-          tag: 'TH',
-          key: 'a',
-          content: null,
-        }, {
-          ...DEFAULT_COMMON,
-          tag: 'TH',
-          key: 'b',
-          content: null,
-        }],
-      }],
-    },
   },
 });

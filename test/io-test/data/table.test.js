@@ -77,6 +77,7 @@ ioTest({
         tds: [{
           ...DEFAULT_COMMON,
           tag: 'TD',
+          key: 'col-a',
           content: null,
         }],
       }],
@@ -90,6 +91,7 @@ ioTest({
         tds: [{
           ...DEFAULT_COMMON,
           tag: 'TD',
+          key: 'col-a',
           content: null,
         }],
       }],
