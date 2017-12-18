@@ -1,13 +1,16 @@
 import { isArray } from './array';
-import { isEmpty } from './object';
+import { isObject } from './object';
 
-export function convert(converter, value) {
-  if (isArray(value)) {
-    return value.map(converter);
-  }
-  const model = converter(value || {});
-  if (isEmpty(model)) {
+export function convert(context, converter, value) {
+  function convertValue(obj) {
+    if (isArray(obj)) {
+      return [].concat(...obj.map(convertValue));
+    }
+    if (isObject(obj)) {
+      return converter(Object.assign({}, obj, context));
+    }
     return null;
   }
-  return model;
+
+  return convertValue(value);
 }

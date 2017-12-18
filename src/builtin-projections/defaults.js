@@ -1,165 +1,71 @@
-import { convert, pluck, pick } from '../utils';
+import { mapObject, isArray } from '../utils';
 
-function normalize(config) {
-  const {
-    caption = null,
-    columns = [],
-    records = [],
-    thead = {},
-    tfoot = {},
-  } = config;
-
-  const colgroup = Object.assign({}, { columns }, config.colgroup);
-  const tbody = Object.assign({}, { records }, config.tbody);
-  tbody.rows = tbody.rows || tbody.records.map(record => Object.assign({}, { record }, tbody.tr));
-  const colgroups = (config.colgroups || [{ key: 'colgroup-default' }]).map(cg =>
-    (cg.key === 'colgroup-default' ? Object.assign(cg, colgroup) : cg));
-  const tbodies = (config.tbodies || [{ key: 'tbody-default' }]).map(tb =>
-    (tb.key === 'tbody-default' ? Object.assign(tb, tbody) : tb));
-
-  return Object.assign({}, config, {
-    caption,
-    colgroups,
-    thead: Object.assign({}, { rows: [{ isHeader: true }] }, thead),
-    tbodies,
-    tfoot,
-  });
+function createModel(config, ...additionalProps) {
+  return Object.assign({
+    key: config.key || null,
+    props: config.props || {},
+    classes: config.classes || [],
+    styles: config.styles || {},
+    events: config.events || {},
+  }, ...additionalProps);
 }
 
-function decorate({ composeTable }, config, {
-  DefaultCell,
-  DefaultHeader,
-}) {
-  const table = normalize(config);
-  const columns = [].concat(...pluck(table.colgroups, 'columns'));
+const toVector = obj => (isArray(obj) ? obj : [obj]);
+const toScalar = obj => (isArray(obj) ? obj[0] || null : obj);
+const extendParam = (compose, ...ext) =>
+  config => compose(Object.assign({}, config, ...ext));
+const handleVector = compose =>
+  (config = []) => [].concat(...toVector(config).map(compose));
+const handleScalar = compose =>
+  (config = {}) => toScalar(compose(toScalar(config)));
 
+export default function () {
   return {
-    composeTable(/* table */) {
-      const context = name => convert(
-        obj => Object.assign({}, obj, { table }),
-        table[name]
-      );
+    composeTable(table) {
+      const extendContext = (compose, tag) => extendParam(compose, { table, tag });
 
-      return Object.assign({}, composeTable(table), {
-        caption: convert(this.composeCaption, context('caption')),
-        colgroups: [].concat(...convert(this.composeColgroups, context('colgroups'))),
-        thead: convert(this.composeThead, context('thead')),
-        tbodies: [].concat(...convert(this.composeTbodies, context('tbodies'))),
-        tfoot: convert(this.composeTfoot, context('tfoot')),
+      return createModel(table, mapObject({
+        caption: handleScalar(extendContext(this.composeCaption)),
+        colgroups: handleVector(extendContext(this.composeColgroups)),
+        thead: handleScalar(extendContext(this.composeSections, 'THEAD')),
+        tbodies: handleVector(extendContext(this.composeSections, 'TBODY')),
+        tfoot: handleScalar(extendContext(this.composeSections, 'TFOOT')),
+      }, (compose, name) => compose(table[name])), {
+        tag: 'TABLE',
       });
     },
 
-    composeCaption(/* caption */) { return null; },
+    composeCaption(caption) {
+      const { content = null } = caption;
+      return createModel(caption, { content, tag: 'CAPTION' });
+    },
 
     composeColgroups(colgroup) {
-      const cols = columns.map(column =>
-        Object.assign({}, colgroup.col, {
-          column,
-          colgroup,
-          table: colgroup.table,
-        }));
-
-      return [{
-        key: colgroup.key,
-        cols: [].concat(...convert(this.composeCols, cols)),
-      }];
+      const composeCols = handleVector(extendParam(this.composeCols, { colgroup }));
+      const cols = composeCols(colgroup.cols);
+      return [createModel(colgroup, { cols, tag: 'COLGROUP' })];
     },
 
     composeCols(col) {
-      return [{ key: `@col-${col.column.name}` }];
+      return [createModel(col, { tag: 'COL' })];
     },
 
-    composeThead(thead) {
-      let trs = [];
-      if (thead && thead.rows) {
-        trs = thead.rows.map(row => Object.assign({}, row, pick(thead, 'table'), { thead }));
-      }
-
-      return { trs: [].concat(...convert(this.composeHeaderTrs, trs)) };
-    },
-
-    composeTbodies(tbody) {
-      const trs = tbody.rows.map(row => Object.assign({}, row, pick(tbody, 'table', 'tfoot', 'thead'), {
-        tbody,
-      }));
-
-      return [{
-        key: tbody.key,
-        trs: [].concat(...convert(this.composeTrs, trs)),
-      }];
-    },
-
-    composeTfoot(tfoot) {
-      if (tfoot && tfoot.rows) {
-        return {
-          trs: [].concat(...convert(this.composeTrs, tfoot.rows)),
-        };
-      }
-      return null;
-    },
-
-    composeHeaderTrs(tr) {
-      if (tr.isHeader) {
-        const trs = columns.map(column => Object.assign({}, tr.th, pick(tr, 'table', 'thead'), {
-          column,
-          tr,
-        }));
-
-        return [{
-          key: 'tr-header',
-          tds: [].concat(...convert(this.composeHeaderThs, trs)),
-        }];
-      }
-      return this.composeTrs(tr);
+    composeSections(section) {
+      const { tag = 'TBODY' } = section;
+      const composeTrs = handleVector(extendParam(this.composeTrs, { section }));
+      const trs = composeTrs(section.trs);
+      return [createModel(section, { trs, tag })];
     },
 
     composeTrs(tr) {
-      if (tr.record) {
-        return this.composeDataTrs(tr);
-      }
-      return null;
+      const composeTds = handleVector(extendParam(this.composeTds, { tr }));
+      const tds = composeTds(tr.tds);
+      return [createModel(tr, { tds, tag: 'TR' })];
     },
 
-    composeDataTrs(tr) {
-      const tds = columns.map(column => Object.assign(
-        {},
-        tr.td,
-        pick(tr, 'table', 'thead', 'tbody', 'tfoot', 'record'),
-        {
-          column,
-          tr,
-        }
-      ));
-
-      return [{
-        key: `@tr-${tr.record[table.primaryKey]}`,
-        tds: [].concat(...convert(this.composeDataTds, tds)),
-      }];
-    },
-
-    composeHeaderThs(th) {
-      return [{
-        key: `@th-${th.column.name}`,
-        isHeader: true,
-        content: Object.assign({}, {
-          Component: DefaultHeader,
-          props: pick(th, 'column', 'table'),
-        }),
-      }];
-    },
-
-    composeDataTds(td) {
-      return [{
-        key: `@td-${td.column.name}`,
-        content: Object.assign({}, {
-          Component: DefaultCell,
-          props: pick(td, 'record', 'column', 'table'),
-        }),
-      }];
+    composeTds(td) {
+      const { tag = 'TD', content = null } = td;
+      return [createModel(td, { content, tag })];
     },
   };
-}
-
-export function defaults(config) {
-  return { decorate, config };
 }
