@@ -5,11 +5,14 @@ export function ioTest({
   projections = [],
   method = 'composeTable',
   input = {},
-  output = {},
+  output: expected = {},
+  validate = () => {},
 }) {
   describe('Input/Output Test', () => {
     test(name, () => {
-      expect(composer(projections)[method](input)).toEqual(output);
+      const output = composer(projections)[method](input);
+      expect(output).toMatchObject(expected);
+      validate({ input, output });
     });
   });
 }

@@ -13,11 +13,11 @@ function defaultCellContent(col, data) {
     return data[col.key];
   }
 
-  return '';
+  return null;
 }
 
 function defaultHeaderContent(col) {
-  return col.title || col.key || '';
+  return col.title || col.key || null;
 }
 
 function defaultContent(td) {
@@ -27,7 +27,7 @@ function defaultContent(td) {
     return isHeader ? defaultHeaderContent(col) : defaultCellContent(col, data);
   }
 
-  return '';
+  return null;
 }
 
 function getContent(td) {

@@ -1,13 +1,15 @@
-import { defaults, data, decoration } from '../../../src/builtin-projections';
+import { defaults, columns, data, decoration } from '../../../src/builtin-projections';
 import { isArray } from '../../../src/utils';
 import { ioTest } from '../io-test';
 import { DEFAULT_COMMON } from '../constants';
 
-const click = () => window.console.log('click td');
+const clickOuter = jest.fn();
+const clickInner = jest.fn();
+
 
 ioTest({
   name: 'decoration~composeTable with full config',
-  projections: [defaults, data, decoration],
+  projections: [defaults, columns, data, decoration],
   input: {
     key: 'default-table',
     props: { foo: 1, bar: 2 },
@@ -20,18 +22,32 @@ ioTest({
     },
     $td: {
       key: ({ col }, key) => (col && col.key) || key,
-      events: { click },
+      events: { click: clickOuter },
     },
     colgroups: [{
       cols: { key: 'col-a' },
     }],
-    thead: [{
+    thead: {
       key: 'default-thead',
-    }],
+      $td: {
+        events: { click: clickInner },
+        props: {
+          title: 'some-random-title',
+        },
+        classes: ['title-cell'],
+      },
+      trs: [{
+        tds: [{}],
+      }],
+    },
     tbodies: [{
       key: 'default-tbody',
       trs: [{
+        $td: ({ key }) => ({
+          content: key,
+        }),
         key: 'first-tr',
+        data: { b: 2 },
       }, {
         $td: {
           key: ({ col }) => `td-${col.key}`,
@@ -68,7 +84,19 @@ ioTest({
       ...DEFAULT_COMMON,
       tag: 'THEAD',
       key: 'default-thead',
-      trs: [],
+      trs: [{
+        ...DEFAULT_COMMON,
+        tag: 'TR',
+        tds: [{
+          ...DEFAULT_COMMON,
+          tag: 'TD',
+          content: null,
+          props: {
+            title: 'some-random-title',
+          },
+          classes: ['title-cell'],
+        }],
+      }],
     },
     tbodies: [{
       ...DEFAULT_COMMON,
@@ -78,7 +106,12 @@ ioTest({
         ...DEFAULT_COMMON,
         tag: 'TR',
         key: 'first-tr',
-        tds: [],
+        tds: [{
+          ...DEFAULT_COMMON,
+          tag: 'TD',
+          key: 'col-a',
+          content: 'col-a',
+        }],
       }, {
         ...DEFAULT_COMMON,
         tag: 'TR',
@@ -87,7 +120,7 @@ ioTest({
           ...DEFAULT_COMMON,
           tag: 'TD',
           key: 'td-col-a',
-          events: { click },
+          events: { click: clickOuter },
           content: null,
         }],
       }],
@@ -102,7 +135,7 @@ ioTest({
           ...DEFAULT_COMMON,
           tag: 'TD',
           key: 'col-a',
-          events: { click },
+          events: { click: clickOuter },
           content: null,
         }],
       }],
@@ -113,5 +146,12 @@ ioTest({
       key: null,
       trs: [],
     },
+  },
+  validate({ output }) {
+    expect(clickOuter).not.toHaveBeenCalled();
+    expect(clickInner).not.toHaveBeenCalled();
+    output.thead.trs[0].tds[0].events.click();
+    expect(clickOuter).toHaveBeenCalledTimes(1);
+    expect(clickInner).toHaveBeenCalledTimes(1);
   },
 });
