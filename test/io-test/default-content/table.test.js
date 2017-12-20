@@ -21,8 +21,21 @@ ioTest({
     }, {
       key: 'c',
       property: ({ a, bar }) => a + bar,
+    }, {
+      key: null,
     }],
     data: [{ a: 1, bar: 2 }],
+    tfoot: {
+      trs: [{
+        key: 'some-row',
+        tds: [{
+          key: 'a',
+        }, {
+          key: 'b',
+          content: 'cell-b',
+        }],
+      }],
+    },
   },
   output: {
     ...DEFAULT_TABLE,
@@ -40,6 +53,9 @@ ioTest({
       }, {
         ...DEFAULT_COMMON,
         key: 'c',
+        tag: 'COL',
+      }, {
+        ...DEFAULT_COMMON,
         tag: 'COL',
       }],
     }],
@@ -65,6 +81,10 @@ ioTest({
           key: 'c',
           tag: 'TH',
           content: 'c',
+        }, {
+          ...DEFAULT_COMMON,
+          tag: 'TH',
+          content: null,
         }],
       }],
     },
@@ -89,8 +109,32 @@ ioTest({
           tag: 'TD',
           key: 'c',
           content: 3,
+        }, {
+          ...DEFAULT_COMMON,
+          tag: 'TD',
+          content: null,
         }],
       }],
     }],
+    tfoot: {
+      ...DEFAULT_COMMON,
+      tag: 'TFOOT',
+      trs: [{
+        ...DEFAULT_COMMON,
+        tag: 'TR',
+        key: 'some-row',
+        tds: [{
+          ...DEFAULT_COMMON,
+          tag: 'TD',
+          key: 'a',
+          content: null,
+        }, {
+          ...DEFAULT_COMMON,
+          tag: 'TD',
+          key: 'b',
+          content: 'cell-b',
+        }],
+      }],
+    },
   },
 });

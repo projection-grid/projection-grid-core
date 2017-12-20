@@ -26,7 +26,7 @@ const getPropsDecorator = getObjectDecorator;
 
 // Decorator for classes
 const getClassesDecorator = d => (
-  isArray(d) ? (ctx, classes) => classes.append(d) : getStandardDecorator(d)
+  isArray(d) ? (ctx, classes) => classes.concat(d) : getStandardDecorator(d)
 );
 
 // Decorator for styles
