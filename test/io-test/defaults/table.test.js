@@ -2,7 +2,7 @@ import { ioTest } from '../io-test';
 import { defaults } from '../../../src/builtin-projections';
 import { DEFAULT_COMMON } from '../constants';
 
-const click = () => window.console.log('click table');
+const click = jest.fn();
 
 ioTest({
   name: 'defaults~composeTable with full config',

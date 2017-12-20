@@ -147,6 +147,7 @@ ioTest({
       trs: [],
     },
   },
+  matchObject: true,
   validate({ output }) {
     expect(clickOuter).not.toHaveBeenCalled();
     expect(clickInner).not.toHaveBeenCalled();
