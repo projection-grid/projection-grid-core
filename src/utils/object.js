@@ -3,12 +3,14 @@ import { isFunction } from './function';
 
 export const isObject = obj => Object.prototype.toString.call(obj) === '[object Object]';
 
-export const assign = Object.assign || ((target, ...source) => {
-  source.each(src => Object.keys(src).each((value, key) => {
+export const assignPonyfill = (target, ...source) => {
+  source.forEach(src => Object.keys(src).forEach((value, key) => {
     target[key] = value; // eslint-disable-line
   }));
   return target;
-});
+};
+
+export const assign = Object.assign || assignPonyfill;
 
 const iterateeWithCondition = (
   obj,
