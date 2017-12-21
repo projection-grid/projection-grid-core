@@ -5,6 +5,7 @@ import {
   header,
   defaultContent,
   decoration,
+  customRow,
 } from './builtin-projections';
 
 import { composer } from './composer';
@@ -37,6 +38,7 @@ export class ProjectionGridCore {
         header,
         defaultContent,
         decoration,
+        customRow,
       ],
     });
   }
