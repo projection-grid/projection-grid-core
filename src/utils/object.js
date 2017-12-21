@@ -3,6 +3,15 @@ import { isFunction } from './function';
 
 export const isObject = obj => Object.prototype.toString.call(obj) === '[object Object]';
 
+export const assignPonyfill = (target, ...source) => {
+  source.forEach(src => Object.keys(src).forEach((value, key) => {
+    target[key] = value; // eslint-disable-line
+  }));
+  return target;
+};
+
+export const assign = Object.assign || assignPonyfill;
+
 const iterateeWithCondition = (
   obj,
   condition,
@@ -18,7 +27,7 @@ const iterateeWithCondition = (
 
   return Object.keys(obj).reduce((memo, key) => {
     if (condition(obj, key)) {
-      return Object.assign(memo, { [key]: iteratee(obj[key], key) });
+      return assign(memo, { [key]: iteratee(obj[key], key) });
     }
 
     return memo;

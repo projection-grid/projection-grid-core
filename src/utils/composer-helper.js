@@ -1,4 +1,4 @@
-import { compactObject } from './object';
+import { compactObject, assign } from './object';
 import { isFunction } from './function';
 
 const applyField = (origin, patch) => {
@@ -18,11 +18,11 @@ const applyField = (origin, patch) => {
     return patch;
   }
 
-  return Object.assign({}, origin, compactObject(patch));
+  return assign({}, origin, compactObject(patch));
 };
 
 export const applyValue = (defaults, obj) => Object.keys(obj || {}).reduce((memo, key) =>
-  Object.assign({}, memo, {
+  assign({}, memo, {
     [key]: applyField(memo[key], obj[key]),
   }), defaults);
 
@@ -39,10 +39,10 @@ export const applyForChildByCondition = (
       applyForChildByCondition(parentMemo, value, childPath, condition));
   }
 
-  return Object.assign({}, parent, {
+  return assign({}, parent, {
     [path1]: parent[path1].map((childLevel1, index) => {
       if (condition(childLevel1, index)) {
-        return Object.assign({}, childLevel1, {
+        return assign({}, childLevel1, {
           [path2]: childLevel1[path2].map(childLevel2 => applyValue(childLevel2, value)),
         });
       }

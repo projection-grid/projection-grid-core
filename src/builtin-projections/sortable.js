@@ -1,9 +1,9 @@
-import { applyValue } from '../utils';
+import { applyValue, assign } from '../utils';
 
 export function sortable({ composeHeaderThs }, config) {
   return {
     composeHeaderThs(model) {
-      const sortConfig = Object.assign({}, {
+      const sortConfig = assign({}, {
         ascClasses: [],
         descClasses: [],
         handleResort: () => {},

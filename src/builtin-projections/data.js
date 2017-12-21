@@ -1,4 +1,4 @@
-import { isArray, isObject, pluck } from '../utils';
+import { isArray, isObject, pluck, assign } from '../utils';
 
 export default function ({
   composeTable,
@@ -15,7 +15,7 @@ export default function ({
 
     composeSections(section) {
       const { trs = [], data } = section;
-      return composeSections(isArray(data) ? Object.assign({}, section, {
+      return composeSections(isArray(data) ? assign({}, section, {
         trs: trs.concat([{ data }]),
       }) : section);
     },
@@ -26,12 +26,12 @@ export default function ({
       const cols = [].concat(...pluck(colgroups, 'cols'));
 
       if (isArray(data)) {
-        const trs = data.map(d => Object.assign({}, tr, { data: d }));
+        const trs = data.map(d => assign({}, tr, { data: d }));
         return [].concat(...trs.map(this.composeTrs));
       }
 
       if (isObject(data)) {
-        return composeTrs(Object.assign({}, tr, {
+        return composeTrs(assign({}, tr, {
           tds: cols.map(col => ({ data, col, key: col.key })),
         }, primaryKey ? { key: data[primaryKey] } : {}));
       }

@@ -1,4 +1,4 @@
-import { applyValue, pick } from '../utils';
+import { applyValue, pick, assign } from '../utils';
 
 export function columnWidth({ composeCols }) {
   return {
@@ -6,7 +6,7 @@ export function columnWidth({ composeCols }) {
       const columns = composeCols(col);
 
       return columns.map((column) => {
-        const widthProps = pick(Object.assign({}, column, col.column), 'width');
+        const widthProps = pick(assign({}, column, col.column), 'width');
 
         return applyValue(column, {
           props: widthProps,

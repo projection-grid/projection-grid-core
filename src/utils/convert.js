@@ -1,5 +1,5 @@
 import { isArray } from './array';
-import { isObject } from './object';
+import { isObject, assign } from './object';
 
 export function convert(context, converter, value) {
   function convertValue(obj) {
@@ -7,7 +7,7 @@ export function convert(context, converter, value) {
       return [].concat(...obj.map(convertValue));
     }
     if (isObject(obj)) {
-      return converter(Object.assign({}, obj, context));
+      return converter(assign({}, obj, context));
     }
     return null;
   }

@@ -1,5 +1,4 @@
-
-import { applyValue, applyForChildByCondition } from '../utils';
+import { applyValue, applyForChildByCondition, assign } from '../utils';
 
 const applyStyles = (memo, styles) => applyValue(memo, { styles });
 
@@ -67,7 +66,7 @@ const composeWithBootstrapStripedRows = ({
   composeDataTds,
   composeTbodies,
   composeThead,
-}) => Object.assign({}, composeWithBootstrap({
+}) => assign({}, composeWithBootstrap({
   composeTable,
   composeCaption,
   composeHeaderThs,

@@ -1,7 +1,7 @@
-import { mapObject } from './utils';
+import { mapObject, assign } from './utils';
 
 function mergeComposer(comp, proj) {
-  return Object.assign(comp, mapObject(proj(comp), func => func.bind(comp)));
+  return assign(comp, mapObject(proj(comp), func => func.bind(comp)));
 }
 
 export function composer(projections) {

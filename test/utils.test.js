@@ -50,6 +50,18 @@ describe('Object', () => {
     expect(_.pick({ a: 1, b: 2, c: 3 }, 'a', 'b')).toEqual({ a: 1, b: 2 });
     expect(_.pick({ a: 1, b: 2, c: 3 }, ['a', 'b'])).toEqual({ a: 1, b: 2 });
   });
+
+  test('assignPonyfill', () => {
+    [
+      [{}, { a: 1, b: 2 }],
+      [{}, { a: 1 }, { b: 2 }],
+      [{}, { a: 1 }, { a: 2, b: 2 }],
+    ].forEach((objects) => {
+      const result = _.assignPonyfill(...objects);
+      expect(result).toBe(objects[0]);
+      expect(Object.assign(...objects)).toEqual(result);
+    });
+  });
 });
 
 describe('Array', () => {
