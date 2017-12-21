@@ -1,5 +1,4 @@
-import { compactObject, assign } from './object';
-import { isFunction } from './function';
+import { compactObject, assign, isFunction } from './object';
 
 const applyField = (origin, patch) => {
   if (!patch) {

@@ -15,16 +15,10 @@ describe('Object', () => {
     expect(_.isObject({})).toBe(true);
   });
 
-  test('isNull', () => {
-    expect(_.isNull(null)).toBe(true);
-    expect(_.isNull(undefined)).toBe(false);
-    expect(_.isNull({})).toBe(false);
-  });
-
-  test('isUndefined', () => {
-    expect(_.isUndefined(null)).toBe(false);
-    expect(_.isUndefined(undefined)).toBe(true);
-    expect(_.isUndefined({})).toBe(false);
+  test('isFunction', () => {
+    function foo() { }
+    expect(_.isFunction(() => {})).toBe(true);
+    expect(_.isFunction(foo)).toBe(true);
   });
 
   test('compactObject', () => {
@@ -85,27 +79,7 @@ describe('Array', () => {
   test('flatten', () => {
     expect(_.flatten([1, [2], [3, [[4]]]])).toEqual([1, 2, 3, 4]);
   });
-
-  test('uniq', () => {
-    expect(_.uniq([1, 2, 1, 4, 1, 3])).toEqual([1, 2, 4, 3]);
-  });
 });
 
 describe('Function', () => {
-  test('isFunction', () => {
-    function foo() { }
-    expect(_.isFunction(() => {})).toBe(true);
-    expect(_.isFunction(foo)).toBe(true);
-  });
-
-  test('partial', () => {
-    const add = (a, b) => a + b;
-    const sum = (...args) => args.reduce(add, 0);
-    const add10 = _.partial(sum, 4, 6);
-    const add40 = _.partial(sum, 5, 15, 20);
-
-    expect(sum(1, 2, 3)).toBe(6);
-    expect(add10(10)).toBe(20);
-    expect(add40(add10())).toBe(50);
-  });
 });
