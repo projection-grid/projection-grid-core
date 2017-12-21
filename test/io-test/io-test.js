@@ -1,11 +1,11 @@
 import { composer } from '../../src/composer';
 
 export function ioTest({
-  name = '',
-  projections = [],
+  name,
+  projections,
   method = 'composeTable',
   input = {},
-  output: expected = {},
+  output: expected,
   matchObject = false,
   validate = () => {},
 }) {
