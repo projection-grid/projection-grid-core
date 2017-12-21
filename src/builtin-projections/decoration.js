@@ -1,8 +1,8 @@
-import { pluck, isArray, isFunction, isObject, mapObject } from '../utils';
+import { pluck, assign, isArray, isFunction, isObject, mapObject } from '../utils';
 
 // Merge 2 event hashes
 function mergeEvents(events, e) {
-  return Object.assign({}, events, mapObject(e, (handler, name) => {
+  return assign({}, events, mapObject(e, (handler, name) => {
     const hdl = events[name];
     return isFunction(hdl) ? (...args) => {
       handler(...args);
@@ -18,7 +18,7 @@ const getKeyDecorator = getStandardDecorator;
 
 // Decorator for object value
 const getObjectDecorator = d => (
-  isObject(d) ? (ctx, obj) => Object.assign({}, obj, d) : getStandardDecorator(d)
+  isObject(d) ? (ctx, obj) => assign({}, obj, d) : getStandardDecorator(d)
 );
 
 // Decorator for props
@@ -70,7 +70,7 @@ function decorate(model, {
     return model.map(m => decorate(m, { context, decorators, hasContent }));
   }
   const deco = decorators.reduce((m, d) => getModelDecorator(d, hasContent)(context, m), model);
-  return Object.assign({}, model, deco);
+  return assign({}, model, deco);
 }
 
 export default function ({

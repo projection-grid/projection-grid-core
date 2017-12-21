@@ -3,6 +3,13 @@ import { isFunction } from './function';
 
 export const isObject = obj => Object.prototype.toString.call(obj) === '[object Object]';
 
+export const assign = Object.assign || ((target, ...source) => {
+  source.each(src => Object.keys(src).each((value, key) => {
+    target[key] = value; // eslint-disable-line
+  }));
+  return target;
+});
+
 const iterateeWithCondition = (
   obj,
   condition,
@@ -18,7 +25,7 @@ const iterateeWithCondition = (
 
   return Object.keys(obj).reduce((memo, key) => {
     if (condition(obj, key)) {
-      return Object.assign(memo, { [key]: iteratee(obj[key], key) });
+      return assign(memo, { [key]: iteratee(obj[key], key) });
     }
 
     return memo;

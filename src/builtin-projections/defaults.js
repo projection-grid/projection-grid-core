@@ -1,7 +1,7 @@
-import { mapObject, isArray } from '../utils';
+import { mapObject, isArray, assign } from '../utils';
 
 function createModel(config, ...additionalProps) {
-  return Object.assign({
+  return assign({
     key: config.key || null,
     props: config.props || {},
     classes: config.classes || [],
@@ -13,7 +13,7 @@ function createModel(config, ...additionalProps) {
 const toVector = obj => (isArray(obj) ? obj : [obj]);
 const toScalar = obj => (isArray(obj) ? obj[0] || null : obj);
 const extendParam = (compose, ...ext) =>
-  config => compose(Object.assign({}, config, ...ext));
+  config => compose(assign({}, config, ...ext));
 const handleVector = compose =>
   (config = []) => [].concat(...toVector(config).map(compose));
 const handleScalar = compose =>
