@@ -100,7 +100,11 @@ export default function ({
       const { table } = section;
       return decorate(composeSections(section), {
         context: section,
-        decorators: pluck([table], '$section'),
+        decorators: pluck([table], {
+          THEAD: '$thead',
+          TBODY: '$tbody',
+          TFOOT: '$tfoot',
+        }[section.tag]),
       });
     },
     composeTrs(tr) {

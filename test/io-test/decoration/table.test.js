@@ -24,6 +24,11 @@ ioTest({
       key: ({ col }, key) => (col && col.key) || key,
       events: { click: clickOuter },
     },
+    $tbody: {
+      styles: {
+        background: 'blue',
+      },
+    },
     colgroups: [{
       cols: { key: 'col-a' },
     }],
@@ -102,6 +107,7 @@ ioTest({
       ...DEFAULT_COMMON,
       tag: 'TBODY',
       key: 'default-tbody',
+      styles: { background: 'blue' },
       trs: [{
         ...DEFAULT_COMMON,
         tag: 'TR',
@@ -127,6 +133,7 @@ ioTest({
     }, {
       ...DEFAULT_COMMON,
       tag: 'TBODY',
+      styles: { background: 'blue' },
       trs: [{
         ...DEFAULT_COMMON,
         tag: 'TR',
