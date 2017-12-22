@@ -21,6 +21,16 @@ describe('Object', () => {
     expect(_.isFunction(foo)).toBe(true);
   });
 
+  test('isUndefined', () => {
+    expect(_.isUndefined()).toBe(true);
+    expect(_.isUndefined(undefined)).toBe(true);
+    expect(_.isUndefined(null)).toBe(false);
+    expect(_.isUndefined(0)).toBe(false);
+    expect(_.isUndefined('')).toBe(false);
+    expect(_.isUndefined([])).toBe(false);
+    expect(_.isUndefined({})).toBe(false);
+  });
+
   test('compactObject', () => {
     expect(_.compactObject({
       a: 'a',
@@ -43,6 +53,14 @@ describe('Object', () => {
   test('pick', () => {
     expect(_.pick({ a: 1, b: 2, c: 3 }, 'a', 'b')).toEqual({ a: 1, b: 2 });
     expect(_.pick({ a: 1, b: 2, c: 3 }, ['a', 'b'])).toEqual({ a: 1, b: 2 });
+  });
+
+  test('ponyfill', () => {
+    const replacement = {};
+    ['a', {}, () => {}].forEach((native) => {
+      expect(_.ponyfill(native, replacement)).toBe(native);
+    });
+    expect(_.ponyfill(undefined, replacement)).toBe(replacement);
   });
 
   test('assignPonyfill', () => {

@@ -3,7 +3,9 @@ import { flatten } from './array';
 export const isObject = obj => Object.prototype.toString.call(obj) === '[object Object]';
 export const isFunction = func => Object.prototype.toString.call(func) === '[object Function]';
 export const isString = obj => Object.prototype.toString.call(obj) === '[object String]';
+export const isUndefined = obj => Object.prototype.toString.call(obj) === '[object Undefined]';
 
+export const ponyfill = (native, replacement) => (isUndefined(native) ? replacement : native);
 export const assignPonyfill = (target, ...source) => {
   source.forEach(src => Object.keys(src).forEach((value, key) => {
     target[key] = value; // eslint-disable-line
@@ -11,7 +13,7 @@ export const assignPonyfill = (target, ...source) => {
   return target;
 };
 
-export const assign = Object.assign || assignPonyfill;
+export const assign = ponyfill(Object.assign, assignPonyfill);
 
 const iterateeWithCondition = (
   obj,
