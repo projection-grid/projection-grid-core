@@ -1,5 +1,6 @@
 # projection-grid-core
 [![projection-grid-core][shields-npm]][link-npm]
+[![coveralls][shields-coveralls]][link-coveralls]
 
 Implement the framework independent of [projection-grid][projection-grid], the
 __highly extensible__ & __cross frameworks__ data table. It exposes the
@@ -47,6 +48,8 @@ neutral [render model][render-model].
 
 [shields-npm]: https://img.shields.io/npm/v/projection-grid-core.svg
 [link-npm]: https://www.npmjs.com/package/projection-grid-core
+[shields-coveralls]: https://img.shields.io/coveralls/github/projection-grid/projection-grid-core.svg
+[link-coveralls]: https://coveralls.io/github/projection-grid/projection-grid-core
 
 [projection-grid]: https://projection-grid.gitbooks.io/projection-grid-api-reference/content/
 [doc-user-config]: https://projection-grid.gitbooks.io/design-note/content/user-config.html
