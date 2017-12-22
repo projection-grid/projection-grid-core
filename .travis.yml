@@ -5,4 +5,4 @@ node_js:
   - "7"
   - "6"
 cache: yarn
-after_script: 'cat ./coverage/lcov.info | coveralls'
+after_script: 'cat ./coverage-report/lcov.info | coveralls'
