@@ -5,7 +5,7 @@ import {
   header,
   data,
   sorting,
-} from '../../../src/builtin-projections';
+} from '../../../src/projections';
 import { DEFAULT_TABLE, DEFAULT_COMMON } from '../constants';
 
 const onSort = jest.fn();

@@ -1,4 +1,4 @@
-import { defaults, columns, data, decoration } from '../../../src/builtin-projections';
+import { defaults, columns, data, decoration } from '../../../src/projections';
 import { isArray } from '../../../src/utils';
 import { ioTest } from '../io-test';
 import { DEFAULT_COMMON } from '../constants';
