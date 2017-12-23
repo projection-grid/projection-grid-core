@@ -1,5 +1,5 @@
 import { ioTest } from '../io-test';
-import { defaults, columns, header, data } from '../../../src/builtin-projections';
+import { defaults, columns, header, data } from '../../../src/projections';
 import { DEFAULT_COMMON, DEFAULT_TABLE } from '../constants';
 
 ioTest({

@@ -1,6 +1,6 @@
 import { mapObject } from '../../../src/utils';
 import { ioTest } from '../io-test';
-import { defaults } from '../../../src/builtin-projections';
+import { defaults } from '../../../src/projections';
 import {
   DEFAULT_TABLE,
   DEFAULT_CAPTION,

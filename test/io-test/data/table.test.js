@@ -1,5 +1,5 @@
 import { ioTest } from '../io-test';
-import { defaults, data } from '../../../src/builtin-projections';
+import { defaults, data } from '../../../src/projections';
 import { DEFAULT_COMMON } from '../constants';
 
 const click = () => window.console.log('click table');

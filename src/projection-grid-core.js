@@ -7,7 +7,7 @@ import {
   decoration,
   customRow,
   sorting,
-} from './builtin-projections';
+} from './projections';
 
 import { composer } from './composer';
 
