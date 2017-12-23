@@ -1,6 +1,6 @@
 {
   "name": "projection-grid-core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Implement the core concept of projection grid",
   "main": "dist/projection-grid-core",
   "repository": "git@github.com:projection-grid/projection-grid-core.git",
@@ -17,6 +17,7 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "coveralls": "^3.0.0",
     "eslint": "^4.12.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-loader": "^1.9.0",

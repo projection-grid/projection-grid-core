@@ -5,7 +5,7 @@ import {
   header,
   data,
   defaultContent,
-} from '../../../src/builtin-projections';
+} from '../../../src/projections';
 import { DEFAULT_COMMON, DEFAULT_TABLE } from '../constants';
 
 ioTest({

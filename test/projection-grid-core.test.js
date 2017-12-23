@@ -1,4 +1,4 @@
-import { ProjectionGridCore } from '../src/projection-grid-core';
+import ProjectionGridCore from '../src';
 import { DEFAULT_COMMON, DEFAULT_TABLE } from './io-test/constants';
 
 describe('ProjectionGridCore#compose', () => {

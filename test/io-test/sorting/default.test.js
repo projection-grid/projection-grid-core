@@ -1,17 +1,29 @@
 import { ioTest } from '../io-test';
-import { defaults, columns, header, data } from '../../../src/projections';
-import { DEFAULT_COMMON, DEFAULT_TABLE } from '../constants';
+import {
+  defaults,
+  columns,
+  header,
+  data,
+  sorting,
+} from '../../../src/projections';
+import { DEFAULT_TABLE, DEFAULT_COMMON } from '../constants';
 
 ioTest({
-  name: 'header~composeTable',
-  projections: [defaults, columns, header, data],
+  name: 'sorting~composeTable with empty config',
+  projections: [defaults, sorting],
+  output: DEFAULT_TABLE,
+});
+
+ioTest({
+  name: 'sorting~composeTable with default header and data',
+  projections: [defaults, columns, header, data, sorting],
   input: {
-    cols: [
-      { key: 'a' },
-      { key: 'b' },
-    ],
-    data: [{ a: 1, b: 2 }],
-    tfoot: { hasHeader: true },
+    cols: [{
+      key: 'Foo',
+    }, {
+      key: 'Bar',
+    }],
+    data: [{ Foo: 1, Bar: 2 }],
   },
   output: {
     ...DEFAULT_TABLE,
@@ -21,11 +33,11 @@ ioTest({
       cols: [{
         ...DEFAULT_COMMON,
         tag: 'COL',
-        key: 'a',
+        key: 'Foo',
       }, {
         ...DEFAULT_COMMON,
         tag: 'COL',
-        key: 'b',
+        key: 'Bar',
       }],
     }],
     thead: {
@@ -33,17 +45,17 @@ ioTest({
       tag: 'THEAD',
       trs: [{
         ...DEFAULT_COMMON,
-        key: '@header',
         tag: 'TR',
+        key: '@header',
         tds: [{
           ...DEFAULT_COMMON,
           tag: 'TH',
-          key: 'a',
+          key: 'Foo',
           content: null,
         }, {
           ...DEFAULT_COMMON,
           tag: 'TH',
-          key: 'b',
+          key: 'Bar',
           content: null,
         }],
       }],
@@ -57,35 +69,21 @@ ioTest({
         tds: [{
           ...DEFAULT_COMMON,
           tag: 'TD',
-          key: 'a',
+          key: 'Foo',
           content: null,
         }, {
           ...DEFAULT_COMMON,
           tag: 'TD',
-          key: 'b',
+          key: 'Bar',
           content: null,
         }],
       }],
     }],
-    tfoot: {
-      ...DEFAULT_COMMON,
-      tag: 'TFOOT',
-      trs: [{
-        ...DEFAULT_COMMON,
-        key: '@header',
-        tag: 'TR',
-        tds: [{
-          ...DEFAULT_COMMON,
-          tag: 'TH',
-          key: 'a',
-          content: null,
-        }, {
-          ...DEFAULT_COMMON,
-          tag: 'TH',
-          key: 'b',
-          content: null,
-        }],
-      }],
-    },
+  },
+  matchObject: true,
+  validate({ output }) {
+    expect(() => {
+      output.thead.trs[0].tds[1].events.click();
+    }).not.toThrow();
   },
 });

@@ -1,5 +1,5 @@
 import { ioTest } from '../io-test';
-import { defaults, customRow } from '../../../src/builtin-projections';
+import { defaults, customRow } from '../../../src/projections';
 import { DEFAULT_COMMON } from '../constants';
 
 const click = jest.fn();
