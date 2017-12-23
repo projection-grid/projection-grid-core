@@ -6,6 +6,7 @@ import {
   defaultContent,
   decoration,
   customRow,
+  PolyfillColspan,
 } from './builtin-projections';
 
 import { composer } from './composer';
@@ -39,6 +40,9 @@ export class ProjectionGridCore {
         defaultContent,
         decoration,
         customRow,
+      ],
+      postProjections: [
+        PolyfillColspan,
       ],
     });
   }

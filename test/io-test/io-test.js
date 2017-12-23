@@ -3,6 +3,7 @@ import { composer } from '../../src/composer';
 export function ioTest({
   name,
   projections,
+  postProjections = [],
   method = 'composeTable',
   input = {},
   output: expected,
@@ -11,7 +12,7 @@ export function ioTest({
 }) {
   describe('Input/Output Test', () => {
     test(name, () => {
-      const output = composer(projections)[method](input);
+      const output = composer([...projections, ...postProjections])[method](input);
       if (matchObject) {
         expect(output).toMatchObject(expected);
       } else {
