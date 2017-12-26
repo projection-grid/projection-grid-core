@@ -17,6 +17,7 @@ describe('ProjectionGridCore#compose', () => {
         thead: {
           ...DEFAULT_COMMON,
           tag: 'THEAD',
+          key: 'defaultTHEAD',
           trs: [{
             ...DEFAULT_COMMON,
             key: '@header',

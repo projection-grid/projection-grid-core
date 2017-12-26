@@ -9,6 +9,7 @@ ioTest({
     ...DEFAULT_TABLE,
     thead: {
       ...DEFAULT_COMMON,
+      key: 'defaultTHEAD',
       tag: 'THEAD',
       trs: [{
         ...DEFAULT_COMMON,

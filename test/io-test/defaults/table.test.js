@@ -59,7 +59,7 @@ ioTest({
     tfoot: {
       ...DEFAULT_COMMON,
       tag: 'TFOOT',
-      key: null,
+      key: 'defaultTFOOT',
       trs: [],
     },
   },

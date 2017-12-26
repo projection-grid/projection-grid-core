@@ -1,5 +1,5 @@
 export const DEFAULT_COMMON = {
-  key: null,
+  key: 'default',
   classes: [],
   props: {},
   styles: {},
@@ -15,8 +15,12 @@ export const DEFAULT_TABLE = {
   tag: 'TABLE',
   caption: DEFAULT_CAPTION,
   colgroups: [],
-  thead: { tag: 'THEAD', trs: [], ...DEFAULT_COMMON },
+  thead: Object.assign({}, DEFAULT_COMMON, {
+    tag: 'THEAD', trs: [], key: 'defaultTHEAD',
+  }),
   tbodies: [],
-  tfoot: { tag: 'TFOOT', trs: [], ...DEFAULT_COMMON },
+  tfoot: Object.assign({}, DEFAULT_COMMON, {
+    tag: 'TFOOT', trs: [], key: 'defaultTFOOT',
+  }),
   ...DEFAULT_COMMON,
 };
