@@ -2,7 +2,7 @@ import { mapObject, isArray, assign } from '../utils';
 
 function createModel(config, ...additionalProps) {
   return assign({
-    key: config.key || `default${config.tag || ''}`,
+    key: config.key || `default-${config.tag} `,
     props: config.props || {},
     classes: config.classes || [],
     styles: config.styles || {},

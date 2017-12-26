@@ -133,7 +133,6 @@ ioTest({
     }, {
       ...DEFAULT_COMMON,
       tag: 'TBODY',
-      key: 'defaultTBODY',
       styles: { background: 'blue' },
       trs: [{
         ...DEFAULT_COMMON,
@@ -151,7 +150,7 @@ ioTest({
     tfoot: {
       ...DEFAULT_COMMON,
       tag: 'TFOOT',
-      key: 'defaultTFOOT',
+      key: null,
       trs: [],
     },
   },

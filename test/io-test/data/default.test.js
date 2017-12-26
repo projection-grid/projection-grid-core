@@ -17,7 +17,6 @@ ioTest({
     tbodies: [{
       ...DEFAULT_COMMON,
       tag: 'TBODY',
-      key: 'defaultTBODY',
       trs: [{
         ...DEFAULT_COMMON,
         tag: 'TR',
@@ -48,7 +47,6 @@ ioTest({
     tbodies: [{
       ...DEFAULT_COMMON,
       tag: 'TBODY',
-      key: 'defaultTBODY',
       trs: [{
         ...DEFAULT_COMMON,
         tag: 'TR',

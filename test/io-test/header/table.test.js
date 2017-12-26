@@ -30,7 +30,6 @@ ioTest({
     }],
     thead: {
       ...DEFAULT_COMMON,
-      key: 'defaultTHEAD',
       tag: 'THEAD',
       trs: [{
         ...DEFAULT_COMMON,
@@ -52,7 +51,6 @@ ioTest({
     tbodies: [{
       ...DEFAULT_COMMON,
       tag: 'TBODY',
-      key: 'defaultTBODY',
       trs: [{
         ...DEFAULT_COMMON,
         tag: 'TR',
@@ -71,7 +69,6 @@ ioTest({
     }],
     tfoot: {
       ...DEFAULT_COMMON,
-      key: 'defaultTFOOT',
       tag: 'TFOOT',
       trs: [{
         ...DEFAULT_COMMON,
