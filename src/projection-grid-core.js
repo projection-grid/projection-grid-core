@@ -30,7 +30,7 @@ export class ProjectionGridCore {
     };
   }
 
-  static createDefault(customDefaultContent = () => {}) {
+  static createDefault() {
     return new ProjectionGridCore({
       projections: [
         defaults,
@@ -38,7 +38,6 @@ export class ProjectionGridCore {
         data,
         header,
         defaultContent,
-        customDefaultContent,
         decoration,
         customRow,
         sorting,
