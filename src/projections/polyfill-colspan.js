@@ -1,9 +1,13 @@
 import { last } from '../utils';
 
-function processRow({ tds = [] }, rowSpans) {
+function processRow({ tds = [], key }, rowSpans) {
   let start = 0;
-  const retRowSpans = rowSpans;
-  tds.forEach((td) => {
+  const retRowSpans = [].concat(rowSpans);
+  const lastIndex = tds.length - 1;
+  tds.forEach((td, index) => {
+    if (index < lastIndex && td.props.colspan === 0) {
+      console.warn(`In tr(tr-key:${key}), there is non-tail td(td index:${index}) with colspan=0`); //eslint-disable-line
+    }
     while (retRowSpans[start] > 0) {
       retRowSpans[start] -= 1;
       start += 1;
@@ -16,7 +20,7 @@ function processRow({ tds = [] }, rowSpans) {
       }
 
       if (td.props.rowspan > 0) {
-        retRowSpans[start] = Math.max(td.props.rowspan - 1, retRowSpans[start] || 0);
+        retRowSpans[start] = Math.max(td.props.rowspan, retRowSpans[start] || 0) - 1;
       }
       start += 1;
     }

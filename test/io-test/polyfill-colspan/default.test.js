@@ -6,8 +6,7 @@ const click = jest.fn();
 
 ioTest({
   name: 'polyfill-colspan~composeTable with tr.content',
-  projections: [defaults, customRow],
-  postProjections: [PolyfillColspan],
+  projections: [defaults, customRow, PolyfillColspan],
   input: {
     key: 'default-table',
     props: { foo: 1, bar: 2 },
@@ -51,6 +50,7 @@ ioTest({
           content: '1',
           props: {
             rowspan: 2,
+            colspan: 0,
           },
         }, {
           content: '2',
@@ -91,7 +91,17 @@ ioTest({
         }],
       }],
     }],
-    tfoot: [],
+    tfoot: [{
+      key: 'default-tfoot',
+      trs: [{
+        content: 'foot placehold',
+      }, {
+        tds: [{
+          content: 'foot1',
+        }],
+        content: 'footothers',
+      }],
+    }],
   },
   output: {
     tag: 'TABLE',
@@ -190,6 +200,7 @@ ioTest({
           content: '1',
           props: {
             rowspan: 2,
+            colspan: 0,
           },
           tag: 'TD',
         }, {
@@ -262,8 +273,34 @@ ioTest({
     tfoot: {
       ...DEFAULT_COMMON,
       tag: 'TFOOT',
-      key: null,
-      trs: [],
+      key: 'default-tfoot',
+      trs: [{
+        ...DEFAULT_COMMON,
+        tag: 'TR',
+        tds: [{
+          ...DEFAULT_COMMON,
+          content: 'foot placehold',
+          props: {
+            colspan: 7,
+          },
+          tag: 'TD',
+        }],
+      }, {
+        ...DEFAULT_COMMON,
+        tag: 'TR',
+        tds: [{
+          ...DEFAULT_COMMON,
+          content: 'foot1',
+          tag: 'TD',
+        }, {
+          ...DEFAULT_COMMON,
+          content: 'footothers',
+          props: {
+            colspan: 6,
+          },
+          tag: 'TD',
+        }],
+      }],
     },
   },
 });
