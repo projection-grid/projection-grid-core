@@ -9,9 +9,13 @@ export function ioTest({
   matchObject = false,
   validate = () => {},
 }) {
+  const state = {};
   describe('Input/Output Test', () => {
     test(name, () => {
-      const output = composer(projections)[method](input);
+      const output = composer(projections, {
+        state,
+        dispatch: (reducer, ...args) => reducer(state, ...args),
+      })[method](input);
       if (matchObject) {
         expect(output).toMatchObject(expected);
       } else {

@@ -15,22 +15,26 @@ export class ProjectionGridCore {
   constructor({
     projections = [],
     postProjections = [],
-  } = {}) {
+    dispatch,
+  }) {
     this.projections = projections;
     this.postProjections = postProjections;
+    this.dispatch = dispatch;
   }
 
-  compose({ config, projections = [] }) {
+  compose({ config, projections = [], state }) {
+    const { dispatch } = this;
+
     return {
       table: composer([
         ...this.projections,
         ...projections,
         ...this.postProjections,
-      ]).composeTable(config),
+      ], { state, dispatch }).composeTable(config),
     };
   }
 
-  static createDefault() {
+  static createDefault(dispatch) {
     return new ProjectionGridCore({
       projections: [
         defaults,
@@ -42,6 +46,7 @@ export class ProjectionGridCore {
         customRow,
         sorting,
       ],
+      dispatch,
     });
   }
 }

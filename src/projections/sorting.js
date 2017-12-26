@@ -1,7 +1,15 @@
-import { decorate } from '../utils';
+import { assign, decorate } from '../utils';
 
-export default function sorting({ composeTds }) {
+export default function sorting({
+  composeCols,
+  composeTds,
+}, { state, dispatch }) {
   return {
+    composeCols(col) {
+      return composeCols(assign({
+        sorting: state === col.key,
+      }, col));
+    },
     composeTds(td) {
       const { col, isHeader, tr: { section: { table } } } = td;
       const decorators = [];
@@ -11,7 +19,7 @@ export default function sorting({ composeTds }) {
           sorting: {
             $td = null,
             onSort = () => {},
-            next = ({ sorting: s }) => !s,
+            reducer = (s, { key }) => (s === key ? null : key),
           } = {},
         } = table;
 
@@ -22,12 +30,7 @@ export default function sorting({ composeTds }) {
         if (isHeader) {
           decorators.push({
             events: {
-              click: () => {
-                onSort({
-                  ...col,
-                  sorting: next(col),
-                });
-              },
+              click: () => onSort(dispatch(reducer, col)),
             },
           });
         }
@@ -41,3 +44,5 @@ export default function sorting({ composeTds }) {
     },
   };
 }
+
+sorting.scope = 'projection-grid-core.sorting';

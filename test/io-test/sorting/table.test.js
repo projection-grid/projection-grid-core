@@ -9,9 +9,9 @@ import {
 import { DEFAULT_TABLE, DEFAULT_COMMON } from '../constants';
 
 const onSort = jest.fn();
-const next = jest.fn();
+const reducer = jest.fn();
 
-next.mockImplementation(s => !s);
+reducer.mockImplementation((s, { key }) => (s === key ? null : key));
 
 ioTest({
   name: 'sorting~composeTable with full config',
@@ -21,7 +21,7 @@ ioTest({
       $td: {
         classes: ['sorting'],
       },
-      next,
+      reducer,
       onSort,
     },
     cols: [{
@@ -109,17 +109,11 @@ ioTest({
   matchObject: true,
   validate({ output }) {
     expect(onSort).not.toHaveBeenCalled();
-    expect(next).not.toHaveBeenCalled();
-    output.thead.trs[0].tds[1].events.click();
-    expect(next).toHaveBeenCalledTimes(1);
-    expect(next).toBeCalledWith({
-      key: 'Bar',
-      sorting: true,
-    });
+    expect(reducer).not.toHaveBeenCalled();
+    output.thead.trs[0].tds[0].events.click();
+    expect(reducer).toHaveBeenCalledTimes(1);
+    expect(reducer).toBeCalledWith(undefined, { key: 'Foo' });
     expect(onSort).toHaveBeenCalledTimes(1);
-    expect(onSort).toBeCalledWith({
-      key: 'Bar',
-      sorting: false,
-    });
+    expect(onSort).toBeCalledWith('Foo');
   },
 });
