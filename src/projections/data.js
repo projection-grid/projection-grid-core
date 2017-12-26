@@ -8,7 +8,10 @@ export default function ({
   return {
     composeTable(table) {
       const { tbodies: tb = [], data } = table;
-      const tbodies = isArray(data) ? tb.concat([{ data }]) : tb;
+      const tbodies = isArray(data) ? tb.concat([{
+        data,
+        key: `tbody-${tb.length}`,
+      }]) : tb;
 
       return composeTable({ ...table, tbodies });
     },
