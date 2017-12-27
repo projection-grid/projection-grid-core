@@ -39,7 +39,7 @@ export const composeRenderModel = (core, { config, projections = [] }) => ({
     ...core.builtinPreProjections,
     ...core.preProjections,
     ...projections,
-    ...core.builtinPostProjections,
     ...core.postProjections,
+    ...core.builtinPostProjections,
   ]).composeTable(config),
 });
