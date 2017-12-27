@@ -8,6 +8,7 @@ import {
   customRow,
   sorting,
   autoDataKey,
+  PolyfillColspan,
 } from './projections';
 
 import { composer } from './composer';
@@ -29,6 +30,7 @@ export class ProjectionGridCore {
     ];
     this.builtinPostProjections = [
       autoDataKey,
+      PolyfillColspan,
     ];
   }
 

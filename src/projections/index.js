@@ -7,3 +7,4 @@ export { default as defaultContent } from './default-content';
 export { default as customRow } from './custom-row';
 export { default as sorting } from './sorting';
 export { default as autoDataKey } from './auto-data-key';
+export { default as PolyfillColspan } from './polyfill-colspan';

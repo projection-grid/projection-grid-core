@@ -102,6 +102,15 @@ describe('Array', () => {
     expect(utils.capitalizeFirstLetter('abc')).toEqual('Abc');
     expect(utils.capitalizeFirstLetter('')).toEqual('');
   });
+
+  test('compact', () => {
+    expect(utils.compact([1, 0, 2, 3])).toEqual([1, 2, 3]);
+  });
+
+  test('last', () => {
+    expect(utils.last([1, 2, 3])).toEqual(3);
+    expect(utils.last(undefined)).toEqual(undefined);
+  });
 });
 
 describe('Function', () => {
