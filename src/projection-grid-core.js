@@ -15,7 +15,7 @@ import { composer } from './composer';
 export class ProjectionGridCore {
   constructor({
     defaultContentFactory = model => model,
-  }) {
+  } = {}) {
     this.projections = [];
     this.builtinPreProjections = [
       defaults,

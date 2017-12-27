@@ -10,7 +10,7 @@ import { DEFAULT_COMMON, DEFAULT_TABLE } from '../constants';
 
 ioTest({
   name: 'defaultContent~composeTable',
-  projections: [defaults, columns, header, data, defaultContent],
+  projections: [defaults, columns, header, data, defaultContent(model => model)],
   input: {
     cols: [{
       key: 'a',
