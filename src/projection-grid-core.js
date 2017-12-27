@@ -14,8 +14,6 @@ import {
 import { composer } from './composer';
 
 const getComposeFunction = projections => function compose({ config = {} }) {
-  window.console.log(projections);
-
   return {
     table: composer(projections).composeTable(config),
   };
