@@ -97,6 +97,18 @@ describe('Array', () => {
   test('flatten', () => {
     expect(utils.flatten([1, [2], [3, [[4]]]])).toEqual([1, 2, 3, 4]);
   });
+
+  test('compact', () => {
+    expect(utils.compact([1, 0, 2, 3])).toEqual([1, 2, 3]);
+  });
+
+  test('last', () => {
+    expect(utils.last([1, 2, 3])).toEqual(3);
+  });
+
+  test('last', () => {
+    expect(utils.last(undefined)).toEqual(undefined);
+  });
 });
 
 describe('Function', () => {

@@ -6,3 +6,7 @@ export { default as decoration } from './decoration';
 export { default as defaultContent } from './default-content';
 export { default as customRow } from './custom-row';
 export { default as sorting } from './sorting';
+export { default as PolyfillColspan } from './polyfill-colspan';
+// export { sortable } from './sortable';
+// export { theme } from './theme';
+// export { columnWidth } from './column-width';
