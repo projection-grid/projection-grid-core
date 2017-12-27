@@ -12,47 +12,54 @@ import {
 } from './projections';
 
 import { composer } from './composer';
+import { isArray } from './utils/array';
 
-const generateBuiltinProjections = ({
-  defaultContentFactory,
-}) => ({
-  pre: [
-    defaults,
-    columns,
-    data,
-    header,
-    defaultContent(defaultContentFactory),
-    decoration,
-    customRow,
-    sorting,
-  ],
-  post: [
-    autoKey,
-    PolyfillColspan,
-  ],
-});
-
-const getComposeFunction = projections => function compose({ config = {} } = {}) {
+const getComposeFunction = projections => function compose({ config = {} }) {
   return {
-    table: composer(projections).composeTable(config),
+    table: composer([...projections.pre, ...projections.post]).composeTable(config),
   };
 };
 
-const getUseFunction = curProjections => function use({
-  pre = [],
-  post = [],
+const getUseFunction = curProjections => function use(projections = []) {
+  const nextProjections = {
+    pre: [...curProjections.pre, ...(isArray(projections) ? projections : projections.pre)],
+    post: [...(isArray(projections.post) ? projections.post : []), ...curProjections.post],
+  };
+
+  return {
+    use: getUseFunction(nextProjections),
+    compose: getComposeFunction(nextProjections),
+  };
+};
+
+export function createCore({
+  defaultContentFactory = model => model,
 } = {}) {
-  const projections = [...pre, ...curProjections, ...post];
+  const initProjections = { pre: [], post: [] };
+  const use = getUseFunction(initProjections);
+  const compose = getComposeFunction(initProjections);
+  const useBuiltin = function useBuiltin() {
+    return use({
+      pre: [
+        defaults,
+        columns,
+        data,
+        header,
+        defaultContent(defaultContentFactory),
+        decoration,
+        customRow,
+        sorting,
+      ],
+      post: [
+        autoKey,
+        PolyfillColspan,
+      ],
+    });
+  };
 
   return {
-    use: getUseFunction(projections),
-    useBuiltin: ({
-      defaultContentFactory = model => model,
-    } = {}) => getUseFunction(projections)(generateBuiltinProjections({ defaultContentFactory })),
-    compose: getComposeFunction(projections),
+    use,
+    compose,
+    useBuiltin,
   };
-};
-
-export function createCore(projections = []) {
-  return getUseFunction(projections)();
 }
