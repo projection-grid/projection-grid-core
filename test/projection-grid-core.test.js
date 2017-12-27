@@ -36,4 +36,12 @@ describe('ProjectionGridCore#compose', () => {
       },
     });
   });
+
+  test('pipe nothing', () => {
+    const core = ProjectionGridCore.createCore();
+    expect(() => {
+      core.pipe();
+    }).not.toThrow();
+    expect(core.pipe().projections.length).toEqual(0);
+  });
 });

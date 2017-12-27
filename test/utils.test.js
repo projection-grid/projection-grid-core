@@ -97,6 +97,11 @@ describe('Array', () => {
   test('flatten', () => {
     expect(utils.flatten([1, [2], [3, [[4]]]])).toEqual([1, 2, 3, 4]);
   });
+
+  test('capitalizeFirstLetter', () => {
+    expect(utils.capitalizeFirstLetter('abc')).toEqual('Abc');
+    expect(utils.capitalizeFirstLetter('')).toEqual('');
+  });
 });
 
 describe('Function', () => {
