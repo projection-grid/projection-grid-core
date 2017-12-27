@@ -7,7 +7,7 @@ import {
   decoration,
   customRow,
   sorting,
-  PolyfillColspan,
+  zeroColspan,
 } from './projections';
 
 import { composer } from './composer';
@@ -46,7 +46,7 @@ export class ProjectionGridCore {
         decoration,
         customRow,
         sorting,
-        PolyfillColspan,
+        zeroColspan,
       ],
       dispatch,
     });
