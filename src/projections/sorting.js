@@ -1,15 +1,9 @@
-import { assign, decorate } from '../utils';
+import { decorate } from '../utils';
 
 export default function sorting({
-  composeCols,
   composeTds,
 }, { state, dispatch }) {
   return {
-    composeCols(col) {
-      return composeCols(assign({
-        sorting: state === col.key,
-      }, col));
-    },
     composeTds(td) {
       const { col, isHeader, tr: { section: { table } } } = td;
       const decorators = [];
@@ -20,10 +14,11 @@ export default function sorting({
             $td = null,
             onSort = () => {},
             reducer = (s, { key }) => (s === key ? null : key),
+            isSorting = ({ key }) => state === key,
           } = {},
         } = table;
 
-        if (col.sorting) {
+        if (isSorting(col)) {
           decorators.push($td);
         }
 

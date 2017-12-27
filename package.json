@@ -31,6 +31,7 @@
   "peerDependencies": {},
   "jest": {
     "collectCoverage": true,
+    "collectCoverageFrom": ["src/**/*.js"],
     "coverageDirectory": "./coverage-report"
   }
 }

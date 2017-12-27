@@ -81,9 +81,9 @@ ioTest({
     }],
   },
   matchObject: true,
-  validate({ output }) {
+  validate(output) {
     expect(() => {
-      output.thead.trs[0].tds[1].events.click();
+      output.table.thead.trs[0].tds[1].events.click();
     }).not.toThrow();
   },
 });

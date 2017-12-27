@@ -9,14 +9,17 @@ export const DEFAULT_CAPTION = { tag: 'CAPTION', content: null, ...DEFAULT_COMMO
 export const DEFAULT_COL = { tag: 'COL', ...DEFAULT_COMMON };
 export const DEFAULT_COLGROUP = { tag: 'COLGROUP', cols: [], ...DEFAULT_COMMON };
 export const DEFAULT_TD = { tag: 'TD', content: null, ...DEFAULT_COMMON };
+export const DEFAULT_TH = { tag: 'TH', content: null, ...DEFAULT_COMMON };
 export const DEFAULT_TR = { tag: 'TR', tds: [], ...DEFAULT_COMMON };
-export const DEFAULT_SECTION = { tag: 'TBODY', trs: [], ...DEFAULT_COMMON };
+export const DEFAULT_TBODY = { ...DEFAULT_COMMON, tag: 'TBODY', trs: [] };
+export const DEFAULT_THEAD = { ...DEFAULT_COMMON, tag: 'THEAD', trs: [] };
+export const DEFAULT_TFOOT = { ...DEFAULT_COMMON, tag: 'TFOOT', trs: [] };
 export const DEFAULT_TABLE = {
+  ...DEFAULT_COMMON,
   tag: 'TABLE',
   caption: DEFAULT_CAPTION,
   colgroups: [],
-  thead: { tag: 'THEAD', trs: [], ...DEFAULT_COMMON },
+  thead: DEFAULT_THEAD,
   tbodies: [],
-  tfoot: { tag: 'TFOOT', trs: [], ...DEFAULT_COMMON },
-  ...DEFAULT_COMMON,
+  tfoot: DEFAULT_TFOOT,
 };
