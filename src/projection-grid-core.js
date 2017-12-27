@@ -27,6 +27,7 @@ export const createCore = ({
     sorting,
   ],
   preProjections,
+  builtInPostProjections: [],
   postProjections,
 });
 
@@ -35,6 +36,7 @@ export const composeRenderModel = (core, { config, projections = [] }) => ({
     ...core.builtInProjections,
     ...core.preProjections,
     ...projections,
+    ...core.builtInPostProjections,
     ...core.postProjections,
   ]).composeTable(config),
 });
