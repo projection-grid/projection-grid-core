@@ -53,6 +53,6 @@ const getUseFunction = curProjections => function use({
   };
 };
 
-export function createCore() {
-  return getUseFunction([])();
+export function createCore(projections) {
+  return getUseFunction(projections)();
 }
