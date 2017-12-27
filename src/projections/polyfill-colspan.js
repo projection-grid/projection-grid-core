@@ -1,6 +1,6 @@
 import { last } from '../utils';
 
-function processRow({ tds = [], key }, rowSpans) {
+function processRow({ tds, key }, rowSpans) {
   let start = 0;
   const retRowSpans = [].concat(rowSpans);
   const lastIndex = tds.length - 1;
@@ -32,7 +32,7 @@ function processRow({ tds = [], key }, rowSpans) {
   };
 }
 
-function processSection({ trs = [] }) {
+function processSection({ trs }) {
   let rowSpans = [];
   const ret = [];
 
@@ -49,15 +49,7 @@ function processSection({ trs = [] }) {
   return ret;
 }
 
-function updateColspan({
-  thead = {
-    trs: [],
-  },
-  tbodies = [],
-  tfoot = {
-    trs: [],
-  },
-}) {
+function updateColspan({ thead, tbodies, tfoot }) {
   let lastTds = processSection(thead);
   tbodies.forEach((tbody) => {
     lastTds = lastTds.concat(processSection(tbody));

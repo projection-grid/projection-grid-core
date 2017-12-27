@@ -3,15 +3,17 @@ import { DEFAULT_COMMON, DEFAULT_TABLE } from './io-test/constants';
 
 describe('ProjectionGridCore#compose', () => {
   test('compose empty grid', () => {
-    const core = new ProjectionGridCore();
+    const core = new ProjectionGridCore({
+      dispatch: () => ({}),
+    });
     expect(core.compose({ config: {} })).toEqual({
       table: {},
     });
   });
 
   test('compose default grid', () => {
-    const core = ProjectionGridCore.createDefault();
-    expect(core.compose({ config: {} })).toEqual({
+    const core = ProjectionGridCore.createDefault(() => ({}));
+    expect(core.compose({ config: {}, state: {} })).toEqual({
       table: {
         ...DEFAULT_TABLE,
         thead: {

@@ -155,10 +155,10 @@ ioTest({
     },
   },
   matchObject: true,
-  validate({ output }) {
+  validate(output) {
     expect(clickOuter).not.toHaveBeenCalled();
     expect(clickInner).not.toHaveBeenCalled();
-    output.thead.trs[0].tds[0].events.click();
+    output.table.thead.trs[0].tds[0].events.click();
     expect(clickOuter).toHaveBeenCalledTimes(1);
     expect(clickInner).toHaveBeenCalledTimes(1);
   },
