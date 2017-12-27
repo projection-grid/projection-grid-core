@@ -7,7 +7,7 @@ import {
   decoration,
   customRow,
   sorting,
-  autoDataKey,
+  autoKey,
   PolyfillColspan,
 } from './projections';
 
@@ -27,7 +27,7 @@ const generateBuiltinProjections = ({
     sorting,
   ],
   post: [
-    autoDataKey,
+    autoKey,
     PolyfillColspan,
   ],
 });
