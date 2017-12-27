@@ -13,49 +13,55 @@ import {
 
 import { composer } from './composer';
 
-export class ProjectionGridCore {
-  constructor({
-    defaultContentFactory = model => model,
-  } = {}) {
-    this.projections = [];
-    this.builtinPreProjections = [
-      defaults,
-      columns,
-      data,
-      header,
-      defaultContent(defaultContentFactory),
-      decoration,
-      customRow,
-      sorting,
-    ];
-    this.builtinPostProjections = [
-      autoDataKey,
-      PolyfillColspan,
-    ];
-  }
+const getComposeFunction = projections => function compose({ config = {} }) {
+  window.console.log(projections);
 
-  pipe(projections = []) {
-    this.projections = this.projections.concat(projections);
+  return {
+    table: composer(projections).composeTable(config),
+  };
+};
 
-    return this;
-  }
+const getUseFunction = curProjections => function use({
+  pre = [],
+  post = [],
+} = {}) {
+  const projections = [...pre, ...curProjections, ...post];
 
-  pipeBuiltinPre() {
-    return this.pipe(this.builtinPreProjections);
-  }
+  return {
+    use: getUseFunction(projections),
+    compose: getComposeFunction(projections),
+  };
+};
 
-  pipeBuiltinPost() {
-    return this.pipe(this.builtinPostProjections);
-  }
+export function createCore({
+  defaultContentFactory = model => model,
+} = {}) {
+  const use = getUseFunction([]);
 
-  compose({ config }) {
-    return {
-      table: composer(this.projections).composeTable(config),
-    };
-  }
+  const compose = getComposeFunction([]);
 
-  static createCore(...args) {
-    return new ProjectionGridCore(...args);
-  }
+  const useBuiltin = function useBuiltin() {
+    return use({
+      pre: [
+        defaults,
+        columns,
+        data,
+        header,
+        defaultContent(defaultContentFactory),
+        decoration,
+        customRow,
+        sorting,
+      ],
+      post: [
+        autoDataKey,
+        PolyfillColspan,
+      ],
+    });
+  };
+
+  return {
+    use,
+    compose,
+    useBuiltin,
+  };
 }
-
