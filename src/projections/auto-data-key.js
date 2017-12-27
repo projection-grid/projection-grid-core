@@ -1,7 +1,7 @@
 import { capitalizeFirstLetter } from '../utils';
 
 const decoreateWithDataKey = (element, index) => Object.assign({}, element, {
-  dataKey: `${element.tag}-${element.key ? element.key : index}`,
+  key: element.key ? element.key : `${element.tag}-${index}`,
 });
 
 const ELEMENTS_TO_DECORATE = ['td', 'colgroup', 'section', 'col', 'tr'];
