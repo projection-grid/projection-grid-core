@@ -12,34 +12,48 @@ import {
 
 import { composer } from './composer';
 
-export const createCore = ({
-  defaultContentFactory = model => model,
-  preProjections = [],
-  postProjections = [],
-}) => ({
-  builtinPreProjections: [
-    defaults,
-    columns,
-    data,
-    header,
-    defaultContent(defaultContentFactory),
-    decoration,
-    customRow,
-    sorting,
-  ],
-  preProjections,
-  builtinPostProjections: [
-    autoDataKey,
-  ],
-  postProjections,
-});
+export class ProjectionGridCore {
+  constructor({
+    defaultContentFactory = model => model,
+  }) {
+    this.projections = [];
+    this.builtinPreProjections = [
+      defaults,
+      columns,
+      data,
+      header,
+      defaultContent(defaultContentFactory),
+      decoration,
+      customRow,
+      sorting,
+    ];
+    this.builtinPostProjections = [
+      autoDataKey,
+    ];
+  }
 
-export const composeRenderModel = (core, { config, projections = [] }) => ({
-  table: composer([
-    ...core.builtinPreProjections,
-    ...core.preProjections,
-    ...projections,
-    ...core.postProjections,
-    ...core.builtinPostProjections,
-  ]).composeTable(config),
-});
+  pipe(projections = []) {
+    this.projections = this.projections.concat(projections);
+
+    return this;
+  }
+
+  pipeBuiltinPre() {
+    return this.pipe(this.builtinPreProjections);
+  }
+
+  pipeBuiltinPost() {
+    return this.pipe(this.builtinPostProjections);
+  }
+
+  compose({ config }) {
+    return {
+      table: composer(this.projections).composeTable(config),
+    };
+  }
+
+  static createCore(...args) {
+    return new ProjectionGridCore(...args);
+  }
+}
+
