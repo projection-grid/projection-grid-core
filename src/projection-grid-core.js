@@ -13,6 +13,25 @@ import {
 
 import { composer } from './composer';
 
+const generateBuiltinProjections = ({
+  defaultContentFactory = model => model,
+} = {}) => ({
+  pre: [
+    defaults,
+    columns,
+    data,
+    header,
+    defaultContent(defaultContentFactory),
+    decoration,
+    customRow,
+    sorting,
+  ],
+  post: [
+    autoDataKey,
+    PolyfillColspan,
+  ],
+});
+
 const getComposeFunction = projections => function compose({ config = {} }) {
   return {
     table: composer(projections).composeTable(config),
@@ -27,39 +46,13 @@ const getUseFunction = curProjections => function use({
 
   return {
     use: getUseFunction(projections),
+    useBuiltin: ({
+      defaultContentFactory = model => model,
+    } = {}) => getUseFunction(projections)(generateBuiltinProjections({ defaultContentFactory })),
     compose: getComposeFunction(projections),
   };
 };
 
-export function createCore({
-  defaultContentFactory = model => model,
-} = {}) {
-  const use = getUseFunction([]);
-
-  const compose = getComposeFunction([]);
-
-  const useBuiltin = function useBuiltin() {
-    return use({
-      pre: [
-        defaults,
-        columns,
-        data,
-        header,
-        defaultContent(defaultContentFactory),
-        decoration,
-        customRow,
-        sorting,
-      ],
-      post: [
-        autoDataKey,
-        PolyfillColspan,
-      ],
-    });
-  };
-
-  return {
-    use,
-    compose,
-    useBuiltin,
-  };
+export function createCore() {
+  return getUseFunction([])();
 }
