@@ -36,3 +36,5 @@ export const pick = (obj, ...keys) => {
   return iterateeWithCondition(obj, (item, key) =>
     (searchKeys => searchKeys.indexOf(key) > -1)(flattendKeys));
 };
+
+export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);

@@ -7,6 +7,7 @@ import {
   decoration,
   customRow,
   sorting,
+  autoDataKey,
 } from './projections';
 
 import { composer } from './composer';
@@ -27,7 +28,9 @@ export const createCore = ({
     sorting,
   ],
   preProjections,
-  builtinPostProjections: [],
+  builtinPostProjections: [
+    autoDataKey,
+  ],
   postProjections,
 });
 
