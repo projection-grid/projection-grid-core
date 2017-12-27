@@ -14,8 +14,8 @@ import {
 import { composer } from './composer';
 
 const generateBuiltinProjections = ({
-  defaultContentFactory = model => model,
-} = {}) => ({
+  defaultContentFactory,
+}) => ({
   pre: [
     defaults,
     columns,
@@ -32,7 +32,7 @@ const generateBuiltinProjections = ({
   ],
 });
 
-const getComposeFunction = projections => function compose({ config = {} }) {
+const getComposeFunction = projections => function compose({ config = {} } = {}) {
   return {
     table: composer(projections).composeTable(config),
   };
@@ -53,6 +53,6 @@ const getUseFunction = curProjections => function use({
   };
 };
 
-export function createCore(projections) {
+export function createCore(projections = []) {
   return getUseFunction(projections)();
 }

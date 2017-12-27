@@ -1,9 +1,9 @@
-import ProjectionGridCore from '../src';
+import { createCore } from '../src';
 import { DEFAULT_COMMON, DEFAULT_TABLE } from './io-test/constants';
 
 describe('ProjectionGridCore#compose', () => {
   test('compose empty grid', () => {
-    const core = ProjectionGridCore.createCore();
+    const core = createCore();
 
     expect(core.compose({ config: {} })).toEqual({
       table: {},
@@ -11,9 +11,9 @@ describe('ProjectionGridCore#compose', () => {
   });
 
   test('compose default grid', () => {
-    const core = ProjectionGridCore.createCore().pipeBuiltinPre().pipeBuiltinPost();
+    const core = createCore().useBuiltin();
 
-    expect(core.compose({ config: {} })).toEqual({
+    expect(core.compose()).toEqual({
       table: {
         ...DEFAULT_TABLE,
         thead: {
@@ -37,11 +37,10 @@ describe('ProjectionGridCore#compose', () => {
     });
   });
 
-  test('pipe nothing', () => {
-    const core = ProjectionGridCore.createCore();
+  test('use nothing', () => {
+    const core = createCore();
     expect(() => {
-      core.pipe();
+      core.use();
     }).not.toThrow();
-    expect(core.pipe().projections.length).toEqual(0);
   });
 });
