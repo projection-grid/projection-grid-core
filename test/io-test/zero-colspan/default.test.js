@@ -1,12 +1,12 @@
 import { ioTest } from '../io-test';
-import { defaults, customRow, PolyfillColspan } from '../../../src/projections';
+import { defaults, customRow, zeroColspan } from '../../../src/projections';
 import { DEFAULT_COMMON } from '../constants';
 
 const click = jest.fn();
 
 ioTest({
-  name: 'polyfill-colspan~composeTable with tr.content',
-  projections: [defaults, customRow, PolyfillColspan],
+  name: 'zero-colspan~composeTable with tr.content',
+  projections: [defaults, customRow, zeroColspan],
   input: {
     key: 'default-table',
     props: { foo: 1, bar: 2 },

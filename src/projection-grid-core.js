@@ -8,15 +8,22 @@ import {
   customRow,
   sorting,
   autoKey,
-  PolyfillColspan,
+  zeroColspan,
 } from './projections';
 
 import { composer } from './composer';
 import { isArray } from './utils/array';
 
-const getComposeFunction = projections => function compose({ config = {} }) {
+const getComposeFunction = projections => function compose({
+  config = {},
+  state = {},
+  dispatch = () => ({}),
+}) {
   return {
-    table: composer([...projections.pre, ...projections.post]).composeTable(config),
+    table: composer([
+      ...projections.pre,
+      ...projections.post,
+    ], { state, dispatch }).composeTable(config),
   };
 };
 
@@ -52,7 +59,7 @@ export function createCore({
       ],
       post: [
         autoKey,
-        PolyfillColspan,
+        zeroColspan,
       ],
     });
   };

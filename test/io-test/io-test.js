@@ -1,24 +1,21 @@
-import { composer } from '../../src/composer';
+import { scenarioTest } from './scenario-test';
 
 export function ioTest({
   name,
   projections,
-  postProjections = [],
-  method = 'composeTable',
   input = {},
-  output: expected,
-  matchObject = false,
-  validate = () => {},
+  output,
+  matchObject,
+  validate,
 }) {
-  describe('Input/Output Test', () => {
-    test(name, () => {
-      const output = composer([...projections, ...postProjections])[method](input);
-      if (matchObject) {
-        expect(output).toMatchObject(expected);
-      } else {
-        expect(output).toEqual(expected);
-      }
-      validate({ input, output });
-    });
+  scenarioTest({
+    name,
+    projections,
+    config: input,
+    steps: [{
+      expected: { table: output },
+      strictMatch: !matchObject,
+      validate,
+    }],
   });
 }

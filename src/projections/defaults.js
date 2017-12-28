@@ -51,7 +51,7 @@ export default function () {
     },
 
     composeSections(section) {
-      const { tag = 'TBODY' } = section;
+      const { tag } = section;
       const composeTrs = handleVector(extendParam(this.composeTrs, { section }));
       const trs = composeTrs(section.trs);
       return [createModel(section, { trs, tag })];
