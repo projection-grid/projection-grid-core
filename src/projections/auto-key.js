@@ -1,6 +1,6 @@
-import { mapObject } from '../utils';
+import { mapObject, assign } from '../utils';
 
-const decorateWithKey = (element, index) => Object.assign({}, element, {
+const decorateWithKey = (element, index) => assign({}, element, {
   key: element.key ? element.key : `${element.tag}-${index}`,
 });
 

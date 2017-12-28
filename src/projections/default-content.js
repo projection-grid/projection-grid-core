@@ -43,11 +43,14 @@ export default function getDefaultContentProjection(factory) {
       composeTds(td) {
         return composeTds({
           ...td,
-          content: getContent(td),
-        }).map(factory);
+          content: factory(getContent(td)),
+        });
       },
       composeCaption(caption) {
-        return factory(composeCaption(caption));
+        return composeCaption({
+          ...caption,
+          content: factory(caption.content),
+        });
       },
     };
   };

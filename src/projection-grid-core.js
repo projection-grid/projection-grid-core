@@ -12,7 +12,7 @@ import {
 } from './projections';
 
 import { composer } from './composer';
-import { isArray } from './utils/array';
+import { isArray, find } from './utils/array';
 
 const getComposeFunction = projections => function compose({
   config = {},
@@ -29,8 +29,8 @@ const getComposeFunction = projections => function compose({
 
 const getUseFunction = curProjections => function use(projections = []) {
   const nextProjections = {
-    pre: [...curProjections.pre, ...(isArray(projections) ? projections : projections.pre)],
-    post: [...(isArray(projections.post) ? projections.post : []), ...curProjections.post],
+    pre: [...curProjections.pre, ...find([projections, projections.pre, []], isArray)],
+    post: [...find([projections.post, []], isArray), ...curProjections.post],
   };
 
   return {
@@ -40,7 +40,7 @@ const getUseFunction = curProjections => function use(projections = []) {
 };
 
 export function createCore({
-  defaultContentFactory = model => model,
+  defaultContentFactory = content => content,
 } = {}) {
   const initProjections = { pre: [], post: [] };
   const use = getUseFunction(initProjections);

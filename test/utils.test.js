@@ -111,6 +111,12 @@ describe('Array', () => {
     expect(utils.last([1, 2, 3])).toEqual(3);
     expect(utils.last(undefined)).toEqual(undefined);
   });
+
+  test('find', () => {
+    expect(utils.find([1, 2, 3], e => e > 1)).toEqual(2);
+    expect(utils.find([1, 2, 3], e => e > 4)).toBeUndefined();
+    expect(() => utils.find(null, e => e > 1)).toThrow('find called on a non-array variable');
+  });
 });
 
 describe('Function', () => {
