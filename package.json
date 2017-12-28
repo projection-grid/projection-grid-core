@@ -1,6 +1,6 @@
 {
   "name": "projection-grid-core",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Implement the core concept of projection grid",
   "main": "dist/projection-grid-core",
   "repository": "git@github.com:projection-grid/projection-grid-core.git",
@@ -8,7 +8,7 @@
   "private": false,
   "scripts": {
     "build": "webpack",
-    "prepublishOnly": "webpack",
+    "prepublish": "webpack",
     "watch": "webpack --watch",
     "test": "jest"
   },
