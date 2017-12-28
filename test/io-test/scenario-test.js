@@ -1,4 +1,4 @@
-import { createCore } from '../../src';
+import createCore from '../../src';
 
 export function scenarioTest({
   name,
