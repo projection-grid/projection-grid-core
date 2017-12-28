@@ -39,13 +39,13 @@ const getUseFunction = curProjections => function use(projections = []) {
   };
 };
 
-export function createCore({
-  defaultContentFactory = content => content,
-} = {}) {
+export function createCore() {
   const initProjections = { pre: [], post: [] };
   const use = getUseFunction(initProjections);
   const compose = getComposeFunction(initProjections);
-  const useBuiltin = function useBuiltin() {
+  const useBuiltin = function useBuiltin({
+    defaultContentFactory = content => content,
+  } = {}) {
     return use({
       pre: [
         defaults,

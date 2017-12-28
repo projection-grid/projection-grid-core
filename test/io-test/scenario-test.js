@@ -10,13 +10,6 @@ export function scenarioTest({
     test(name, () => {
       let state = {};
       const core = createCore().use(projections);
-      // ProjectionGridCore({
-      //   projections,
-      //   dispatch: (reducer, ...args) => {
-      //     state = reducer(state, ...args);
-      //     return state;
-      //   },
-      // });
       const testStep = (model, {
         action = () => {},
         strictMatch = false,
