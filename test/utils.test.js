@@ -98,16 +98,24 @@ describe('Array', () => {
     expect(utils.flatten([1, [2], [3, [[4]]]])).toEqual([1, 2, 3, 4]);
   });
 
+  test('capitalizeFirstLetter', () => {
+    expect(utils.capitalizeFirstLetter('abc')).toEqual('Abc');
+    expect(utils.capitalizeFirstLetter('')).toEqual('');
+  });
+
   test('compact', () => {
     expect(utils.compact([1, 0, 2, 3])).toEqual([1, 2, 3]);
   });
 
   test('last', () => {
     expect(utils.last([1, 2, 3])).toEqual(3);
+    expect(utils.last(undefined)).toEqual(undefined);
   });
 
-  test('last', () => {
-    expect(utils.last(undefined)).toEqual(undefined);
+  test('find', () => {
+    expect(utils.find([1, 2, 3], e => e > 1)).toEqual(2);
+    expect(utils.find([1, 2, 3], e => e > 4)).toBeUndefined();
+    expect(() => utils.find(null, e => e > 1)).toThrow('find called on a non-array variable');
   });
 });
 

@@ -27,7 +27,7 @@ scenarioTest({
     columns,
     header,
     data,
-    defaultContent,
+    defaultContent(m => m),
     decoration,
     sorting,
   ],

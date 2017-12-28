@@ -34,15 +34,24 @@ function getContent(td) {
   return td.content || defaultContent(td);
 }
 
-export default function ({
-  composeTds,
-}) {
-  return {
-    composeTds(td) {
-      return composeTds({
-        ...td,
-        content: getContent(td),
-      });
-    },
+export default function getDefaultContentProjection(factory) {
+  return function defaultContentProjection({
+    composeTds,
+    composeCaption,
+  }) {
+    return {
+      composeTds(td) {
+        return composeTds({
+          ...td,
+          content: factory(getContent(td)),
+        });
+      },
+      composeCaption(caption) {
+        return composeCaption({
+          ...caption,
+          content: factory(caption.content),
+        });
+      },
+    };
   };
 }

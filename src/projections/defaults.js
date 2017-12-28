@@ -25,8 +25,8 @@ export default function () {
       const extendContext = (compose, tag) => extendParam(compose, { table, tag });
 
       return createModel(table, mapObject({
-        caption: handleScalar(extendContext(this.composeCaption)),
-        colgroups: handleVector(extendContext(this.composeColgroups)),
+        caption: handleScalar(extendContext(this.composeCaption), 'CAPTION'),
+        colgroups: handleVector(extendContext(this.composeColgroups), 'COLGROUP'),
         thead: handleScalar(extendContext(this.composeSections, 'THEAD')),
         tbodies: handleVector(extendContext(this.composeSections, 'TBODY')),
         tfoot: handleScalar(extendContext(this.composeSections, 'TFOOT')),

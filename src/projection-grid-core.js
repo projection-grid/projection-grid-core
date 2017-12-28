@@ -7,48 +7,66 @@ import {
   decoration,
   customRow,
   sorting,
+  autoKey,
   zeroColspan,
 } from './projections';
 
 import { composer } from './composer';
+import { isArray, find } from './utils/array';
 
-export class ProjectionGridCore {
-  constructor({
-    projections = [],
-    postProjections = [],
-    dispatch,
-  }) {
-    this.projections = projections;
-    this.postProjections = postProjections;
-    this.dispatch = dispatch;
-  }
+const getComposeFunction = projections => function compose({
+  config = {},
+  state = {},
+  dispatch = () => ({}),
+} = {}) {
+  return {
+    table: composer([
+      ...projections.pre,
+      ...projections.post,
+    ], { state, dispatch }).composeTable(config),
+  };
+};
 
-  compose({ config, projections = [], state }) {
-    const { dispatch } = this;
+const getUseFunction = curProjections => function use(projections = []) {
+  const nextProjections = {
+    pre: [...curProjections.pre, ...find([projections, projections.pre, []], isArray)],
+    post: [...find([projections.post, []], isArray), ...curProjections.post],
+  };
 
-    return {
-      table: composer([
-        ...this.projections,
-        ...projections,
-        ...this.postProjections,
-      ], { state, dispatch }).composeTable(config),
-    };
-  }
+  return {
+    use: getUseFunction(nextProjections),
+    compose: getComposeFunction(nextProjections),
+  };
+};
 
-  static createDefault(dispatch) {
-    return new ProjectionGridCore({
-      projections: [
+export function createCore() {
+  const initProjections = { pre: [], post: [] };
+  const use = getUseFunction(initProjections);
+  const compose = getComposeFunction(initProjections);
+  const useBuiltin = function useBuiltin({
+    defaultContentFactory = content => content,
+  } = {}) {
+    return use({
+      pre: [
         defaults,
         columns,
         data,
         header,
-        defaultContent,
+        defaultContent(defaultContentFactory),
         decoration,
         customRow,
         sorting,
+      ],
+      post: [
+        autoKey,
         zeroColspan,
       ],
-      dispatch,
     });
-  }
+  };
+
+  return {
+    use,
+    compose,
+    useBuiltin,
+  };
 }
