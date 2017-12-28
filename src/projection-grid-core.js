@@ -18,7 +18,7 @@ const getComposeFunction = projections => function compose({
   config = {},
   state = {},
   dispatch = () => ({}),
-}) {
+} = {}) {
   return {
     table: composer([
       ...projections.pre,

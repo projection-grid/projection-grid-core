@@ -1,4 +1,4 @@
-import ProjectionGridCore from '../../src';
+import { createCore } from '../../src';
 
 export function scenarioTest({
   name,
@@ -9,13 +9,14 @@ export function scenarioTest({
   describe('Scenario test', () => {
     test(name, () => {
       let state = {};
-      const core = new ProjectionGridCore({
-        projections,
-        dispatch: (reducer, ...args) => {
-          state = reducer(state, ...args);
-          return state;
-        },
-      });
+      const core = createCore().use(projections);
+      // ProjectionGridCore({
+      //   projections,
+      //   dispatch: (reducer, ...args) => {
+      //     state = reducer(state, ...args);
+      //     return state;
+      //   },
+      // });
       const testStep = (model, {
         action = () => {},
         strictMatch = false,
@@ -25,8 +26,11 @@ export function scenarioTest({
         action(model);
         const newModel = core.compose({
           config,
-          projections,
           state,
+          dispatch: (reducer, ...args) => {
+            state = reducer(state, ...args);
+            return state;
+          },
         });
 
         if (strictMatch) {
