@@ -7,6 +7,7 @@ import {
   decoration,
   customRow,
   sorting,
+  columnWidth,
   autoKey,
   zeroColspan,
 } from './projections';
@@ -56,6 +57,7 @@ export function createCore() {
         decoration,
         customRow,
         sorting,
+        columnWidth,
       ],
       post: [
         autoKey,
