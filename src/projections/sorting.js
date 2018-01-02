@@ -13,13 +13,25 @@ export default function sorting({
           sorting: {
             $td = null,
             onSort = () => {},
-            reducer = (s, { key }) => (s === key ? null : key),
-            isSorting = ({ key }) => state === key,
+            reducer = (s, { key }) => {
+              if (!s || !s[key]) {
+                return { [key]: 'desc' };
+              }
+
+              if (s[key] === 'asc') {
+                return {};
+              }
+
+              return { [key]: 'asc' };
+            },
+            getSortingState = ({ key }) => ((state && state[key]) ? state[key] : false),
           } = {},
         } = table;
 
-        if (isSorting(col)) {
-          decorators.push($td);
+        const sortingState = getSortingState(col);
+
+        if (sortingState) {
+          decorators.push($td[sortingState] || $td);
         }
 
         if (isHeader) {
