@@ -117,6 +117,15 @@ describe('Array', () => {
     expect(utils.find([1, 2, 3], e => e > 4)).toBeUndefined();
     expect(() => utils.find(null, e => e > 1)).toThrow('find called on a non-array variable');
   });
+
+  test('update keys', () => {
+    expect(utils.updateKeys({ foo: 'bar', a: 'b' }, { foo: 'foo1' })).toEqual({ foo1: 'bar', a: 'b' });
+  });
+
+  test('omit', () => {
+    expect(utils.omit({ a: 'a', b: 'b' }, ['a'])).toEqual({ b: 'b' });
+    expect(utils.omit({ a: 'a', b: 'b' }, 'a')).toEqual({ b: 'b' });
+  });
 });
 
 describe('Function', () => {

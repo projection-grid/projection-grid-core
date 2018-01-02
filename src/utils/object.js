@@ -37,4 +37,17 @@ export const pick = (obj, ...keys) => {
     (searchKeys => searchKeys.indexOf(key) > -1)(flattendKeys));
 };
 
+export const omit = (obj, ...keys) => {
+  const flattendKeys = flatten(keys);
+
+  return iterateeWithCondition(obj, (item, key) =>
+    (searchKeys => searchKeys.indexOf(key) === -1)(flattendKeys));
+};
+
 export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
+
+export const updateKeys = (obj, keyReplacements) => Object.keys(obj).reduce((memo, key) => {
+  const newKey = keyReplacements[key] || key;
+
+  return assign({}, memo, { [newKey]: obj[key] });
+}, {});
