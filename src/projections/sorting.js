@@ -11,6 +11,7 @@ export default function sorting({
       if (col) {
         const {
           sorting: {
+            cols = [],
             $td = null,
             onSort = () => {},
             reducer = (s, { key }) => {
@@ -28,18 +29,22 @@ export default function sorting({
           } = {},
         } = table;
 
-        const sortingState = getSortingState(col);
+        const isSortable = !cols || cols.length === 0 || cols.indexOf(col.key) > -1;
 
-        if (sortingState) {
-          decorators.push($td[sortingState] || $td);
-        }
+        if (isSortable) {
+          const sortingState = getSortingState(col);
 
-        if (isHeader) {
-          decorators.push({
-            events: {
-              click: () => onSort(dispatch(reducer, col)),
-            },
-          });
+          if (sortingState) {
+            decorators.push($td[sortingState] || $td);
+          }
+
+          if (isHeader) {
+            decorators.push({
+              events: {
+                click: () => onSort(dispatch(reducer, col)),
+              },
+            });
+          }
         }
       }
 
