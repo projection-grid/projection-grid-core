@@ -1,19 +1,17 @@
-import { find, pluck, isArray } from '../utils';
+import { find, isArray } from '../utils';
 
 export default function ({
   composeTrs,
 }) {
   return {
     composeTrs(tr) {
-      const { data, ...trOthers } = tr;
-      const {
-        section: {
-          table,
-        },
-        section,
-      } = trOthers;
-      const placeholders = pluck([tr, section, table], 'placeholder');
-      const content = find(placeholders, v => v !== undefined);
+      const { data, placeholder, ...trOthers } = tr;
+      const { section } = trOthers;
+      const { table } = section;
+      const content = find(
+        [placeholder, section.placeholder, table.placeholder],
+        v => v !== undefined
+      );
       if (isArray(data) && data.length === 0 && content) {
         return composeTrs({
           ...trOthers,
