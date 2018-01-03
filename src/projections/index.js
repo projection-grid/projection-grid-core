@@ -9,3 +9,4 @@ export { default as sorting } from './sorting';
 export { default as autoKey } from './auto-key';
 export { default as zeroColspan } from './zero-colspan';
 export { default as columnWidth } from './column-width';
+export { default as placeholder } from './placeholder';

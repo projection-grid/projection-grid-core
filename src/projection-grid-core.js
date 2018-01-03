@@ -10,6 +10,7 @@ import {
   columnWidth,
   autoKey,
   zeroColspan,
+  placeholder,
 } from './projections';
 
 import { composer } from './composer';
@@ -58,6 +59,7 @@ export function createCore() {
         customRow,
         sorting,
         columnWidth,
+        placeholder,
       ],
       post: [
         autoKey,

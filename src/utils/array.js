@@ -6,7 +6,7 @@ export const flatten = list => list.reduce((a, b) => a.concat(isArray(b) ? flatt
 
 export const compact = list => list.filter(v => v);
 
-export const last = arr => (isArray(arr) ? arr[arr.length - 1] : arr);
+export const last = array => (isArray(array) ? array.slice(-1)[0] : undefined);
 
 export const find = (list, predicate, context) => {
   if (!isArray(list)) {
