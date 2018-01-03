@@ -29,10 +29,6 @@ ioTest({
       }, {
         key: 'second-tr',
         data: { a: 3, b: 4 },
-      }, {
-        key: 'third-tr',
-        data: [],
-        tds: [{ content: 'a' }],
       }],
     }],
     tfoot: [],
@@ -83,15 +79,6 @@ ioTest({
           tag: 'TD',
           key: 'col-a',
           content: null,
-        }],
-      }, {
-        ...DEFAULT_COMMON,
-        tag: 'TR',
-        key: 'third-tr',
-        tds: [{
-          ...DEFAULT_COMMON,
-          content: 'a',
-          tag: 'TD',
         }],
       }],
     }, {
