@@ -1,18 +1,28 @@
-import { compact, last, pluck, assign } from '../utils';
+import { last, pluck, isArray, assign } from '../utils';
 
 export default function ({
-  composeSections,
+  composeTrs,
 }) {
   return {
-    composeSections(section) {
-      const { tag, table, trs = [] } = section;
-      if (tag === 'TBODY' && trs.length === 0) {
-        const placeholders = pluck([table, section], 'placeholder');
-        return composeSections(assign({}, section, {
-          trs: [{ content: last(compact(placeholders)) }],
-        }));
+    composeTrs(tr) {
+      const {
+        data,
+        section: {
+          table,
+        },
+        section,
+      } = tr;
+      let placeholders = pluck([table, section, tr], 'placeholder');
+      placeholders = placeholders.filter(v => v !== undefined);
+      const placeholder = last(placeholders);
+      if (isArray(data) && data.length === 0 && placeholder) {
+        const obj = assign({}, tr, {
+          content: placeholder,
+        });
+        delete obj.data;
+        return composeTrs(obj);
       }
-      return composeSections(section);
+      return composeTrs(tr);
     },
   };
 }
