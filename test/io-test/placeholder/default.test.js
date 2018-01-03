@@ -3,21 +3,18 @@ import { defaults, data, columns, customRow, placeholder } from '../../../src/pr
 import { DEFAULT_COMMON, DEFAULT_TABLE } from '../constants';
 
 ioTest({
-  name: 'placeholder with [root].placeholder',
+  name: 'placeholder with [root].placeholder and [root].data = []',
   projections: [defaults, data, customRow, placeholder],
   input: {
     placeholder: 'placeholder',
-    tbodies: [{
-      key: 'default-tbody-placeholder',
-      data: [],
-    }],
+    data: [],
   },
   output: {
     ...DEFAULT_TABLE,
     tbodies: [{
       ...DEFAULT_COMMON,
       tag: 'TBODY',
-      key: 'default-tbody-placeholder',
+      key: null,
       trs: [{
         ...DEFAULT_COMMON,
         tag: 'TR',
@@ -87,7 +84,7 @@ ioTest({
 });
 
 ioTest({
-  name: 'placeholder with [root].tbodies[i].trs.data.length === 0',
+  name: 'placeholder with [root].tbodies[i].trs.data.length === 0 and placeholder in tr',
   projections: [defaults, data, columns, customRow, placeholder],
   input: {
     placeholder: 'placeholder',

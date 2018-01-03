@@ -3,7 +3,7 @@ import { defaults, columns, columnWidth } from '../../../src/projections';
 import { DEFAULT_COMMON, DEFAULT_TABLE } from '../constants';
 
 ioTest({
-  name: 'column~width with [root].cols[i].width',
+  name: 'columnWidth~composeTable with [root].cols[i].width',
   projections: [defaults, columns, columnWidth],
   input: {
     cols: [
