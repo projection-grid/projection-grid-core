@@ -1,25 +1,24 @@
-import { last, pluck, isArray, assign } from '../utils';
+import { find, pluck, isArray } from '../utils';
 
 export default function ({
   composeTrs,
 }) {
   return {
     composeTrs(tr) {
+      const { data, ...trOthers } = tr;
       const {
-        data,
         section: {
           table,
         },
         section,
-      } = tr;
-      let placeholders = pluck([table, section, tr], 'placeholder');
-      placeholders = placeholders.filter(v => v !== undefined);
-      const placeholder = last(placeholders);
-      if (isArray(data) && data.length === 0 && placeholder) {
-        const { data: orignData, ...obj } = assign({}, tr, {
-          content: placeholder,
+      } = trOthers;
+      const placeholders = pluck([tr, section, table], 'placeholder');
+      const content = find(placeholders, v => v !== undefined);
+      if (isArray(data) && data.length === 0 && content) {
+        return composeTrs({
+          ...trOthers,
+          content,
         });
-        return composeTrs(obj);
       }
       return composeTrs(tr);
     },
