@@ -21,14 +21,14 @@ export default function ({
     },
 
     composeTrs(tr) {
-      const { data, section: { table } } = tr;
+      const { data, section: { table }, tds = [] } = tr;
       const { primaryKey, colgroups = [] } = table;
       const cols = [].concat(...pluck(colgroups, 'cols'));
-      const returnTrs = composeTrs(tr);
 
       if (isArray(data)) {
+        const preTrs = tds.length > 0 ? composeTrs(tr) : [];
         const trs = data.map(d => assign({}, tr, { data: d }));
-        return returnTrs.concat(...trs.map(this.composeTrs));
+        return preTrs.concat(...trs.map(this.composeTrs));
       }
 
       if (isObject(data)) {
@@ -37,7 +37,7 @@ export default function ({
         }, primaryKey ? { key: data[primaryKey] } : {}));
       }
 
-      return returnTrs;
+      return composeTrs(tr);
     },
   };
 }
