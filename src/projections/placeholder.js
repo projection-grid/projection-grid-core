@@ -16,10 +16,9 @@ export default function ({
       placeholders = placeholders.filter(v => v !== undefined);
       const placeholder = last(placeholders);
       if (isArray(data) && data.length === 0 && placeholder) {
-        const obj = assign({}, tr, {
+        const { data: orignData, ...obj } = assign({}, tr, {
           content: placeholder,
         });
-        delete obj.data;
         return composeTrs(obj);
       }
       return composeTrs(tr);
