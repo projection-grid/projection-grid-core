@@ -18,7 +18,9 @@ export default function ({ composeTable }) {
       const model = composeTable(table);
 
       return assign({}, model, {
-        colgroups: mapWithKey(model.colgroups),
+        colgroups: mapWithKey(model.colgroups).map(colgroup => assign({}, colgroup, {
+          cols: mapWithKey(colgroup.cols),
+        })),
         tbodies: mapWithKey(model.tbodies).map(decorateTrsWithKey),
         thead: decorateTrsWithKey(model.thead),
         tfoot: decorateTrsWithKey(model.tfoot),
