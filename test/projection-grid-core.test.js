@@ -18,7 +18,6 @@ describe('ProjectionGridCore#compose', () => {
         ...DEFAULT_TABLE,
         thead: {
           ...DEFAULT_COMMON,
-          key: 'THEAD-0',
           tag: 'THEAD',
           trs: [{
             ...DEFAULT_COMMON,
@@ -29,7 +28,6 @@ describe('ProjectionGridCore#compose', () => {
         },
         tfoot: {
           ...DEFAULT_COMMON,
-          key: 'TFOOT-0',
           tag: 'TFOOT',
           trs: [],
         },

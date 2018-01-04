@@ -55,9 +55,19 @@ scenarioTest({
       },
     },
     sorting: {
-      $td: {
+      $default: {
+        styles: {
+          background: 'blue',
+        },
+      },
+      $asc: {
         styles: {
           background: 'red',
+        },
+      },
+      $desc: {
+        styles: {
+          background: 'yellow',
         },
       },
     },
@@ -86,14 +96,14 @@ scenarioTest({
               key: 'Foo',
               content: 'Foo',
               styles: {
-                background: 'green',
+                background: 'blue',
               },
             }, {
               ...DEFAULT_TH,
               key: 'Bar',
               content: 'Bar',
               styles: {
-                background: 'green',
+                background: 'blue',
               },
             }],
           }],
@@ -191,7 +201,7 @@ scenarioTest({
               key: 'Bar',
               content: 'Bar',
               styles: {
-                background: 'green',
+                background: 'blue',
               },
             }],
           }],
@@ -205,7 +215,7 @@ scenarioTest({
               key: 'Foo',
               content: 1,
               styles: {
-                background: 'red',
+                background: 'green',
               },
             }, {
               ...DEFAULT_TD,
@@ -222,7 +232,7 @@ scenarioTest({
               key: 'Foo',
               content: 2,
               styles: {
-                background: 'red',
+                background: 'green',
               },
             }, {
               ...DEFAULT_TD,
@@ -282,14 +292,14 @@ scenarioTest({
               key: 'Foo',
               content: 'Foo',
               styles: {
-                background: 'green',
+                background: 'yellow',
               },
             }, {
               ...DEFAULT_TH,
               key: 'Bar',
               content: 'Bar',
               styles: {
-                background: 'green',
+                background: 'blue',
               },
             }],
           }],

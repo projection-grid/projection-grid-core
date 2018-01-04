@@ -1,8 +1,8 @@
-import { decorate } from '../utils';
+import { decorate, find } from '../utils';
 
 export default function sorting({
   composeTds,
-}, { state, dispatch }) {
+}, { state = { sortBy: null }, dispatch }) {
   return {
     composeTds(td) {
       const { col, isHeader, tr: { section: { table } } } = td;
@@ -11,23 +11,36 @@ export default function sorting({
       if (col) {
         const {
           sorting: {
-            $td = null,
+            cols = [],
+            $default = null,
+            $asc = null,
+            $desc = null,
             onSort = () => {},
-            reducer = (s, { key }) => (s === key ? null : key),
-            isSorting = ({ key }) => state === key,
+            reducer = (s = { sortBy: null }, { key }) => ({
+              sortBy: key,
+              direction: key === s.sortBy ?
+                find(['asc', 'desc'], d => d !== s.direction) :
+                'asc',
+            }),
           } = {},
         } = table;
 
-        if (isSorting(col)) {
-          decorators.push($td);
-        }
+        const isSortable = !cols || cols.length === 0 || cols.indexOf(col.key) > -1;
 
-        if (isHeader) {
-          decorators.push({
-            events: {
-              click: () => onSort(dispatch(reducer, col)),
-            },
-          });
+        if (isSortable) {
+          if (isHeader) {
+            decorators.push({
+              events: {
+                click: () => onSort(dispatch(reducer, col)),
+              },
+            });
+
+            if (state.sortBy === col.key) {
+              decorators.push(state.direction === 'asc' ? $asc : $desc);
+            } else {
+              decorators.push($default);
+            }
+          }
         }
       }
 

@@ -1,16 +1,30 @@
-import { mapObject, assign } from '../utils';
+import { assign } from '../utils';
 
 const decorateWithKey = (element, index) => assign({}, element, {
   key: element.key ? element.key : `${element.tag}-${index}`,
 });
 
-function autoKey(composer) {
-  return mapObject(composer, (callback, name) => {
-    if (name.match(/s$/)) {
-      return input => callback(input).map(decorateWithKey);
-    }
-    return callback;
-  });
-}
+const mapWithKey = elementGroup => elementGroup.map(decorateWithKey);
 
-export default autoKey;
+const decorateTrsWithKey = model => assign({}, model, {
+  trs: mapWithKey(model.trs).map(tr => assign({}, tr, {
+    tds: mapWithKey(tr.tds),
+  })),
+});
+
+export default function ({ composeTable }) {
+  return {
+    composeTable(table) {
+      const model = composeTable(table);
+
+      return assign({}, model, {
+        colgroups: mapWithKey(model.colgroups).map(colgroup => assign({}, colgroup, {
+          cols: mapWithKey(colgroup.cols),
+        })),
+        tbodies: mapWithKey(model.tbodies).map(decorateTrsWithKey),
+        thead: decorateTrsWithKey(model.thead),
+        tfoot: decorateTrsWithKey(model.tfoot),
+      });
+    },
+  };
+}
