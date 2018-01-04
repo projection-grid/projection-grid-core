@@ -1,6 +1,6 @@
 {
   "name": "projection-grid-core",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Implement the core concept of projection grid",
   "main": "dist/projection-grid-core",
   "repository": "git@github.com:projection-grid/projection-grid-core.git",
