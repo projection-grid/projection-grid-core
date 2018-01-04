@@ -12,6 +12,7 @@ export default function sorting({
         const {
           sorting: {
             cols = [],
+            $default = null,
             $asc = null,
             $desc = null,
             onSort = () => {},
@@ -27,16 +28,18 @@ export default function sorting({
         const isSortable = !cols || cols.length === 0 || cols.indexOf(col.key) > -1;
 
         if (isSortable) {
-          if (state.sortBy === col.key) {
-            decorators.push({ $td: state.direction === 'asc' ? $asc : $desc });
-          }
-
           if (isHeader) {
             decorators.push({
               events: {
                 click: () => onSort(dispatch(reducer, col)),
               },
             });
+
+            if (state.sortBy === col.key) {
+              decorators.push(state.direction === 'asc' ? $asc : $desc);
+            } else {
+              decorators.push($default);
+            }
           }
         }
       }
