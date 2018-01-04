@@ -55,6 +55,11 @@ scenarioTest({
       },
     },
     sorting: {
+      $default: {
+        styles: {
+          background: 'blue',
+        },
+      },
       $asc: {
         styles: {
           background: 'red',
@@ -91,14 +96,14 @@ scenarioTest({
               key: 'Foo',
               content: 'Foo',
               styles: {
-                background: 'green',
+                background: 'blue',
               },
             }, {
               ...DEFAULT_TH,
               key: 'Bar',
               content: 'Bar',
               styles: {
-                background: 'green',
+                background: 'blue',
               },
             }],
           }],
@@ -196,7 +201,7 @@ scenarioTest({
               key: 'Bar',
               content: 'Bar',
               styles: {
-                background: 'green',
+                background: 'blue',
               },
             }],
           }],
@@ -294,7 +299,7 @@ scenarioTest({
               key: 'Bar',
               content: 'Bar',
               styles: {
-                background: 'green',
+                background: 'blue',
               },
             }],
           }],
