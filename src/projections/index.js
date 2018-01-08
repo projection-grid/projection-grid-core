@@ -1,6 +1,7 @@
 export { default as defaults } from './defaults';
 export { default as columns } from './columns';
 export { default as data } from './data';
+export { default as primaryKey } from './primary-key';
 export { default as header } from './header';
 export { default as decoration } from './decoration';
 export { default as defaultContent } from './default-content';
@@ -10,3 +11,4 @@ export { default as autoKey } from './auto-key';
 export { default as zeroColspan } from './zero-colspan';
 export { default as columnWidth } from './column-width';
 export { default as placeholder } from './placeholder';
+export { default as columnTree } from './column-tree';

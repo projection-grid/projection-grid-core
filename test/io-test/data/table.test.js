@@ -1,12 +1,12 @@
 import { ioTest } from '../io-test';
-import { defaults, data } from '../../../src/projections';
+import { defaults, data, primaryKey } from '../../../src/projections';
 import { DEFAULT_COMMON } from '../constants';
 
 const click = () => window.console.log('click table');
 
 ioTest({
   name: 'data~composeTable with full config',
-  projections: [defaults, data],
+  projections: [defaults, data, primaryKey],
   input: {
     key: 'default-table',
     primaryKey: 'a',
@@ -73,7 +73,7 @@ ioTest({
       }, {
         ...DEFAULT_COMMON,
         tag: 'TR',
-        key: 3,
+        key: 'second-tr',
         tds: [{
           ...DEFAULT_COMMON,
           tag: 'TD',
