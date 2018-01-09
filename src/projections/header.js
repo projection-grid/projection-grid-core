@@ -26,11 +26,11 @@ export default function ({
     },
 
     composeTrs(tr) {
-      const { isHeader, section: { table } } = tr;
+      const { isHeader, section: { table }, tds = [] } = tr;
       const { colgroups = [] } = table;
       const cols = [].concat(...pluck(colgroups, 'cols'));
 
-      if (isHeader) {
+      if (isHeader && tds.length === 0) {
         return composeTrs({
           ...tr,
           tds: cols.map(col => ({
